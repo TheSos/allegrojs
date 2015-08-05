@@ -231,6 +231,12 @@ function install_int_ex(procedure,speed)
 	_installed_timers.push({timer:procedure,id:timer_id});
 }
 
+function loop(procedure,speed)
+{
+	var timer_id = window.setInterval(procedure,speed);
+	//_installed_timers.push({timer:procedure,id:timer_id});
+}
+
 /// Removes interrupt
 /// @param procedure interrupt procedure to be removed
 function remove_int(procedure)
@@ -239,11 +245,21 @@ function remove_int(procedure)
 	{
 		if (_installed_timers[c].timer == _installed_timers)
 		{
-			window.clearInterval(procedure);
+			window.clearInterval(_installed_timers[c].id);
 			_installed_timers.splice(c,1);
 			return;
 		}
 	}
+}
+
+/// Removes  all interrupts
+function remove_all_ints()
+{
+	for(var c=0;c<_installed_timers.length;c++)
+	{
+			window.clearInterval(_installed_timers[c].id);
+	}
+	_installed_timers = [];
 }
 
 ////////////////////////////////////////////
@@ -355,10 +371,21 @@ function load_bitmap(filename)
 		}
 	}
 	*/
-	var w = img.width;
-	var h = img.height;
-	var bmp = create_bitmap(w,h);
-	bmp.context.drawImage(img,0,0);
+	
+	
+	var bmp = {canvas:-1,context:-1,w:-1,h:-1};
+	img.onload = function(){
+		var cv = document.createElement('canvas');
+		cv.width = img.width;
+		cv.height = img.height;
+		var ctx = cv.getContext("2d");
+		ctx.drawImage(img,0,0);
+		bmp.context = ctx;
+		bmp.canvas = cv;
+		bmp.w = img.width;
+		bmp.h = img.height;
+	};
+	
 	return bmp;
 }
 
@@ -679,14 +706,14 @@ function trianglefill(bitmap,x1,y1,x2,y2,x3,y3,color)
 function polygon(bitmap,vertices,points,color)
 {
 	_strokestyle(bitmap,color);
-	var poly = new Path2D();
+	bitmap.context.beginPath();
 	for (var c=0;c<vertices;c++)
 	{
-		if (c) poly.lineTo(points[c*2],points[c*2+1]);
-		else poly.moveTo(points[c*2],points[c*2+1]);
+		if (c) bitmap.context.lineTo(points[c*2],points[c*2+1]);
+		else bitmap.context.moveTo(points[c*2],points[c*2+1]);
 	}
-	poly.closePath();
-  bitmap.context.stroke(poly);
+	bitmap.context.closePath();
+  bitmap.context.stroke();
 }
 
 /// Draws a polygon.
@@ -698,14 +725,14 @@ function polygon(bitmap,vertices,points,color)
 function polygonfill(bitmap,vertices,points,color)
 {
 	_fillstyle(bitmap,color);
-	var poly = new Path2D();
+	bitmap.context.beginPath();
 	for (var c=0;c<vertices;c++)
 	{
-		if (c) poly.lineTo(points[c*2],points[c*2+1]);
-		else poly.moveTo(points[c*2],points[c*2+1]);
+		if (c) bitmap.context.lineTo(points[c*2],points[c*2+1]);
+		else bitmap.context.moveTo(points[c*2],points[c*2+1]);
 	}
-	poly.closePath();
-  bitmap.context.fill(poly);
+	bitmap.context.closePath();
+  bitmap.context.fill();
 }
 
 /// Draws a rectangle.
@@ -1064,7 +1091,7 @@ function destroy_sample(filename)
 function play_sample(sample,vol,freq,loop)
 {
 	adjust_sample(sample,vol,freq,loop)
-	sample.element.fastSeek(0);
+	//sample.element.fastSeek(0);
 	sample.element.play();
 }
 
@@ -1087,6 +1114,6 @@ function adjust_sample(sample,vol,freq,loop)
 function stop_sample(sample)
 {
 	sample.element.pause();
-	sample.element.fastSeek(0);
+ 	//sample.element.fastSeek(0);
 }
 

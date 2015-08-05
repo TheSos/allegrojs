@@ -1,11 +1,12 @@
 var page1,page2,active_page,logo;
+var beep;
 var tim=0;
 var size=64,speed=3;
 var cx=0,cy=0;
 var vx=speed,vy=speed;
 
 
-var stage=26;
+var stage=-1;
 var delay=0;
 var title = "jAllegro unit test";
 var subtitle = "press space";
@@ -17,15 +18,15 @@ function draw()
 	
 	if (stage==0)
 	{
-		
+		title = "Let's begin!"
 	} else if (stage==1)
 	{
 		title = "blit";
-		blit(logo,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w,rand()%logo.h);
+		blit(logo,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w+1,rand()%logo.h+1);
 	} else if (stage==2)
 	{
 		title = "stretch_blit";
-		stretch_blit(logo,canvas,0,0,rand()%logo.w,rand()%logo.h,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H);
+		stretch_blit(logo,canvas,0,0,rand()%logo.w+1,rand()%logo.h+1,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
 	} else if (stage==3)
 	{
 		title = "draw_sprite";
@@ -33,7 +34,7 @@ function draw()
 	}  else if (stage==4)
 	{
 		title = "stretch_sprite";
-		stretch_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H);
+		stretch_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
 	}  else if (stage==5)
 	{
 		title = "rotate_sprite";
@@ -45,11 +46,11 @@ function draw()
 	}  else if (stage==7)
 	{
 		title = "rotate_scaled_sprite";
-		rotate_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%3);
+		rotate_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%3+.1);
 	}  else if (stage==8)
 	{
 		title = "pivot_scaled_sprite";
-		pivot_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w,rand()%logo.h,rand()%360,rand()%3);
+		pivot_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w,rand()%logo.h,rand()%360,rand()%3+.1);
 	}  else if (stage==9)
 	{
 		title = "textout";
@@ -167,8 +168,7 @@ function draw()
 	}  else if (stage==30)
 	{
 		title = "timer";
-		if (!timers)
-		{
+		stage=31;	
 		timers=true;
 		install_int_ex(function(){
 			circlefill(canvas,100,100,100,makecol(rand()%255,rand()%255,rand()%255));
@@ -189,13 +189,30 @@ function draw()
 			install_int(function(){
 			circlefill(canvas,500,100,100,makecol(rand()%255,rand()%255,rand()%255));
 		},1500);
-		}
+		
+	} else if (stage==31)
+	{
+		title = "timer";
+	
+	}   else if (stage==32)
+	{
+		stage=33;
+		title = "sound";
+		remove_all_ints();
+		install_int_ex(function(){
+			play_sample(beep,Math.random(),Math.random()+.5,0);
+			circlefill(canvas,SCREEN_W/2,SCREEN_H/2,400,makecol(rand()%255,rand()%255,rand()%255));
+		},SECS_TO_TIMER(2));
+	} else if (stage==33)
+	{
+		title = "sound";
+	
+	}   else if (stage==34)
+	{
+		title = "The End";
+		remove_all_ints();
+	
 	}  
-	
-	
-	//
-	//circlefill(canvas,cx,cy,size,makecol(255,255,255,255));
-	
 	textout_centre(canvas,font,title,SCREEN_W/2,64,64,makecol(255,0,0));
 	textout(canvas,font,subtitle,10,SCREEN_H-10,24,makecol(255,0,0));
 	delay++;
@@ -228,10 +245,10 @@ function main()
 	install_mouse();
 	install_sound();
 	logo = load_bmp("allegro.png");
-	
+	beep = load_sample("dtmf.mp3");
 	active_page = page2;
 
-	install_int_ex(function()
+	loop(function()
 	{
 		//clear_to_color(canvas, makecol(255, 255, 255));
 
