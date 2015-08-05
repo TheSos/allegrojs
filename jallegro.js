@@ -21,6 +21,9 @@ function _error(string)
 	alert(string);
 }
 
+/// Enables debugging to a console.
+/// 'console' can be any html element that can accept text, preffereably a <div>
+/// @param id id of the element to be the console
 function enable_debug(id)
 {
 	_debug_element = document.getElementById(id);
@@ -28,6 +31,8 @@ function enable_debug(id)
 }
 
 /// Logs to console
+/// Only works after enable_debug() has been called. Will append <br/> newline tag. You can use html inside your logs too.
+/// @param string text to log
 function log(string)
 {
 	if (!_debug_enabled) return;
@@ -35,6 +40,7 @@ function log(string)
 }
 
 /// Wipes the debug console
+/// Clears the debug element of any text. Useful if you want to track changing values in real time without clogging the browser. Just call it at the beginning every loop()!
 function wipe_log()
 {
 	if (!_debug_enabled) return;
@@ -51,35 +57,60 @@ function _debug(string)
 ////////////////////////////////////////////
 // HELPER MATH FUNCTIONS
 
-var _seed = 1;
-
-function srand(seed)
-{
-	if (!seed)
-	{
-		_seed = 2147483647 * Math.random();
-	} else {
-		_seed = seed;
-	}
-}
-
+/// Returns a random number from 0 to 65535
+/// Result is always integer. Use modulo (%) operator to create smaller values i.e. rand()%256 will return a random number from 0 to 255 inclusive.
+/// @return a random number in 0-65535 inclusive range
 function rand()
 {
-	return 65536 * Math.random();
+	return Math.floor(65536 * Math.random());
 }
 
+/// Returbns a random number from 0.0 to 1.0
+/// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 willr eturn a value from 0.0 to 10.0
+/// @return a random floating point value from 0.0 to 1.0
+function frand()
+{
+	return Math.random();
+}
+
+/// Returns absolute value of a
+/// Removes minus sign from the value, shoudl there be any.
+/// @param a value to be absoluted
+/// @return absolute value of a
 function abs(a) {return (a<0)?(-a):(a);}
 
+/// Returns legth of a vector
+/// @param x,y vector coordinates
+/// @return length of the vector
+function length(x,y)
+{
+	return Math.sqrt(x*x-y*y);
+}
+
+/// Calculates distance between two points
+/// @param x1,x2 first point
+/// @param x2,y2 second point
+/// @return diostance between the points
 function distance(x1,y1,x2,y2)
 {
 	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
+/// Calculates squared distance between two points
+/// This verison is just a tad faster
+/// @param x1,x2 first point
+/// @param x2,y2 second point
+/// @return diostance between the points
 function distance2(x1,y1,x2,y2)
 {
 	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
 }
 
+/// Distance between a point  and a line segment
+/// @param x1,y1 first end of line segment
+/// @param x2,y2 second end of line segment
+/// @param x3,y3 point coordinates
+/// @return distance of point x3,y3 from line x1,y1-x2,y2
 function linedist(x1,y1,x2,y2,x3,y3)
 {
 	var px = x2-x1
@@ -100,27 +131,50 @@ function linedist(x1,y1,x2,y2,x3,y3)
   return dist
 }
 
+/// Linear interpolation between two values
+/// Returns a value midway between from and to specified by progress
+/// @param from number to lerp from
+/// @param to number to lerp to
+/// @param progress amount of lerp
+/// @return lerped value
 function lerp(from,to,progress)
 {
 	return from+(to-from)*progress;
 }
 
+/// Returns a dot product of two vectors
+/// Dot product is equal to cosine of angle between two vectors times their lengths. With normalised, length 1.0, vectors, the value would be 1.0 if vectors are the same, 0.0 if they are perpendicular, and -1.0 if they point the opposite direction. It helps to determine angle differences.
+/// @param x1,y1 vector one, won't be normalised
+/// @param x2,y2 vector two, won't be normalised
+/// @return dot product of the vectors
 function dot(x1,y1,x2,y2)
 {
 	return x1*x2+y1*y2;
 }
 
+/// Returns sign of value
+/// Will return -1 if it's negative, 1 if positive and 0 if zero
+/// @param a value
+/// @return sign of a
 function sgn(a)
 {
 	return a < 0 ? -1 : (a > 0 ? 1 : 0);
 }
 
+
+/// Returns an angle between two vectors
+/// @param x1,y1 vector one
+/// @param x2,y2 vector two
+/// @return angle in degrees, snapped to 0-360
 function angle(x1,y1,x2,y2)
 {
 	var a = DEG(Math.atan2(y2 - y1, x2 - x1));
 	return a < 0 ? a + 360 : a;
 }
 
+/// Returns a diference between angles
+/// @param a,b, angles
+/// @return angle difference, in -180 to 180 range
 function anglediff(a,b)
 {
 	var diff = b - a;
@@ -129,6 +183,11 @@ function anglediff(a,b)
 	return diff;
 }
 
+/// Clamps a value
+/// Min doesn't really have to be smaller than max
+/// @param value value to be clamped
+/// @param min,max values to clam between
+/// @return clamped value
 function clamp(value,min,max)
 {
 	if (max > min)
@@ -143,11 +202,21 @@ function clamp(value,min,max)
 	}
 }
 
+/// Scales a value from one range to another
+/// @param value value to be scaled
+/// @param min,max bounds to scale from
+/// @param min2,max2 bounds to scale to
+/// @return scaled value
 function scale(value,min,max,min2,max2)
 {
 	return min2 + ((value - min) / (max - min)) * (max2 - min2);
 }
 
+/// Scales value from one range to another and clamps it down
+/// @param value value to be scaled
+/// @param min,max bounds to scale from
+/// @param min2,max2 bounds to scale and clamp to
+/// @return scaled and clamped value
 function scaleclamp(value,min,max,min2,max2)
 {
 	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
@@ -169,7 +238,7 @@ function scaleclamp(value,min,max,min2,max2)
 /// This function must be called before anything else, even though it does nothing.
 function install_allegro()
 {
-	log("Allegro isntalled!");
+	log("Allegro installed!");
 }
 
 /// Wrapper for install_allegro.
@@ -209,6 +278,14 @@ function END_OF_MAIN()
 /// * Button 4 is Back.
 var mouse_b = 0;
 
+/// Same as mouse_b but only checks if a button was pressed last frame
+/// Not that this only works inside loop()
+var mouse_pressed = 0;
+
+/// Same as mouse_b but only checks if a button was released last frame
+/// Not that this only works inside loop()
+var mouse_released = 0;
+
 /// Mouse X position within the canvas.
 var mouse_x = -1;
 
@@ -216,6 +293,7 @@ var mouse_x = -1;
 var mouse_y = -1;
 
 /// Mouse wheel position.
+/// This might not work consistently accross all browsers!
 var mouse_z = -1;
 
 /// Mouse mickey, X position since last move.
@@ -248,6 +326,7 @@ function install_mouse()
 	canvas.canvas.addEventListener('mouseup',_mouseup);
 	canvas.canvas.addEventListener('mousedown',_mousedown);
 	canvas.canvas.addEventListener('mousemove',_mousemove);
+	canvas.canvas.addEventListener('wheel',_mousewheel);
 	_mouse_installed = true;
 	log("Mouse installed!");
 	return 0;
@@ -261,31 +340,27 @@ function remove_mouse()
 		_error("You must call install_mouse before remove_mouse");
 		return -1;
 	}
-	_canvas.canvas.removeEventListener('mouseup',_mouseup);
-	_canvas.canvas.removeEventListener('mousedown',_mousedown);
-	_canvas.canvas.removeEventListener('mousemove',_mousemove);
+	canvas.canvas.removeEventListener('mouseup',_mouseup);
+	canvas.canvas.removeEventListener('mousedown',_mousedown);
+	canvas.canvas.removeEventListener('mousemove',_mousemove);
+	canvas.canvas.removeEventListener('wheel',_mousewheel);
 	_mouse_installed = false;
 	log("Mouse removed!");
 	return 0;
-}
-
-/// Shows mouse within canvas
-/// \todo: this function
-function show_mouse(show)
-{
-
 }
 
 /// mouseup event handler
 function _mouseup(e)
 {
 	mouse_b = mouse_b&~(1<<(e.which-1));
+	mouse_pressed = mouse_pressed&~(1<<(e.which-1));
 }
 
 /// mousedown event handler
 function _mousedown(e)
 {
 	mouse_b = mouse_b|(1<<(e.which-1));
+	mouse_released = mouse_released&~(1<<(e.which-1));
 }
 
 /// mousemove event handler
@@ -295,6 +370,13 @@ function _mousemove(e)
 	mouse_y = e.offsetY;
 	mouse_mx = e.movementX;
 	mouse_my = e.movementY;
+}
+
+/// mosuewheel event handler
+function _mousewheel(e)
+{
+	mouse_z += e.deltaY;
+	mouse_mz = e.deltaY;
 }
 
 ////////////////////////////////////////////
@@ -374,13 +456,39 @@ function install_int_ex(procedure,speed)
 	log("Added insterrupt #" + timer_id + " at " + speed + "msec isntervals!");
 }
 
+var _loopproc;
+
+/// Performes some loop tasks, such as cleaning up pressed[] and released[]
+function _uberloop()
+{
+	loop();
+	if (_keyboard_installed)
+	{
+		for (var c=0;c<0x80;c++)
+		{
+			pressed[c] = false;
+			released[c] = false;
+		}
+	}
+	if (_mouse_installed)
+	{
+		mouse_pressed = 0;
+		mouse_released = 0;
+		mouse_mx = 0;
+		mosue_my = 0;
+		mouse_mz = 0;
+	}
+	
+}
+
 /// Game loop interrupt
-/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval.
-/// @param procedure function to be looped, prteferably inline, but let's not talk codign styles here
+/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function!
+/// @param procedure function to be looped, prteferably inline, but let's not talk coding styles here
 /// @param speed speed in the same format as install_int_ex()
 function loop(procedure,speed)
 {
-	var timer_id = window.setInterval(procedure,speed);
+	_loopproc = procedure;
+	var timer_id = window.setInterval(_uberloop,speed);
 	log("Game loop initialised!");
 	//_installed_timers.push({timer:procedure,id:timer_id});
 }
@@ -482,6 +590,14 @@ var KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45, KEY_F 
 /// *     KEY_EQUALS_PAD, KEY_BACKQUOTE, KEY_SEMICOLON, KEY_COMMAND
 var key = [];
 
+/// Array of flags indicating in a key was jsut pressed last last loop()
+/// Note that this will only work inside loop()
+var pressed = [];
+
+/// Array of flags indicating in a key was jsut released last last loop()
+/// Note that this will only work inside loop()
+var released = [];
+
 var _keyboard_installed = false;
 var _pressed = false;
 
@@ -494,7 +610,12 @@ function install_keyboard()
 		_allog("Keyboard already installed");
 		return -1;
 	}
-	for (var c=0;c<0x7f;c++) key[c] = false;
+	for (var c=0;c<0x7f;c++) 
+	{
+		key[c] = false;
+		pressed[c] = false;
+		released[c] = false;
+	}
 	window.addEventListener('keyup',_keyup);
 	window.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
@@ -519,6 +640,7 @@ function remove_keyboard()
 function _keydown(e)
 {
 	key[e.keyCode] = true;
+	pressed[e.keyCode] = true;
 	_pressed = true;
 	if (e.keyCode!=KEY_F5) e.preventDefault();
 }
@@ -527,6 +649,7 @@ function _keydown(e)
 function _keyup(e)
 {
 	key[e.keyCode] = false;
+	released[e.keyCode] = true;
 	if (e.keyCode!=KEY_F5) e.preventDefault();
 }
 
@@ -674,8 +797,10 @@ function _fillstyle(bitmap,color)
 }
 
 /// Helper for setting stroke style
-function _strokestyle(bitmap,color)
+function _strokestyle(bitmap,color,width)
 {
+	if (!width) width=1;
+	bitmap.context.lineWidth = width;
 	bitmap.context.strokeStyle = 'rgba('+ getr(color) + ',' + getg(color) + ',' + getb(color) + ',' + getaf(color) + ')';
 }
 
@@ -822,9 +947,10 @@ function clear_to_color(bitmap,color)
 /// @param x1,y1 start point coordinates
 /// @param x2,y2 end point coordinates
 /// @param color color in 0xAARRGGBB format
-function line(bitmap,x1,y1,x2,y2,color)
+/// @param width line width
+function line(bitmap,x1,y1,x2,y2,color,width)
 {
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	bitmap.context.moveTo(x1,y1);
 	bitmap.context.lineTo(x2,y2);
@@ -837,10 +963,12 @@ function line(bitmap,x1,y1,x2,y2,color)
 /// @param x column to draw the line to
 /// @param y1,y2 line endpoints
 /// @param color color in 0xAARRGGBB format
-function vline(bitmap,x,y1,y2,color)
+/// @param width line width
+function vline(bitmap,x,y1,y2,color,width)
 {
+	if (!width) width=1;
 	_fillstyle(bitmap,color);
-	bitmap.context.fillRect(x,y1,1,y2-y1);
+	bitmap.context.fillRect(x,y1,width,y2-y1);
 }
 
 /// Draws a horizontal line.
@@ -849,10 +977,12 @@ function vline(bitmap,x,y1,y2,color)
 /// @param y row to draw the line to
 /// @param x1,x2 line endpoints
 /// @param color color in 0xAARRGGBB format
-function hline(bitmap,x1,y,x2,color)
+/// @param width line width
+function hline(bitmap,x1,y,x2,color,width)
 {
+	if (!width) width=1;
 	_fillstyle(bitmap,color);
-	bitmap.context.fillRect(x1,y,x2-x1,1);
+	bitmap.context.fillRect(x1,y,x2-x1,width);
 }
 
 /// Draws a triangle.
@@ -862,9 +992,10 @@ function hline(bitmap,x1,y,x2,color)
 /// @param x2,y2 second point coordinates
 /// @param x3,y3 third point coordinates
 /// @param color color in 0xAARRGGBB format
-function triangle(bitmap,x1,y1,x2,y2,x3,y3,color)
+/// @param width line width
+function triangle(bitmap,x1,y1,x2,y2,x3,y3,color,width)
 {
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	bitmap.context.moveTo(x1,y1);
 	bitmap.context.lineTo(x2,y2);
@@ -897,9 +1028,10 @@ function trianglefill(bitmap,x1,y1,x2,y2,x3,y3,color)
 /// @param vertices number of vertices to draw
 /// @param points array containing vertices*2 elements of polygon coordinates in [x1,y1,x2,y2,x3...] format
 /// @param color color in 0xAARRGGBB format
-function polygon(bitmap,vertices,points,color)
+/// @param width line width
+function polygon(bitmap,vertices,points,color,width)
 {
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	for (var c=0;c<vertices;c++)
 	{
@@ -935,9 +1067,10 @@ function polygonfill(bitmap,vertices,points,color)
 /// @param x1,y1 start point coordinates
 /// @param x2,y2 end point coordinates
 /// @param color color in 0xAARRGGBB format
-function rect(bitmap,x1,y1,x2,y2,color)
+/// @param width line width
+function rect(bitmap,x1,y1,x2,y2,color,width)
 {
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.strokeRect(x1,y1,x2,y2);
 }
 
@@ -959,9 +1092,10 @@ function rectfill(bitmap,x1,y1,x2,y2,color)
 /// @param x,y center point coordinates
 /// @param r circle radius
 /// @param color color in 0xAARRGGBB format
-function circle(bitmap,x,y,radius,color)
+/// @param width line width
+function circle(bitmap,x,y,radius,color,width)
 {
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	bitmap.context.arc(x,y,radius,0,PI2);
 	bitmap.context.stroke();
@@ -988,10 +1122,11 @@ function circlefill(bitmap,x,y,radius,color)
 /// @param ang1,ang2 angles to draw the arc between measured anticlockwise from the positive x axis in degrees
 /// @param r radius
 /// @param color color in 0xAARRGGBB format
-function arc(bitmap,x,y,ang1,ang2,r,color)
+/// @param width line width
+function arc(bitmap,x,y,ang1,ang2,r,color,width)
 {
 //_debug(ang1 +" "+ ang2 +" "+ r);
-	_strokestyle(bitmap,color);
+	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	if (ang1>ang2)
 	{
@@ -1173,7 +1308,7 @@ function load_font(filename)
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
 /// @param outline outline color, or omit for no outline
-function textout(bitmap,f,s,x,y,size,color,outline)
+function textout(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name ;
 	//_debug(bitmap.context.font );
@@ -1182,7 +1317,7 @@ function textout(bitmap,f,s,x,y,size,color,outline)
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
-		_strokestyle(bitmap,outline);
+		_strokestyle(bitmap,outline,width);
 		bitmap.context.strokeText(s,x,y);
 	}
 }
@@ -1196,7 +1331,7 @@ function textout(bitmap,f,s,x,y,size,color,outline)
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
 /// @param outline outline color, or -1 for no outline
-function textout_centre(bitmap,f,s,x,y,size,color,outline)
+function textout_centre(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "center";
@@ -1204,7 +1339,7 @@ function textout_centre(bitmap,f,s,x,y,size,color,outline)
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
-		_strokestyle(bitmap,outline);
+		_strokestyle(bitmap,outline,width);
 		bitmap.context.strokeText(s,x,y);
 	}
 }
@@ -1218,7 +1353,7 @@ function textout_centre(bitmap,f,s,x,y,size,color,outline)
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
 /// @param outline outline color, or -1 for no outline
-function textout_right(bitmap,f,s,x,y,size,color,outline)
+function textout_right(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "right";
@@ -1226,7 +1361,7 @@ function textout_right(bitmap,f,s,x,y,size,color,outline)
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
-		_strokestyle(bitmap,color);
+		_strokestyle(bitmap,color,width);
 		bitmap.context.strokeText(s,x,y);
 	}
 }
@@ -1236,6 +1371,9 @@ function textout_right(bitmap,f,s,x,y,size,color,outline)
 
 var _volume = 1.0;
 
+/// Loaded samples
+var _samples = [];
+
 /// Install sound
 /// @todo: stuff here? AudioContext? comaptibility first!
 function install_sound()
@@ -1243,18 +1381,20 @@ function install_sound()
 
 }
 
-/// Doesn't set global volume at all, since it does nothing.
-/// @todo: this
+/// Sets global volume
 function set_volume(volume)
 {
-	
+	_volume = volume;
+	for(var c=0;c<_samples.length;c++)
+	{
+		_samples[c].element.volume = _samples[c].volume*_volume;
+	}
 }
 
-/// Doesn't get global volume at all, since it does nothing.
-/// @todo: this too
+/// Gets global volume
 function get_volume()
 {
-
+	return _volume;
 }
 
 /// Loads a sample from file
@@ -1265,8 +1405,9 @@ function load_sample(filename)
 {
 	var audio = document.createElement('audio');
 	audio.src = filename;
-	var sample = {element:audio,file:filename,ready:false};
+	var sample = {element:audio,file:filename,volume:1.0,ready:false};
 	_downloadables.push(sample);
+	_samples.push(sample);
 	log("Loading sample " + filename + "...");
 	audio.onloadeddata  = function()
 	{
@@ -1295,7 +1436,6 @@ function play_sample(sample,vol,freq,loop)
 	if (!freq && freq!=0) freq=1.0;
 	if (!loop && loop!=0) loop=0;
 	adjust_sample(sample,vol,freq,loop)
-	//sample.element.fastSeek(0);
 	sample.element.play();
 }
 
@@ -1307,7 +1447,8 @@ function play_sample(sample,vol,freq,loop)
 /// @param loop loop or not to loop
 function adjust_sample(sample,vol,freq,loop)
 {
-	sample.element.volume = vol;
+	sample.volume = vol;
+	sample.element.volume = sample.volume*_volume;
 	sample.element.loop = loop;
 	sample.element.playbackRate = freq;
 }
@@ -1318,6 +1459,5 @@ function adjust_sample(sample,vol,freq,loop)
 function stop_sample(sample)
 {
 	sample.element.pause();
- 	//sample.element.fastSeek(0);
 }
 

@@ -1,10 +1,4 @@
-var page1,page2,active_page,logo;
 var beep;
-var tim=0;
-var size=64,speed=3;
-var cx=0,cy=0;
-var vx=speed,vy=speed;
-
 
 var stage=-1;
 var delay=0;
@@ -18,7 +12,6 @@ function draw()
 	
 	if (stage==0)
 	{
-		//stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
 		title = "progress_bar"
 		loading_bar(delay/200);
 	} else if (stage==1)
@@ -71,7 +64,6 @@ function draw()
 		var x = rand()%SCREEN_W;
 		var y = rand()%SCREEN_H;
 		textout(canvas,font,getpixel(canvas,x,y).toString(16),x,y,24,getpixel(canvas,x,y));
-		//_debug(getpixel(canvas,x,y).toString(16));
 	}  else if (stage==13)
 	{
 		title = "putpixel";
@@ -203,7 +195,7 @@ function draw()
 		remove_all_ints();
 		install_int_ex(function(){
 			play_sample(beep,Math.random(),Math.random()+.5,0);
-			circlefill(canvas,SCREEN_W/2,SCREEN_H/2,400,makecol(rand()%255,rand()%255,rand()%255));
+			circlefill(canvas,SCREEN_W/2,SCREEN_H/2,200,makecol(rand()%255,rand()%255,rand()%255));
 		},SECS_TO_TIMER(2));
 	} else if (stage==33)
 	{
@@ -220,46 +212,24 @@ function draw()
 	delay++;
 	if (key[KEY_SPACE] && delay>10)
 	{
-		//stretch_sprite(canvas,logo,cx-size/2,cy-size/2,size,size);
 		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
 		stage++;
 		delay=0;
-		//subtitle="";
 	}
-}
-
-function update()
-{
-	cx+=vx;
-	cy+=vy;
-	if (cx>SCREEN_W-size/2) vx=-speed;
-	if (cy>SCREEN_H-size/2) vy=-speed;
-	if (cx<size/2) vx=speed;
-	if (cy<size/2) vy=speed;
 }
 
 function main()
 {
 	enable_debug('debug');
-	allegro_init();
-	set_gfx_mode("unittest", 640, 480);
-	install_keyboard();
-	install_timer();
-	install_mouse();
-	install_sound();
+	allegro_init_all("unittest", 640, 480);
 	logo = load_bmp("allegro.png");
 	beep = load_sample("dtmf.mp3");
-	active_page = page2;
 
 	ready(function(){
 		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
 		loop(function()
 		{
-			//clear_to_color(canvas, makecol(255, 255, 255));
-		
-			update();
-			draw();
-		
+			draw();		
 		}, BPS_TO_TIMER(60));
 	});
 	return 0;
