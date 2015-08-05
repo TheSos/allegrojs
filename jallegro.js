@@ -80,6 +80,26 @@ function distance2(x1,y1,x2,y2)
 	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
 }
 
+function linedist(x1,y1,x2,y2,x3,y3)
+{
+	var px = x2-x1
+	var py = y2-y1
+  var something = px*px + py*py
+	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
+	if (u > 1)
+		u = 1
+	else if (u < 0)
+		u = 0
+
+	var x = x1 + u * px
+	var y = y1 + u * py
+  var dx = x - x3
+  var dy = y - y3
+
+  var dist = Math.sqrt(dx*dx + dy*dy)
+  return dist
+}
+
 function lerp(from,to,progress)
 {
 	return from+(to-from)*progress;
@@ -500,12 +520,14 @@ function _keydown(e)
 {
 	key[e.keyCode] = true;
 	_pressed = true;
+	if (e.keyCode!=KEY_F5) e.preventDefault();
 }
 
 /// keyup event handler
 function _keyup(e)
 {
 	key[e.keyCode] = false;
+	if (e.keyCode!=KEY_F5) e.preventDefault();
 }
 
 ////////////////////////////////////////////
@@ -1269,6 +1291,9 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
+	if (!vol && vol!=0) vol=1.0;
+	if (!freq && freq!=0) freq=1.0;
+	if (!loop && loop!=0) loop=0;
 	adjust_sample(sample,vol,freq,loop)
 	//sample.element.fastSeek(0);
 	sample.element.play();
