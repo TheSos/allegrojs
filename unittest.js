@@ -18,7 +18,9 @@ function draw()
 	
 	if (stage==0)
 	{
-		title = "Let's begin!"
+		//stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
+		title = "progress_bar"
+		loading_bar(delay/200);
 	} else if (stage==1)
 	{
 		title = "blit";
@@ -238,6 +240,7 @@ function update()
 
 function main()
 {
+	enable_debug('debug');
 	allegro_init();
 	set_gfx_mode("unittest", 640, 480);
 	install_keyboard();
@@ -248,15 +251,17 @@ function main()
 	beep = load_sample("dtmf.mp3");
 	active_page = page2;
 
-	loop(function()
-	{
-		//clear_to_color(canvas, makecol(255, 255, 255));
-
-		update();
-		draw();
-	
-  }, BPS_TO_TIMER(60));
-
+	ready(function(){
+		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
+		loop(function()
+		{
+			//clear_to_color(canvas, makecol(255, 255, 255));
+		
+			update();
+			draw();
+		
+		}, BPS_TO_TIMER(60));
+	});
 	return 0;
 }
 END_OF_MAIN();

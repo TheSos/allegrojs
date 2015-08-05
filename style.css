@@ -19,3 +19,10 @@ canvas {
  image-rendering: pixelated;                 /* Awesome future-browsers       */
   -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
+
+#debug {
+width:640px;
+height:480px;
+border:1px solid black;
+font: 16px monospace;
+}

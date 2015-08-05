@@ -10,6 +10,8 @@
 /// Set this to 1 to get debug messages
 var ALLEGRO_DEBUG = 1;
 
+var _debug_enabled = false;
+var _debug_element;
 
 /// Fatal error displays alert and logs to console
 function _error(string)
@@ -19,11 +21,24 @@ function _error(string)
 	alert(string);
 }
 
+function enable_debug(id)
+{
+	_debug_element = document.getElementById(id);
+	if (_debug_element) _debug_enabled = true;
+}
+
 /// Logs to console
 function log(string)
 {
-	if (!ALLEGRO_DEBUG) return;
-	console.log(string);
+	if (!_debug_enabled) return;
+	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
+}
+
+/// Wipes the debug console
+function wipe_log()
+{
+	if (!_debug_enabled) return;
+	_debug_element.innerHTML = "";
 }
 
 /// Logs to console
@@ -36,10 +51,96 @@ function _debug(string)
 ////////////////////////////////////////////
 // HELPER MATH FUNCTIONS
 
+var _seed = 1;
+
+function srand(seed)
+{
+	if (!seed)
+	{
+		_seed = 2147483647 * Math.random();
+	} else {
+		_seed = seed;
+	}
+}
+
 function rand()
 {
-	return Math.floor(Math.random()*65536);
+	return 65536 * Math.random();
 }
+
+function abs(a) {return (a<0)?(-a):(a);}
+
+function distance(x1,y1,x2,y2)
+{
+	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+}
+
+function distance2(x1,y1,x2,y2)
+{
+	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
+}
+
+function lerp(from,to,progress)
+{
+	return from+(to-from)*progress;
+}
+
+function dot(x1,y1,x2,y2)
+{
+	return x1*x2+y1*y2;
+}
+
+function sgn(a)
+{
+	return a < 0 ? -1 : (a > 0 ? 1 : 0);
+}
+
+function angle(x1,y1,x2,y2)
+{
+	var a = DEG(Math.atan2(y2 - y1, x2 - x1));
+	return a < 0 ? a + 360 : a;
+}
+
+function anglediff(a,b)
+{
+	var diff = b - a;
+	while (diff > 180) { diff -= 360; }
+	while (diff <= -180) { diff += 360; }
+	return diff;
+}
+
+function clamp(value,min,max)
+{
+	if (max > min)
+	{
+		if (value < min) return min;
+		else if (value > max) return max;
+		else return value;
+	} else {
+		if (value < max) return max;
+		else if (value > min) return min;
+		else return value;
+	}
+}
+
+function scale(value,min,max,min2,max2)
+{
+	return min2 + ((value - min) / (max - min)) * (max2 - min2);
+}
+
+function scaleclamp(value,min,max,min2,max2)
+{
+	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
+	if (max2 > min2)
+	{
+		value = value < max2 ? value : max2;
+		return value > min2 ? value : min2;
+	}
+	value = value < min2 ? value : min2;
+	return value > max2 ? value : max2;
+}
+
+
 
 ////////////////////////////////////////////
 // CONFIGURATION ROUTINES
@@ -48,13 +149,25 @@ function rand()
 /// This function must be called before anything else, even though it does nothing.
 function install_allegro()
 {
-	
+	log("Allegro isntalled!");
 }
 
 /// Wrapper for install_allegro.
 function allegro_init()
 {
+	install_allegro();
+}
 
+/// Inits Allegro and installs all subsystems.
+/// Calls install_allegro(), isntall_mouse(), install_timer(), install_keyboard(), isntall_sound() and set_gfx_mode() with provided parameters
+function allegro_init_all(id,w,h)
+{
+	install_allegro();
+	set_gfx_mode(id,w,h);
+	install_mouse();
+	install_keyboard();
+	install_sound();
+	
 }
 
 /// Macro to be placed after the end of main()
@@ -116,6 +229,7 @@ function install_mouse()
 	canvas.canvas.addEventListener('mousedown',_mousedown);
 	canvas.canvas.addEventListener('mousemove',_mousemove);
 	_mouse_installed = true;
+	log("Mouse installed!");
 	return 0;
 }
 
@@ -131,6 +245,7 @@ function remove_mouse()
 	_canvas.canvas.removeEventListener('mousedown',_mousedown);
 	_canvas.canvas.removeEventListener('mousemove',_mousemove);
 	_mouse_installed = false;
+	log("Mouse removed!");
 	return 0;
 }
 
@@ -165,8 +280,13 @@ function _mousemove(e)
 ////////////////////////////////////////////
 // TIMER ROUTINES
 
+/// All downloadable objects
+var _downloadables = [];
+
+/// holds all currently installed timers
 var _installed_timers = [];
 
+/// looks upa  timer by it's function on the list
 function _timer_lookup(proc)
 {
 	for(var c=0;c<_installed_timers.length;c++)
@@ -197,12 +317,14 @@ function BPS_TO_TIMER(bps) {return 1000/bps;}
 function BPM_TO_TIMER(bpm) {return 60*1000/bpm;}
 
 /// Does nothing.
-/// \todo: remove
+/// \todo: remove?
 function install_timer()
 {
 	
 }
 
+/// Unix timestamp!
+/// Returns number of seconds since 1970 started.
 function time()
 {
 	return new Date().getTime();
@@ -229,12 +351,70 @@ function install_int_ex(procedure,speed)
 {
 	var timer_id = window.setInterval(procedure,speed);
 	_installed_timers.push({timer:procedure,id:timer_id});
+	log("Added insterrupt #" + timer_id + " at " + speed + "msec isntervals!");
 }
 
+/// Game loop interrupt
+/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval.
+/// @param procedure function to be looped, prteferably inline, but let's not talk codign styles here
+/// @param speed speed in the same format as install_int_ex()
 function loop(procedure,speed)
 {
 	var timer_id = window.setInterval(procedure,speed);
+	log("Game loop initialised!");
 	//_installed_timers.push({timer:procedure,id:timer_id});
+}
+
+/// time when ready() was called
+var _loader_init_time;
+
+/// Holds the download complete handler function
+var _ready_proc;
+
+/// Holds the download complete handler function
+var _bar_proc;
+
+/// cchecks if everythign has downlaoded in intervals
+function _progress_check()
+{
+	var num_assets = 0;
+	var num_loaded = 0;
+	for (var c=0;c<_downloadables.length;c++)
+	{
+		num_assets++;
+		if (_downloadables[c].ready) num_loaded++;
+	}
+	if (_bar_proc) _bar_proc(num_assets/num_loaded);
+	if (num_loaded<num_assets)
+	{
+		window.setTimeout(_progress_check,100);
+	}
+	else 
+	{
+		log("Loading complete! Took " + ((time()-_loader_init_time)/1000).toFixed(1) + " seconds!");
+		_ready_proc();
+	}
+}
+
+function loading_bar(progress)
+{
+	rectfill(canvas,5,SCREEN_H-55,SCREEN_W-10,50,makecol(0,0,0));
+	rectfill(canvas,10,SCREEN_H-50,SCREEN_W-20,40,makecol(255,255,255));
+	rectfill(canvas,15,SCREEN_H-45,SCREEN_W-30,30,makecol(0,0,0));
+	rectfill(canvas,20,SCREEN_H-40,scaleclamp(progress,0,1,0,(SCREEN_W-40)),20,makecol(255,255,255));
+}
+
+/// Installs a handler to check if everything has downlaoded. 
+/// You shoudla lways wrap your loop() function around it, unless there is nothign ecternal you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this halnder will only get executed after everything has laoded making sure youc an access bitmap properties and data and play samples right away.
+/// @param procedure function to be called when eveything has loaded.
+/// @param bar loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
+function ready(procedure,bar)
+{
+	_loader_init_time = time();
+	_ready_proc = procedure;
+	log("Loader initialised!");
+	if (bar) _bar_proc = bar; else _bar_proc = loading_bar;
+	window.setTimeout(_progress_check,100);
 }
 
 /// Removes interrupt
@@ -245,6 +425,7 @@ function remove_int(procedure)
 	{
 		if (_installed_timers[c].timer == _installed_timers)
 		{
+			log("Removing interrupt " + _installed_timers[c].id + "!");
 			window.clearInterval(_installed_timers[c].id);
 			_installed_timers.splice(c,1);
 			return;
@@ -297,6 +478,7 @@ function install_keyboard()
 	window.addEventListener('keyup',_keyup);
 	window.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
+	log("Keybaord installed!");
 }
 
 /// Uninstalls keyboard
@@ -310,6 +492,7 @@ function remove_keyboard()
 	window.removeEventListener('keyup',_keyup);
 	window.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
+	log("Keybaord removed!");
 }
 
 /// keydown event handler
@@ -337,7 +520,6 @@ function _keyup(e)
 ////////////////////////////////////////////
 // BITMAP OBJECTS
 
-
 /// Creates empty bitmap.
 /// Creates a bitmap object of given dimensions and returns it.
 /// @param width bitmap width
@@ -345,47 +527,37 @@ function _keyup(e)
 /// @return bitmap object
 function create_bitmap(width,height)
 {
+	log("Creating bitmap at " + width + " x " + height + "!");
 	var cv = document.createElement('canvas');
 	cv.width = width;
 	cv.height = height;
 	var ctx = cv.getContext("2d");
-	return {w:width,h:height,canvas:cv,context:ctx};
+	return {w:width,h:height,canvas:cv,context:ctx,ready:true};
 }
 
 /// Loads bitmap from file
-/// Loads image from file and stalls execution until image is fully loaded.
+/// Loads image from file async. This means that the executioon won't stall for the image, and it's data won't be accessible right off the start. You can check for bitmap object's 'ready' member to see if it has loaded, but you probably should avoid stallign execution for that, as JS doesn't really like that.
 /// @param filename URL of image
 /// @return bitmap object, or -1 on error
 function load_bitmap(filename)
 {
+	log("Loading bitmap " + filename + "...");
 	var img = new Image();
 	img.src = filename;
 	var now = time();
-	/*
-	while(!img.complete)
-	{
-		if (time()-now>10)
-		{
-			log("Loading " + filename + " 10s timeout!");
-			//return -1;
-		}
-	}
-	*/
-	
-	
-	var bmp = {canvas:-1,context:-1,w:-1,h:-1};
+	var cv = document.createElement('canvas');
+	var ctx = cv.getContext("2d");
+	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false};
+	_downloadables.push(bmp);
 	img.onload = function(){
-		var cv = document.createElement('canvas');
-		cv.width = img.width;
-		cv.height = img.height;
-		var ctx = cv.getContext("2d");
-		ctx.drawImage(img,0,0);
-		bmp.context = ctx;
-		bmp.canvas = cv;
+		log("Bitmap " + filename + " loaded, size: " + img.width + " x " + img.height + "!");
+		bmp.canvas.width = img.width;
+		bmp.canvas.height = img.height;
+		bmp.context.drawImage(img,0,0);
 		bmp.w = img.width;
 		bmp.h = img.height;
+		bmp.ready=true;
 	};
-	
 	return bmp;
 }
 
@@ -433,7 +605,7 @@ function set_gfx_mode(canvas_id,width,height)
 	//_debug(ctx);
 	SCREEN_W = width;
 	SCREEN_H = height;
-	canvas = {w:width,h:height,canvas:cv,context:ctx};
+	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
 	font = load_font('vga.ttf');
 	_gfx_installed = true;
 	
@@ -1071,9 +1243,16 @@ function load_sample(filename)
 {
 	var audio = document.createElement('audio');
 	audio.src = filename;
-	return {element:audio,file:filename};
+	var sample = {element:audio,file:filename,ready:false};
+	_downloadables.push(sample);
+	log("Loading sample " + filename + "...");
+	audio.onloadeddata  = function()
+	{
+		sample.ready=true;
+		log("Sample " + filename + " loaded!");
+	}
+	return sample;
 }
-
 
 /// Does noithing.
 /// @todo: something that happens here
