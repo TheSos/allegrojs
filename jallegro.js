@@ -144,13 +144,13 @@ function show_mouse(show)
 /// mouseup event handler
 function _mouseup(e)
 {
-	mouse_b = mouse_b&~(1<<e.which);
+	mouse_b = mouse_b&~(1<<(e.which-1));
 }
 
 /// mousedown event handler
 function _mousedown(e)
 {
-	mouse_b = mouse_b|(1<<e.which);
+	mouse_b = mouse_b|(1<<(e.which-1));
 }
 
 /// mousemove event handler
@@ -166,6 +166,15 @@ function _mousemove(e)
 // TIMER ROUTINES
 
 var _installed_timers = [];
+
+function _timer_lookup(proc)
+{
+	for(var c=0;c<_installed_timers.length;c++)
+	{
+		if (_installed_timers[c].timer==proc) return _installed_timers[c];
+	}
+	return -1;
+}
 
 /// Converts seconds to install_int_ex interval units
 /// @param secs number of seconds
@@ -209,7 +218,7 @@ function install_int(procedure,msec)
 }
 
 /// Installs interrupt function.
-/// With this one, you must use helper functions to set the interval in the second argument. The lowest interval is 1 msec, but you probably don't want to go below 17 msec. Suggested values are BPS_TO_TIMER(30) or BPS_TO_TIMER(60). It can be used to alter previously installed interrupt function as well.
+/// With this one, you must use helper functions to set the interval in the second argument. The lowest interval is 1 msec, but you probably don't want to go below 17 msec. Suggested values are BPS_TO_TIMER(30) or BPS_TO_TIMER(60). It cannot be used to alter previously installed interrupt function as well.
 /// * SECS_TO_TIMER(secs) - seconds
 /// * MSEC_TO_TIMER(msec) - miliseconds (1/1000th)
 /// * BPS_TO_TIMER(bps) - beats per second
@@ -336,6 +345,7 @@ function load_bitmap(filename)
 	var img = new Image();
 	img.src = filename;
 	var now = time();
+	/*
 	while(!img.complete)
 	{
 		if (time()-now>10)
@@ -344,6 +354,7 @@ function load_bitmap(filename)
 			//return -1;
 		}
 	}
+	*/
 	var w = img.width;
 	var h = img.height;
 	var bmp = create_bitmap(w,h);
@@ -549,8 +560,8 @@ function getaf(color)
 /// @return color in 0xAARRGGBB format
 function getpixel(bitmap,x,y)
 {
-	var data = bitmap.context.getImageData(x,y,1,1);
-	return (data[0]<<24)|((data[1]&0xff)<<16)|((data[2]&0xff)<<8)|((data[3]&0xff));
+	var data = bitmap.context.getImageData(x,y,1,1).data;
+	return (data[3]<<24)|((data[0]&0xff)<<16)|((data[1]&0xff)<<8)|((data[2]&0xff));
 }
 
 /// Gets pixel color from bitmap
@@ -559,10 +570,10 @@ function getpixel(bitmap,x,y)
 /// @param x x coordinate of pixel
 /// @param y y coordinate of pixel
 /// @param color color in 0xAARRGGBB format
-function putpixel(b,x,y,color)
+function putpixel(bitmap,x,y,color)
 {
 	_fillstyle(bitmap,color);
-	bitmap.context.fillRect(20,20,150,100);
+	bitmap.context.fillRect(x,y,1,1);
 }
 
 /// Clears bitmap to transparent black.
@@ -620,7 +631,7 @@ function vline(bitmap,x,y1,y2,color)
 function hline(bitmap,x1,y,x2,color)
 {
 	_fillstyle(bitmap,color);
-	bitmap.context.fillRect(x1,y,x2-x1,y);
+	bitmap.context.fillRect(x1,y,x2-x1,1);
 }
 
 /// Draws a triangle.
@@ -758,9 +769,15 @@ function circlefill(bitmap,x,y,radius,color)
 /// @param color color in 0xAARRGGBB format
 function arc(bitmap,x,y,ang1,ang2,r,color)
 {
+//_debug(ang1 +" "+ ang2 +" "+ r);
 	_strokestyle(bitmap,color);
 	bitmap.context.beginPath();
-	bitmap.context.arc(x,y,RAD(ang1),RAD(ang2),r);
+	if (ang1>ang2)
+	{
+		bitmap.context.arc(x,y,r,RAD(ang1),RAD(ang2));
+	} else {
+		bitmap.context.arc(x,y,r,RAD(ang1),RAD(ang2));
+	}
 	bitmap.context.stroke();
 }
 
@@ -775,7 +792,12 @@ function arcfill(bitmap,x,y,ang1,ang2,r,color)
 {
 	_fillstyle(bitmap,color);
 	bitmap.context.beginPath();
-	bitmap.context.arc(x,y,RAD(ang1),RAD(ang2),r);
+	if (ang1>ang2)
+	{
+		bitmap.context.arc(x,y,r,RAD(ang1),RAD(ang2));
+	} else {
+		bitmap.context.arc(x,y,r,RAD(ang1),RAD(ang2));
+	}
 	bitmap.context.fill();
 }
 
@@ -866,7 +888,7 @@ function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 	bmp.context.save(); 
 	bmp.context.translate(x,y);
   bmp.context.rotate(RAD(angle));
-	bmp.context.translate(-scale*cx,-scalecy);
+	bmp.context.translate(-scale*cx,-scale*cy);
   bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,x,y,sprite.w*scale,sprite.h*scale);
 	bmp.context.restore(); 
 }
@@ -879,6 +901,7 @@ function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 /// @param dx,dy top-left bitmap corner coordinates in target bitmap
 /// @param w,h blit size
 /// @todo make rotated versions of this
+/// @todo tell everyone that blitting to itself is slower than youn thing (requires copy?)
 function blit(source,dest,sx,sy,dx,dy,w,h)
 {
 	//_debug(dest);
@@ -931,8 +954,8 @@ function load_font(filename)
 /// @param outline outline color, or omit for no outline
 function textout(bitmap,f,s,x,y,size,color,outline)
 {
-	bitmap.context.font = size + 'px ' + f.name ;
-	_debug(bitmap.context.font );
+	bitmap.context.font = size.toFixed() + 'px ' + f.name ;
+	//_debug(bitmap.context.font );
 	bitmap.context.textAlign = "left";
 	_fillstyle(bitmap,color);
 	bitmap.context.fillText(s,x,y);
@@ -954,7 +977,7 @@ function textout(bitmap,f,s,x,y,size,color,outline)
 /// @param outline outline color, or -1 for no outline
 function textout_centre(bitmap,f,s,x,y,size,color,outline)
 {
-	bitmap.context.font = size + 'px ' + f.name;
+	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "center";
 	_fillstyle(bitmap,color);
 	bitmap.context.fillText(s,x,y);
@@ -976,7 +999,7 @@ function textout_centre(bitmap,f,s,x,y,size,color,outline)
 /// @param outline outline color, or -1 for no outline
 function textout_right(bitmap,f,s,x,y,size,color,outline)
 {
-	bitmap.context.font = size + 'px ' + f.name;
+	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "right";
 	_fillstyle(bitmap,color);
 	bitmap.context.fillText(s,x,y);
