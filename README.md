@@ -1,7 +1,7 @@
 # jAllegro
 ## A lousy javascript port of a game programming library
 ---
-[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Documentation](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial.html)
+[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Documentation](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial)
 ---
 ### Disclaimer
 This is all WIP, watch out!
