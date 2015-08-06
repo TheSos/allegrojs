@@ -3,8 +3,6 @@
 ---
 [Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [API reference](http://jallegro.sos.gd/api) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial)
 ---
-### Disclaimer
-This is all WIP, watch out!
 
 ### What is jAllegro?
 
