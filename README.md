@@ -218,12 +218,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #### v4.0.1
 * This is the first version
 * lots of stuff still broken
-* todo: examples
-* todo: tutorial
-* todo: cleanup
-* todo: website
-* todo: set/get_volume
-* todo: fix/remvoe freq from play_sample
-* todo: crunched version
-* todo: reference style
-* todo: credit vga.ttf
+* ~~todo: examples~~
+* ~~todo: tutorial~~
+* ~~todo: cleanup~~
+* ~~todo: website~~
+* ~~todo: set/get_volume~~
+* ~~todo: fix/remvoe freq from play_sample~~
+* ~~todo: crunched version~~
+* ~~todo: reference style~~
+* ~~todo: remove vga.ttf~~
