@@ -1272,10 +1272,13 @@ function load_sample(filename)
 	_downloadables.push(sample);
 	_samples.push(sample);
 	log("Loading sample " + filename + "...");
-	audio.onloadeddata  = function()
+	audio.onloadeddata   = function()
 	{
-		sample.ready=true;
-		log("Sample " + filename + " loaded!");
+		if (!sample.ready)
+		{
+			sample.ready=true;
+			log("Sample " + filename + " loaded!");
+		}
 	}
 	return sample;
 }
@@ -1299,7 +1302,7 @@ function play_sample(sample,vol,freq,loop)
 	if (!freq && freq!=0) freq=1.0;
 	if (!loop) loop=false;
 	adjust_sample(sample,vol,freq,loop)
-	sample.currentTime = 0;
+	sample.element.currentTime = 0;
 	sample.element.play();
 }
 
@@ -1323,7 +1326,7 @@ function adjust_sample(sample,vol,freq,loop)
 function stop_sample(sample)
 {
 	sample.element.pause();
-	sample.currentTime = 0;
+	sample.element.currentTime = 0;
 }
 
 /// Pauses playing
