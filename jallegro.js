@@ -525,6 +525,15 @@ function _keyup(e)
 /// @name BITMAP OBJECTS
 //@{
 
+/// Bitmap object, This is not a function.
+/// This is not a function, it's the structure of bitmap object returned from load_bitmap() and create_bitmap(). For every bitmap laoded or created, a canvas element is created. Loaded images are then drawn onto the canvas, so that you can easily manipulate images and everything is consistent. You can also load a single fiel two times and modify it differently for each instance.
+/// @param w bitmap width
+/// @param h bitmap height
+/// @param canvas underlying canvas element, used to draw the bitmap onto stuff
+/// @param context canvas' rendering context, used to draw stuff onto this bitmap
+/// @param ready flags whether laoding of the bitmap is complete
+function BITMAP_OBJECT(w,h,canvas,context,ready) {}
+
 /// Creates empty bitmap.
 /// Creates a bitmap object of given dimensions and returns it.
 /// @param width bitmap width
@@ -1143,6 +1152,13 @@ function stretch_blit(source,dest,sx,sy,sw,sh,dx,dy,dw,dh)
 
 var _num_fonts = 0;
 
+/// Font object, this is not a function.
+/// This is not a function but a reference entry for font object returned by load_font() and create_cont(). 
+/// @param element <style> element containing the font-face declaration. Not available for create_font() fonts and default font object.
+/// @param file font filename, empty string for default font and create_font() typefaces.
+/// @param name font-family name
+function FONT_OBJECT(element,file,name) {}
+
 /// Loads font from file.
 /// This actually creates a style element, puts code isnide and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been laoded in js, thus laod your fonts first thing, and everything should be fine.
 /// @param filename Font file URL
@@ -1156,6 +1172,15 @@ function load_font(filename)
 	document.head.appendChild(s);
 	s.textContent = "@font-face { font-family: " + fontname + "; src:url('" + filename + "');}";
 	return {element:s,file:filename,name:fontname};
+}
+
+/// Creates a font objects from font-family
+/// This creates a fotn element using an existing font-family name.
+/// @param family font-family property, can be 'serif', 'sans-serif' or anything else that works
+/// @return font object
+function create_font(family)
+{
+	return {element:null,file:"",name:family};
 }
 
 /// Draws text on bitmap.
@@ -1237,6 +1262,14 @@ var _volume = 1.0;
 /// Loaded samples
 var _samples = [];
 
+/// Sample object, this is not a function.
+/// This is not a function. This is a sample object structure returned by load_sample().
+/// @param element HTML <audio> element containing the sound properties
+/// @param file sample filename
+/// @param volume sample volume, this is combined with global volume
+/// @param ready loaded indicator flag
+function SAMPLE_OBJECT(element,file,volume,ready) {}
+
 /// Install sound
 /// @todo: stuff here? AudioContext? comaptibility first!
 function install_sound()
@@ -1272,7 +1305,7 @@ function load_sample(filename)
 	_downloadables.push(sample);
 	_samples.push(sample);
 	log("Loading sample " + filename + "...");
-	audio.onloadeddata   = function()
+	audio.onloadeddata = function()
 	{
 		if (!sample.ready)
 		{
