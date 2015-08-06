@@ -7,6 +7,7 @@ var subtitle = "press space";
 
 var timercolor = makecol(192,168,1,254);
 var timers = false;
+var width = 13;
 function draw()
 {
 	
@@ -141,22 +142,42 @@ function draw()
 	}   else if (stage==28)
 	{
 		title = "mouse";
-		putpixel(canvas,mouse_x,mouse_y,makecol(255,255,255));
+		//circlefill(canvas,mouse_x,mouse_y,10,makecol(0,0,0));
+		line(canvas,mouse_x,mouse_y,mouse_x-mouse_mx,mouse_y-mouse_my,makecol(255,255,235),width);
 		if (mouse_b&1) circlefill(canvas,mouse_x,mouse_y,20,makecol(0,0,255));
 		if (mouse_b&2) circlefill(canvas,mouse_x,mouse_y,20,makecol(255,0,0));
 		if (mouse_b&4) circlefill(canvas,mouse_x,mouse_y,20,makecol(0,255,0));
-		if (mouse_b) _debug(mouse_b);
+		
+		if (mouse_pressed&1) circlefill(canvas,mouse_x,mouse_y,20,makecol(0,255,255));
+		if (mouse_pressed&2) circlefill(canvas,mouse_x,mouse_y,20,makecol(255,255,0));
+		if (mouse_pressed&4) circlefill(canvas,mouse_x,mouse_y,20,makecol(0,255,255));
+		
+		if (mouse_released&1) circlefill(canvas,mouse_x,mouse_y,20,makecol(128,255,255));
+		if (mouse_released&2) circlefill(canvas,mouse_x,mouse_y,20,makecol(255,255,128));
+		if (mouse_released&4) circlefill(canvas,mouse_x,mouse_y,20,makecol(128,255,255));
+		width+=mouse_mz;
+		wipe_log();
+		_debug(mouse_z + " " + mouse_mz);
+		
 	}    else if (stage==29)
 	{
 		title = "keyboard";
 		for (var c=0;c<0x7f;c++)
 		{
-			if (key[c])
+			
+			if (pressed[c])
+			{
+				rectfill(canvas,(c>>3)*24,(c&0xf)*24,20,20,makecol(255,255,255));
+			} else if (released[c])
 			{
 				rectfill(canvas,(c>>3)*24,(c&0xf)*24,20,20,makecol(255,255,0));
-			} else {
+			} else if (key[c])
+			{
 				rectfill(canvas,(c>>3)*24,(c&0xf)*24,20,20,makecol(255,0,0));
+			} else {
+				rectfill(canvas,(c>>3)*24,(c&0xf)*24,20,20,makecol(0,0,0));
 			}
+			
 		}
 	
 	}  else if (stage==30)
@@ -222,8 +243,8 @@ function main()
 {
 	enable_debug('debug');
 	allegro_init_all("unittest", 640, 480);
-	logo = load_bmp("allegro.png");
-	beep = load_sample("dtmf.mp3");
+	logo = load_bmp("data/allegro.png");
+	beep = load_sample("data/dtmf.mp3");
 
 	ready(function(){
 		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);

@@ -1,7 +1,6 @@
 body {
 font-family:serif;
-text-align:center;
-background-image:url('../webbg.png');
+background-image:url('webbg.png');
 }
 
 h1 {
@@ -10,6 +9,20 @@ font-size:400%;
 text-shadow:#888 4px 4px 4px;
 padding:0px;
 margin:0px;
+color:#402;
+}
+
+h2 {
+text-align:center;
+}
+
+#contents {
+width:800px;
+border: 2px solid black;
+margin: 20px auto;
+background-color: #ffd;
+padding:5px 20px;
+box-shadow:#888 4px 4px 16px;
 }
 
 #unittest {
@@ -50,23 +63,4 @@ text-decoration:none;
 
 #src {
 font-size:200%;
-}
-
-#examples {
-text-align:center;
-width:660px;
-border:2px solid black;
-font: 16px monospace;
-overflow: auto;
-background-color:#ffc;
-box-shadow:#888 4px 4px 16px;
-margin: 10px auto;
-padding:10px;
-}
-
-.example {
-display:inline-block;
-width:320px;
-color:black;
-font-family:serif;
 }

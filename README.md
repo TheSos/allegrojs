@@ -1,7 +1,8 @@
-# jAlllegro
+# jAllegro
 ## A lousy javascript port of a game programming library
 ---
-
+[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Reference manual](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/jallegro.js)
+---
 ### Disclaimer
 This is all WIP, watch out!
 
@@ -75,27 +76,27 @@ First up, read all of this README! Then, there are several placesd you can go to
 
 Since the underlying system is completely different for jAllegro (Allegro used C and a bit of asembly inside too), there are a bunch of thigns that doesn't make sense for jAllegro, but there are new things that make perfect sense here, while they didn't back in the days. As I will try to keep it as close to original as possible, not to break the feel, there are bound to be discrepancies, and I'kll list them right here!
 
-* set_gfx_mode takes canvas id, and pixel dimensions as arguments.
-* rotate_sprite draws the rotated sprite centered, as opposed to top-left alignment
+* `set_gfx_mode` takes canvas id, and pixel dimensions as arguments.
+* `rotate_sprite` draws the rotated sprite centered, as opposed to top-left alignment
 * all of the color modes are gone, as js has uniform standardised color format
 * software 3d functions are gone, but you can still use WebGL!
-* helped math functions have been added
-* END_OF_FUNCTION() and LOCK_* macros are no longer necessary
-* game loop must be wrapped in a loop() function, as js doesn't support blocking code
-* assets are loadded asynchronously, thus ready() function wrapper lets you execute code ensurign everything has beel loaded already.
-* ready() can display a custom loading bar as well as a default one
-* remove_all_ints() has been added for simplicity
+* helper math functions have been added
+* `END_OF_FUNCTION()` and `LOCK_` macros are no longer necessary
+* game loop must be wrapped in a `loop()` function, as js doesn't support blocking code
+* assets are loadded asynchronously, thus `ready()` function wrapper lets you execute code ensurign everything has beel loaded already.
+* `ready()` can display a custom loading bar as well as a default one
+* `remove_all_ints()` has been added for simplicity
 * a couple of keyboard keys might not work in js
-* all of keystrokes, except for F5 have preventDefault(), meaning that i.e. pressing backspace in game won't take you to previous website!
-* hardware accelerated functions, such as create_video_bitmap() are all gone, everything is accelerated in js anyways
+* all of keystrokes, except for F5 have `preventDefault()`, meaning that i.e. pressing backspace in game won't take you to previous website!
+* hardware accelerated functions, such as `create_video_bitmap()` are all gone, everything is accelerated in js anyways
 * sprite rotations take degrees as parameter instead of 0..256 fixed value
-* makecol always produces 32bit 0xAARRGGBB value and takes 4 components with optional alpha
-* makecolf has been added for 0..1 colors
-* arcfill, trainglefill and polygonfill added
-* masked_blit functions are no longer needed, sicne everythign relies on alpha channel
-* textprintf functions are gone, since textout can do the same without printf stuff
-* textout has a size argument now, due to all fonts being ttf
-* play_sample no logner supports panning
+* `makecol` always produces 32bit 0xAARRGGBB value and takes 4 components with optional alpha
+* `makecolf` has been added for 0..1 colors
+* `arcfill`, `trainglefill` and `polygonfill` added
+* `masked_blit` functions are no longer needed, sicne everythign relies on alpha channel
+* `textprintf` functions are gone, since `textout` can do the same without `printf` stuff
+* `textout` has a size argument now, due to all fonts being ttf
+* `play_sample` no logner supports panning
 
 ### But can it really make games?
 
@@ -103,7 +104,7 @@ That's what it's made for! Here's exgame.js with comments stripped down. In unde
 
 ```javascript
 
-var man,apple;
+var man,apple,bg;
 var munch;
 var apple_x=200,apple_y=200;
 var player_x=100,player_y=100;
@@ -111,7 +112,7 @@ var score = 0;
 
 function draw()
 {
-	clear_to_color(canvas,makecol(0,0,0));
+	draw_sprite(canvas,bg,0,0);
 	draw_sprite(canvas,man,player_x,player_y);
 	draw_sprite(canvas,apple,apple_x,apple_y);
 	textout(canvas,font,"Score: " + score,10,20,24,makecol(255,255,255));
@@ -126,8 +127,8 @@ function update()
 	if (distance(player_x,player_y,apple_x,apple_y)<20)
 	{
 		play_sample(munch);
-		apple_x = rand()%SCREEN_W;
-		apple_y = rand()%SCREEN_H;
+		apple_x = rand()%(SCREEN_W-32);
+		apple_y = rand()%(SCREEN_H-32);
 		score++;
 		log("Apple eaten!");
 	}
@@ -137,9 +138,10 @@ function main()
 {
 	enable_debug('debug');
 	allegro_init_all("canvas_id", 640, 480);
-	man = load_bmp("man.png");
-	apple = load_bmp("apple.png");
-	munch = load_sample("munch.mp3");
+	man = load_bmp("data/man.png");
+	apple = load_bmp("data/apple.png");
+	bg = load_bmp("data/grass.jpg");
+	munch = load_sample("data/munch.mp3");
 	
 	ready(function(){
 		loop(function(){

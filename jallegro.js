@@ -1,237 +1,5 @@
 /// \file jallegro.js
 
-
-
-////////////////////////////////////////////
-/// @name DEBUG FUNCTIONS
-//@{
-
-/// Set this to 1 to get debug messages
-var ALLEGRO_DEBUG = 1;
-
-var _debug_enabled = false;
-var _debug_element;
-
-/// Fatal error displays alert and logs to console
-function _error(string)
-{
-	if (!ALLEGRO_DEBUG) return;
-	console.log("[ERROR] " + string);
-	alert(string);
-}
-
-/// Enables debugging to a console.
-/// 'console' can be any html element that can accept text, preffereably a <div>
-/// @param id id of the element to be the console
-function enable_debug(id)
-{
-	_debug_element = document.getElementById(id);
-	if (_debug_element) _debug_enabled = true;
-}
-
-/// Logs to console
-/// Only works after enable_debug() has been called. Will append <br/> newline tag. You can use html inside your logs too.
-/// @param string text to log
-function log(string)
-{
-	if (!_debug_enabled) return;
-	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
-}
-
-/// Wipes the debug console
-/// Clears the debug element of any text. Useful if you want to track changing values in real time without clogging the browser. Just call it at the beginning every loop()!
-function wipe_log()
-{
-	if (!_debug_enabled) return;
-	_debug_element.innerHTML = "";
-}
-
-/// Logs to console
-function _debug(string)
-{
-	if (!ALLEGRO_DEBUG) return;
-	log(string);
-}
-
-//@}
-////////////////////////////////////////////
-/// @name HELPER MATH FUNCTIONS
-//@{ 
-
-/// Returns a random number from 0 to 65535
-/// Result is always integer. Use modulo (%) operator to create smaller values i.e. rand()%256 will return a random number from 0 to 255 inclusive.
-/// @return a random number in 0-65535 inclusive range
-function rand()
-{
-	return Math.floor(65536 * Math.random());
-}
-
-/// Returbns a random number from 0.0 to 1.0
-/// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 willr eturn a value from 0.0 to 10.0
-/// @return a random floating point value from 0.0 to 1.0
-function frand()
-{
-	return Math.random();
-}
-
-/// Returns absolute value of a
-/// Removes minus sign from the value, shoudl there be any.
-/// @param a value to be absoluted
-/// @return absolute value of a
-function abs(a) {return (a<0)?(-a):(a);}
-
-/// Returns legth of a vector
-/// @param x,y vector coordinates
-/// @return length of the vector
-function length(x,y)
-{
-	return Math.sqrt(x*x-y*y);
-}
-
-/// Calculates distance between two points
-/// @param x1,x2 first point
-/// @param x2,y2 second point
-/// @return diostance between the points
-function distance(x1,y1,x2,y2)
-{
-	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-}
-
-/// Calculates squared distance between two points
-/// This verison is just a tad faster
-/// @param x1,x2 first point
-/// @param x2,y2 second point
-/// @return diostance between the points
-function distance2(x1,y1,x2,y2)
-{
-	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
-}
-
-/// Distance between a point  and a line segment
-/// @param x1,y1 first end of line segment
-/// @param x2,y2 second end of line segment
-/// @param x3,y3 point coordinates
-/// @return distance of point x3,y3 from line x1,y1-x2,y2
-function linedist(x1,y1,x2,y2,x3,y3)
-{
-	var px = x2-x1
-	var py = y2-y1
-  var something = px*px + py*py
-	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
-	if (u > 1)
-		u = 1
-	else if (u < 0)
-		u = 0
-
-	var x = x1 + u * px
-	var y = y1 + u * py
-  var dx = x - x3
-  var dy = y - y3
-
-  var dist = Math.sqrt(dx*dx + dy*dy)
-  return dist
-}
-
-/// Linear interpolation between two values
-/// Returns a value midway between from and to specified by progress
-/// @param from number to lerp from
-/// @param to number to lerp to
-/// @param progress amount of lerp
-/// @return lerped value
-function lerp(from,to,progress)
-{
-	return from+(to-from)*progress;
-}
-
-/// Returns a dot product of two vectors
-/// Dot product is equal to cosine of angle between two vectors times their lengths. With normalised, length 1.0, vectors, the value would be 1.0 if vectors are the same, 0.0 if they are perpendicular, and -1.0 if they point the opposite direction. It helps to determine angle differences.
-/// @param x1,y1 vector one, won't be normalised
-/// @param x2,y2 vector two, won't be normalised
-/// @return dot product of the vectors
-function dot(x1,y1,x2,y2)
-{
-	return x1*x2+y1*y2;
-}
-
-/// Returns sign of value
-/// Will return -1 if it's negative, 1 if positive and 0 if zero
-/// @param a value
-/// @return sign of a
-function sgn(a)
-{
-	return a < 0 ? -1 : (a > 0 ? 1 : 0);
-}
-
-
-/// Returns an angle between two vectors
-/// @param x1,y1 vector one
-/// @param x2,y2 vector two
-/// @return angle in degrees, snapped to 0-360
-function angle(x1,y1,x2,y2)
-{
-	var a = DEG(Math.atan2(y2 - y1, x2 - x1));
-	return a < 0 ? a + 360 : a;
-}
-
-/// Returns a diference between angles
-/// @param a,b, angles
-/// @return angle difference, in -180 to 180 range
-function anglediff(a,b)
-{
-	var diff = b - a;
-	while (diff > 180) { diff -= 360; }
-	while (diff <= -180) { diff += 360; }
-	return diff;
-}
-
-/// Clamps a value
-/// Min doesn't really have to be smaller than max
-/// @param value value to be clamped
-/// @param min,max values to clam between
-/// @return clamped value
-function clamp(value,min,max)
-{
-	if (max > min)
-	{
-		if (value < min) return min;
-		else if (value > max) return max;
-		else return value;
-	} else {
-		if (value < max) return max;
-		else if (value > min) return min;
-		else return value;
-	}
-}
-
-/// Scales a value from one range to another
-/// @param value value to be scaled
-/// @param min,max bounds to scale from
-/// @param min2,max2 bounds to scale to
-/// @return scaled value
-function scale(value,min,max,min2,max2)
-{
-	return min2 + ((value - min) / (max - min)) * (max2 - min2);
-}
-
-/// Scales value from one range to another and clamps it down
-/// @param value value to be scaled
-/// @param min,max bounds to scale from
-/// @param min2,max2 bounds to scale and clamp to
-/// @return scaled and clamped value
-function scaleclamp(value,min,max,min2,max2)
-{
-	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
-	if (max2 > min2)
-	{
-		value = value < max2 ? value : max2;
-		return value > min2 ? value : min2;
-	}
-	value = value < min2 ? value : min2;
-	return value > max2 ? value : max2;
-}
-
-
-//@}
 ////////////////////////////////////////////
 /// @name CONFIGURATION ROUTINES
 //@{
@@ -244,6 +12,7 @@ function install_allegro()
 }
 
 /// Wrapper for install_allegro.
+/// @export
 function allegro_init()
 {
 	install_allegro();
@@ -312,6 +81,10 @@ var mouse_mz = 0;
 /// Checks if mouse was installed
 var _mouse_installed = false;
 
+var _last_mouse_x = -1;
+var _last_mouse_y = -1;
+var _last_mouse_z = -1;
+
 
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
@@ -331,6 +104,7 @@ function install_mouse()
 	canvas.canvas.addEventListener('mousedown',_mousedown);
 	canvas.canvas.addEventListener('mousemove',_mousemove);
 	canvas.canvas.addEventListener('wheel',_mousewheel);
+	canvas.canvas.addEventListener('contextmenu',_mousemenu);
 	_mouse_installed = true;
 	log("Mouse installed!");
 	return 0;
@@ -348,23 +122,31 @@ function remove_mouse()
 	canvas.canvas.removeEventListener('mousedown',_mousedown);
 	canvas.canvas.removeEventListener('mousemove',_mousemove);
 	canvas.canvas.removeEventListener('wheel',_mousewheel);
+	canvas.canvas.removeEventListener('contextmenu',_mousemenu);
 	_mouse_installed = false;
 	log("Mouse removed!");
 	return 0;
+}
+
+function _mousemenu(e)
+{
+	//e.preventDefault();
 }
 
 /// mouseup event handler
 function _mouseup(e)
 {
 	mouse_b = mouse_b&~(1<<(e.which-1));
-	mouse_pressed = mouse_pressed&~(1<<(e.which-1));
+	mouse_pressed = mouse_pressed|(1<<(e.which-1));
+	e.preventDefault();
 }
 
 /// mousedown event handler
 function _mousedown(e)
 {
 	mouse_b = mouse_b|(1<<(e.which-1));
-	mouse_released = mouse_released&~(1<<(e.which-1));
+	mouse_released = mouse_released|(1<<(e.which-1));
+	e.preventDefault();
 }
 
 /// mousemove event handler
@@ -372,15 +154,14 @@ function _mousemove(e)
 {
 	mouse_x = e.offsetX;
 	mouse_y = e.offsetY;
-	mouse_mx = e.movementX;
-	mouse_my = e.movementY;
+	e.preventDefault();
 }
 
 /// mosuewheel event handler
 function _mousewheel(e)
 {
 	mouse_z += e.deltaY;
-	mouse_mz = e.deltaY;
+	e.preventDefault();
 }
 
 //@}
@@ -467,7 +248,13 @@ var _loopproc;
 /// Performes some loop tasks, such as cleaning up pressed[] and released[]
 function _uberloop()
 {
-	loop();
+	if (_mouse_installed)
+	{
+		mouse_mx = mouse_x - _last_mouse_x;
+		mouse_my = mouse_y - _last_mouse_y;
+		mouse_mz = mouse_z - _last_mouse_z;	
+	}
+	_loopproc();
 	if (_keyboard_installed)
 	{
 		for (var c=0;c<0x80;c++)
@@ -483,7 +270,13 @@ function _uberloop()
 		mouse_mx = 0;
 		mosue_my = 0;
 		mouse_mz = 0;
+		_last_mouse_x = mouse_x;
+		_last_mouse_y = mouse_y;
+		_last_mouse_z = mouse_z;
+		
 	}
+	
+	
 	
 }
 
@@ -530,6 +323,9 @@ function _progress_check()
 	}
 }
 
+/// Default loading bar rendering
+/// This function is used by rady() to display a siomple loading bar on screen. You need to manually specify a dummy function if you don't want loading screen.
+/// @param progress loading progress in 0.0 - 1.0 range
 function loading_bar(progress)
 {
 	rectfill(canvas,5,SCREEN_H-55,SCREEN_W-10,50,makecol(0,0,0));
@@ -647,8 +443,8 @@ function remove_keyboard()
 /// keydown event handler
 function _keydown(e)
 {
+	if (!key[e.keyCode]) pressed[e.keyCode] = true;
 	key[e.keyCode] = true;
-	pressed[e.keyCode] = true;
 	_pressed = true;
 	if (e.keyCode!=KEY_F5) e.preventDefault();
 }
@@ -763,7 +559,7 @@ function set_gfx_mode(canvas_id,width,height)
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
-	font = load_font('vga.ttf');
+	font = {element:null,file:"",name:"monospace"};
 	_gfx_installed = true;
 	
 	return 0;
@@ -1475,6 +1271,237 @@ function adjust_sample(sample,vol,freq,loop)
 function stop_sample(sample)
 {
 	sample.element.pause();
+}
+
+//@}
+////////////////////////////////////////////
+/// @name HELPER MATH FUNCTIONS
+//@{ 
+
+/// Returns a random number from 0 to 65535
+/// Result is always integer. Use modulo (%) operator to create smaller values i.e. rand()%256 will return a random number from 0 to 255 inclusive.
+/// @return a random number in 0-65535 inclusive range
+function rand()
+{
+	return Math.floor(65536 * Math.random());
+}
+
+/// Returbns a random number from 0.0 to 1.0
+/// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 willr eturn a value from 0.0 to 10.0
+/// @return a random floating point value from 0.0 to 1.0
+function frand()
+{
+	return Math.random();
+}
+
+/// Returns absolute value of a
+/// Removes minus sign from the value, shoudl there be any.
+/// @param a value to be absoluted
+/// @return absolute value of a
+function abs(a) {return (a<0)?(-a):(a);}
+
+/// Returns legth of a vector
+/// @param x,y vector coordinates
+/// @return length of the vector
+function length(x,y)
+{
+	return Math.sqrt(x*x-y*y);
+}
+
+/// Calculates distance between two points
+/// @param x1,x2 first point
+/// @param x2,y2 second point
+/// @return diostance between the points
+function distance(x1,y1,x2,y2)
+{
+	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+}
+
+/// Calculates squared distance between two points
+/// This verison is just a tad faster
+/// @param x1,x2 first point
+/// @param x2,y2 second point
+/// @return diostance between the points
+function distance2(x1,y1,x2,y2)
+{
+	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
+}
+
+/// Distance between a point  and a line segment
+/// @param x1,y1 first end of line segment
+/// @param x2,y2 second end of line segment
+/// @param x3,y3 point coordinates
+/// @return distance of point x3,y3 from line x1,y1-x2,y2
+function linedist(x1,y1,x2,y2,x3,y3)
+{
+	var px = x2-x1
+	var py = y2-y1
+  var something = px*px + py*py
+	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
+	if (u > 1)
+		u = 1
+	else if (u < 0)
+		u = 0
+
+	var x = x1 + u * px
+	var y = y1 + u * py
+  var dx = x - x3
+  var dy = y - y3
+
+  var dist = Math.sqrt(dx*dx + dy*dy)
+  return dist
+}
+
+/// Linear interpolation between two values
+/// Returns a value midway between from and to specified by progress
+/// @param from number to lerp from
+/// @param to number to lerp to
+/// @param progress amount of lerp
+/// @return lerped value
+function lerp(from,to,progress)
+{
+	return from+(to-from)*progress;
+}
+
+/// Returns a dot product of two vectors
+/// Dot product is equal to cosine of angle between two vectors times their lengths. With normalised, length 1.0, vectors, the value would be 1.0 if vectors are the same, 0.0 if they are perpendicular, and -1.0 if they point the opposite direction. It helps to determine angle differences.
+/// @param x1,y1 vector one, won't be normalised
+/// @param x2,y2 vector two, won't be normalised
+/// @return dot product of the vectors
+function dot(x1,y1,x2,y2)
+{
+	return x1*x2+y1*y2;
+}
+
+/// Returns sign of value
+/// Will return -1 if it's negative, 1 if positive and 0 if zero
+/// @param a value
+/// @return sign of a
+function sgn(a)
+{
+	return a < 0 ? -1 : (a > 0 ? 1 : 0);
+}
+
+
+/// Returns an angle between two vectors
+/// @param x1,y1 vector one
+/// @param x2,y2 vector two
+/// @return angle in degrees, snapped to 0-360
+function angle(x1,y1,x2,y2)
+{
+	var a = DEG(Math.atan2(y2 - y1, x2 - x1));
+	return a < 0 ? a + 360 : a;
+}
+
+/// Returns a diference between angles
+/// @param a,b, angles
+/// @return angle difference, in -180 to 180 range
+function anglediff(a,b)
+{
+	var diff = b - a;
+	diff /= 360; 
+	diff = (diff - floor(diff))*360
+	if (diff > 180) { diff -= 360; }
+	return diff;
+}
+
+/// Clamps a value
+/// Min doesn't really have to be smaller than max
+/// @param value value to be clamped
+/// @param min,max values to clam between
+/// @return clamped value
+function clamp(value,min,max)
+{
+	if (max > min)
+	{
+		if (value < min) return min;
+		else if (value > max) return max;
+		else return value;
+	} else {
+		if (value < max) return max;
+		else if (value > min) return min;
+		else return value;
+	}
+}
+
+/// Scales a value from one range to another
+/// @param value value to be scaled
+/// @param min,max bounds to scale from
+/// @param min2,max2 bounds to scale to
+/// @return scaled value
+function scale(value,min,max,min2,max2)
+{
+	return min2 + ((value - min) / (max - min)) * (max2 - min2);
+}
+
+/// Scales value from one range to another and clamps it down
+/// @param value value to be scaled
+/// @param min,max bounds to scale from
+/// @param min2,max2 bounds to scale and clamp to
+/// @return scaled and clamped value
+function scaleclamp(value,min,max,min2,max2)
+{
+	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
+	if (max2 > min2)
+	{
+		value = value < max2 ? value : max2;
+		return value > min2 ? value : min2;
+	}
+	value = value < min2 ? value : min2;
+	return value > max2 ? value : max2;
+}
+
+
+//@}
+////////////////////////////////////////////
+/// @name DEBUG FUNCTIONS
+//@{
+
+/// Set this to 1 to get debug messages
+var ALLEGRO_DEBUG = 1;
+
+var _debug_enabled = false;
+var _debug_element;
+
+/// Fatal error displays alert and logs to console
+function _error(string)
+{
+	if (!ALLEGRO_DEBUG) return;
+	console.log("[ERROR] " + string);
+	alert(string);
+}
+
+/// Enables debugging to a console.
+/// 'console' can be any html element that can accept text, preffereably a <div>
+/// @param id id of the element to be the console
+function enable_debug(id)
+{
+	_debug_element = document.getElementById(id);
+	if (_debug_element) _debug_enabled = true;
+}
+
+/// Logs to console
+/// Only works after enable_debug() has been called. Will append <br/> newline tag. You can use html inside your logs too.
+/// @param string text to log
+function log(string)
+{
+	if (!_debug_enabled) return;
+	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
+}
+
+/// Wipes the debug console
+/// Clears the debug element of any text. Useful if you want to track changing values in real time without clogging the browser. Just call it at the beginning every loop()!
+function wipe_log()
+{
+	if (!_debug_enabled) return;
+	_debug_element.innerHTML = "";
+}
+
+/// Logs to console
+function _debug(string)
+{
+	if (!ALLEGRO_DEBUG) return;
+	log(string);
 }
 
 //@}
