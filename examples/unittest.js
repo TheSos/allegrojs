@@ -200,7 +200,7 @@ function draw()
 			install_int(function(){
 			circlefill(canvas,500,100,100,makecol(rand()%255,rand()%255,rand()%255));
 		},1500);
-		
+		 
 	} else if (stage==31)
 	{
 		title = "timer";

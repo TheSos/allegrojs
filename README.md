@@ -41,7 +41,7 @@ And here is the html code you need to provide to launch this.
 	<body>
 		<canvas id="canvas_id" width="640" height="480"></canvas>
 	</body>
-</html>
+</html> 
 
 ```
 

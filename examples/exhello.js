@@ -6,4 +6,4 @@ function main()
 	textout_centre(canvas,font,"Hello World!",SCREEN_W/2,SCREEN_H/2,24,makecol(0,0,0));
 	return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN(); 

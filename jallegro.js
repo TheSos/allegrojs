@@ -311,7 +311,7 @@ var _bar_proc;
 
 /// cchecks if everythign has downlaoded in intervals
 function _progress_check()
-{
+{ 
 	var num_assets = 0;
 	var num_loaded = 0;
 	for (var c=0;c<_downloadables.length;c++)
