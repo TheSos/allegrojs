@@ -214,6 +214,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * fixed up missing css files
 * cleaned up a bunch
 * added customizable key unsuppressing
+* added create_font
+* added structure reference
+* fixed docs
 
 #### v4.0.1
 * This is the first version
