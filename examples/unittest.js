@@ -1,3 +1,4 @@
+var mysha;
 var beep;
 
 var stage=-1;
@@ -18,47 +19,47 @@ function draw()
 	} else if (stage==1)
 	{
 		title = "blit";
-		blit(logo,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w+1,rand()%logo.h+1);
+		blit(mysha,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w+1,rand()%mysha.h+1);
 	} else if (stage==2)
 	{
 		title = "stretch_blit";
-		stretch_blit(logo,canvas,0,0,rand()%logo.w+1,rand()%logo.h+1,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
+		stretch_blit(mysha,canvas,0,0,rand()%mysha.w+1,rand()%mysha.h+1,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
 	} else if (stage==3)
 	{
 		title = "draw_sprite";
-		draw_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H);
+		draw_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H);
 	}  else if (stage==4)
 	{
 		title = "stretch_sprite";
-		stretch_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
+		stretch_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
 	}  else if (stage==5)
 	{
 		title = "rotate_sprite";
-		rotate_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360);
+		rotate_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360);
 	}  else if (stage==6)
 	{
 		title = "pivot_sprite";
-		pivot_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w,rand()%logo.h,rand()%360);
+		pivot_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360);
 	}  else if (stage==7)
 	{
 		title = "rotate_scaled_sprite";
-		rotate_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%3+.1);
+		rotate_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%3+.1);
 	}  else if (stage==8)
 	{
 		title = "pivot_scaled_sprite";
-		pivot_scaled_sprite(canvas,logo,rand()%SCREEN_W,rand()%SCREEN_H,rand()%logo.w,rand()%logo.h,rand()%360,rand()%3+.1);
+		pivot_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360,rand()%3+.1);
 	}  else if (stage==9)
 	{
 		title = "textout";
-		textout(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255));
+		textout(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255),makecol(rand()%255,rand()%255,rand()%255),1+rand()%5);
 	}   else if (stage==10)
 	{
 		title = "textout_centre";
-		textout_centre(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255));
+		textout_centre(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255),makecol(rand()%255,rand()%255,rand()%255),1+rand()%5);
 	}   else if (stage==11)
 	{
 		title = "textout_right";
-		textout_right(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255));
+		textout_right(canvas,font,"Hello World!",rand()%SCREEN_W,rand()%SCREEN_H,rand()%48+8,makecol(rand()%255,rand()%255,rand()%255),makecol(rand()%255,rand()%255,rand()%255),1+rand()%5);
 	}  else if (stage==12)
 	{
 		title = "getpixel";
@@ -76,19 +77,19 @@ function draw()
 	} else if (stage==15)
 	{
 		title = "line";
-		line(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255));
+		line(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==16)
 	{
 		title = "vline";
-		vline(canvas,rand()%SCREEN_W,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255));
+		vline(canvas,rand()%SCREEN_W,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==17)
 	{
 		title = "hline";
-		hline(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,makecol(rand()%255,rand()%255,rand()%255));
+		hline(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==18)
 	{
 		title = "triangle";
-		triangle(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255));
+		triangle(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==19)
 	{
 		title = "trianglefill";
@@ -103,7 +104,7 @@ function draw()
 			p.push(rand()%SCREEN_W);
 			p.push(rand()%SCREEN_H);
 		}
-		polygon(canvas,n,p,makecol(rand()%255,rand()%255,rand()%255));
+		polygon(canvas,n,p,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==21)
 	{
 		title = "polygonfill";
@@ -118,7 +119,7 @@ function draw()
 	}  else if (stage==22)
 	{
 		title = "rect";
-		rect(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255));
+		rect(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,rand()%SCREEN_H,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==23)
 	{
 		title = "rectfill";
@@ -126,7 +127,7 @@ function draw()
 	}  else if (stage==24)
 	{
 		title = "circle";
-		circle(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,makecol(rand()%255,rand()%255,rand()%255));
+		circle(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==25)
 	{
 		title = "circlefill";
@@ -134,11 +135,11 @@ function draw()
 	}  else if (stage==26)
 	{
 		title = "arc";
-		arc(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%360,rand()%100,makecol(rand()%255,rand()%255,rand()%255));
+		arc(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%360,rand()%100,makecol(rand()%255,rand()%255,rand()%255),1+rand()%8);
 	}  else if (stage==27)
 	{
 		title = "arcfill";
-		arcfill(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%360,rand()%SCREEN_W,makecol(rand()%255,rand()%255,rand()%255));
+		arcfill(canvas,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%360,rand()%100,makecol(rand()%255,rand()%255,rand()%255));
 	}   else if (stage==28)
 	{
 		title = "mouse";
@@ -229,7 +230,7 @@ function draw()
 	delay++;
 	if (key[KEY_SPACE] && delay>10)
 	{
-		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
+		stretch_blit(mysha,canvas,0,0,mysha.w,mysha.h,0,0,SCREEN_W,SCREEN_H);
 		stage++;
 		delay=0;
 	}
@@ -239,11 +240,11 @@ function main()
 {
 	enable_debug('debug');
 	allegro_init_all("unittest", 640, 480);
-	logo = load_bmp("data/allegro.png");
+	mysha = load_bmp("data/mysha.png");
 	beep = load_sample("data/dtmf.mp3");
 
 	ready(function(){
-		stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
+		stretch_blit(mysha,canvas,0,0,mysha.w,mysha.h,0,0,SCREEN_W,SCREEN_H);
 		loop(function()
 		{
 			draw();		

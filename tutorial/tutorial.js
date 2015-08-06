@@ -31,14 +31,14 @@ function update()
 function main()
 {
 	enable_debug('debug');
-	allegro_init_all("game_canvas", 640, 480);
+	allegro_init_all("game_canvas", 640, 480,true);
 	buzz = load_bmp('project/buzz.png');
 	splat = load_bmp('project/splat.png');
 	weapon  = load_bmp('project/weapon.png');
 	weapon2  = load_bmp('project/weapon2.png');
 	miss = load_sample("project/miss.mp3");
 	hit = load_sample("project/hit.mp3");
-	deaths = create_bitmap(SCREEN_W,SCREEN_H);
+	deaths = load_bmp("project/window.png");
 	hide_mouse();
 	ready(function(){
 		loop(function(){

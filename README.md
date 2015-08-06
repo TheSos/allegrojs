@@ -1,7 +1,7 @@
 # jAllegro
 ## A lousy javascript port of a game programming library
 ---
-[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Documentation](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial)
+[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [API reference](http://jallegro.sos.gd/api) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial)
 ---
 ### Disclaimer
 This is all WIP, watch out!
@@ -54,10 +54,9 @@ I hope for jAllegro to be a tool prefectly suitable for absolute beginners, who 
 ### Where can I learn jAllegro?
 
 First up, read all of this README! Then, there are several placesd you can go to get documentation
-* Study example files (ex*.js) to see how to use different functions of jAllegro
-* Study the demo game (demo.js) and see hwo youc an make a fully fledged game with jAllegro.
-* Check the neat and pretty jAllegro function reference.
-* Check out the jAllegro tutorial.
+* Study [examples](http://jallegro.sos.gd/examples) to see how to use different functions of jAllegro
+* Check the neat and pretty [jAllegro function reference](http://jallegro.sos.gd/docs)
+* Check out the [jAllegro tutorial](http://jallegro.sos.gd/tutorial).
 
 ### What can jAllegro do?
 
@@ -155,6 +154,19 @@ END_OF_MAIN();
 
 ```
 
+### Who made jAllegro?
+
+jAllegro was made by me, Sos Sosowski. I always liked Allegro 4, and it felt wrong that it's gone already, so I wanted to give it a new life in form of this library. I hope that not only Allegro freaks like me, but also people new to javascript, or even game making in general will pick this up and create amazing stuff.
+
+If you heve any questions, suggestions, bug reports or would like to show me a game made with jAllegro (I'd love to know!) Drop me a line!
+
+* You can email me at just.sos.it@gmail.com
+* You can find me on Twitter as [@Sosowski](https://twitter.com/Sosowski)
+* You can go to [my website](http://sos.gd/) too!
+
+
+And don't forget to join the #jallegro IRC channel at Freenode!
+
 ### What are the jAllegro licence terms?
 
 jAllegro licence is the same old Allegro 4 gift-ware licence!
@@ -201,6 +213,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * added mouse menu supress option
 * added show_mouse and hide_mouse
 * wrote the tutorial
+* fixed up missing css files
+* cleaned up a bunch
+* added customizable key unsuppressing
 
 #### v4.0.1
 * This is the first version

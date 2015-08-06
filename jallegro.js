@@ -12,22 +12,24 @@ function install_allegro()
 }
 
 /// Wrapper for install_allegro.
-/// @export
 function allegro_init()
 {
 	install_allegro();
 }
 
 /// Inits Allegro and installs all subsystems.
-/// Calls install_allegro(), isntall_mouse(), install_timer(), install_keyboard(), isntall_sound() and set_gfx_mode() with provided parameters
-function allegro_init_all(id,w,h)
+/// Calls install_allegro(), install_mouse(), install_timer(), install_keyboard(), install_sound() and set_gfx_mode() with provided parameters
+/// @param id drawing canvas id
+/// @param w screen width in pixels
+/// @param h screen height in pixels
+/// @param menu set this to true to enable context menu
+function allegro_init_all(id,w,h,menu,enable_keys)
 {
 	install_allegro();
 	set_gfx_mode(id,w,h);
-	install_mouse();
-	install_keyboard();
+	install_mouse(menu);
+	install_keyboard(enable_keys);
 	install_sound();
-	
 }
 
 /// Macro to be placed after the end of main()
@@ -44,19 +46,17 @@ function END_OF_MAIN()
 
 /// Mouse button bitmask.
 /// Each bit in the mask represents a seoparate mouse button state. If right mouse button is down, mouse_b value would be 4, 00100 in binary. Each bit represents one mouse button. use something like if (mouse_b&1) to check for separate buttons.
-/// * Button 0 is LMB.
-/// * Button 1 is MMB / wheel.
-/// * Button 2 is RMB.
-/// * Button 3 is Forward.
-/// * Button 4 is Back.
+/// * Button 0 is LMB. (mouse_b&1)
+/// * Button 1 is MMB / wheel. (mouse_b&2)
+/// * Button 2 is RMB. (mouse_b&4)
 var mouse_b = 0;
 
 /// Same as mouse_b but only checks if a button was pressed last frame
-/// Not that this only works inside loop()
+/// Note that this only works inside loop()
 var mouse_pressed = 0;
 
 /// Same as mouse_b but only checks if a button was released last frame
-/// Not that this only works inside loop()
+/// Note that this only works inside loop()
 var mouse_released = 0;
 
 /// Mouse X position within the canvas.
@@ -69,22 +69,31 @@ var mouse_y = -1;
 /// This might not work consistently accross all browsers!
 var mouse_z = -1;
 
-/// Mouse mickey, X position since last move.
+/// Mouse mickey, X position since last loop().
+/// Only workis inside loop()
 var mouse_mx = 0;
 
-/// Mouse mickey, Y position since last move.
+/// Mouse mickey, Y position since last loop().
+/// Only workis inside loop()
 var mouse_my = 0;
 
-/// Mouse mickey, wheel position since last move.
+/// Mouse mickey, wheel positon since last loop().
+/// Only workis inside loop()
 var mouse_mz = 0;
 
 /// Checks if mouse was installed
 var _mouse_installed = false;
 
+/// last mosue x position 
 var _last_mouse_x = -1;
+
+/// last mosue y position 
 var _last_mouse_y = -1;
+
+/// last mosue wheel position 
 var _last_mouse_z = -1;
 
+/// is context menu enabled?
 var _menu = false;
 
 /// Installs mouse handlers.
@@ -136,7 +145,7 @@ function remove_mouse()
 	return 0;
 }
 
-/// Enables mosue cursor over canvas
+/// Enables showing system mouse cursor over canvas
 function show_mouse()
 {
 	if (!_mouse_installed)
@@ -148,7 +157,8 @@ function show_mouse()
 	return 0;
 }
 
-/// Disables mosue cursor over canvas
+/// Disables system mosue cursor over canvas.
+/// Use this if you would like to provide your own curseor bitmap
 function hide_mouse()
 {
 	if (!_mouse_installed)
@@ -160,6 +170,7 @@ function hide_mouse()
 	return 0;
 }
 
+/// Mosue context menu suppressor
 function _mousemenu(e)
 {
 	e.preventDefault();
@@ -207,7 +218,7 @@ var _downloadables = [];
 /// holds all currently installed timers
 var _installed_timers = [];
 
-/// looks upa  timer by it's function on the list
+/// looks up a timer by it's function on the list
 function _timer_lookup(proc)
 {
 	for(var c=0;c<_installed_timers.length;c++)
@@ -238,14 +249,13 @@ function BPS_TO_TIMER(bps) {return 1000/bps;}
 function BPM_TO_TIMER(bpm) {return 60*1000/bpm;}
 
 /// Does nothing.
-/// \todo: remove?
 function install_timer()
 {
 	
 }
 
 /// Unix timestamp!
-/// Returns number of seconds since 1970 started.
+/// Returns number of milliseconds since 1970 started.
 function time()
 {
 	return new Date().getTime();
@@ -275,6 +285,7 @@ function install_int_ex(procedure,speed)
 	log("Added insterrupt #" + timer_id + " at " + speed + "msec isntervals!");
 }
 
+/// registered loop procedure
 var _loopproc;
 
 /// Performes some loop tasks, such as cleaning up pressed[] and released[]
@@ -305,15 +316,11 @@ function _uberloop()
 		_last_mouse_x = mouse_x;
 		_last_mouse_y = mouse_y;
 		_last_mouse_z = mouse_z;
-		
 	}
-	
-	
-	
 }
 
 /// Game loop interrupt
-/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function!
+/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function! Note that mouse mickeys (mouse_mx, etc), and pressed indicators (pressed[] and mouse_pressed) will only work inside loop()
 /// @param procedure function to be looped, prteferably inline, but let's not talk coding styles here
 /// @param speed speed in the same format as install_int_ex()
 function loop(procedure,speed)
@@ -356,7 +363,7 @@ function _progress_check()
 }
 
 /// Default loading bar rendering
-/// This function is used by rady() to display a siomple loading bar on screen. You need to manually specify a dummy function if you don't want loading screen.
+/// This function is used by ready() to display a simple loading bar on screen. You need to manually specify a dummy function if you don't want loading screen.
 /// @param progress loading progress in 0.0 - 1.0 range
 function loading_bar(progress)
 {
@@ -367,7 +374,7 @@ function loading_bar(progress)
 }
 
 /// Installs a handler to check if everything has downlaoded. 
-/// You shoudla lways wrap your loop() function around it, unless there is nothign ecternal you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this halnder will only get executed after everything has laoded making sure youc an access bitmap properties and data and play samples right away.
+/// You shoudl always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this halnder will only get executed after everything has laoded making sure youc an access bitmap properties and data and play samples right away.  Note that load_font() does nto affect ready(), so you shoudl always load your fonts first.
 /// @param procedure function to be called when eveything has loaded.
 /// @param bar loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
 function ready(procedure,bar)
@@ -395,7 +402,7 @@ function remove_int(procedure)
 	}
 }
 
-/// Removes  all interrupts
+/// Removes all interrupts
 function remove_all_ints()
 {
 	for(var c=0;c<_installed_timers.length;c++)
@@ -427,25 +434,40 @@ var KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45, KEY_F 
 /// *     KEY_EQUALS_PAD, KEY_BACKQUOTE, KEY_SEMICOLON, KEY_COMMAND
 var key = [];
 
-/// Array of flags indicating in a key was jsut pressed last last loop()
+/// Array of flags indicating in a key was just pressed since last loop()
 /// Note that this will only work inside loop()
 var pressed = [];
 
-/// Array of flags indicating in a key was jsut released last last loop()
+/// Array of flags indicating in a key was just released since last loop()
 /// Note that this will only work inside loop()
 var released = [];
 
+/// Is keybaord even isntalled
 var _keyboard_installed = false;
-var _pressed = false;
+
+/// default keys to not supress
+var _default_enabled_keys = [KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F5,KEY_F6,KEY_F7,KEY_F8,KEY_F9,KEY_F10,KEY_F11,KEY_F12];
+
+
+/// arrayu of preventdefault avoiders
+var _enabled_keys = [];
+
 
 /// Installs keyboard handlers
-/// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key.
-function install_keyboard()
+/// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppresse
+/// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the onyl ones on the list.
+function install_keyboard(enable_keys)
 {
 	if (_keyboard_installed)
 	{
 		_allog("Keyboard already installed");
 		return -1;
+	}
+	if (enable_keys)
+	{
+		_enabled_keys = enable_keys;
+	} else {
+		_enabled_keys = _default_enabled_keys;
 	}
 	for (var c=0;c<0x7f;c++) 
 	{
@@ -478,8 +500,7 @@ function _keydown(e)
 {
 	if (!key[e.keyCode]) pressed[e.keyCode] = true;
 	key[e.keyCode] = true;
-	_pressed = true;
-	if (e.keyCode!=KEY_F5) e.preventDefault();
+	if (_enabled_keys.indexOf(e.keyCode)==-1) e.preventDefault();
 }
 
 /// keyup event handler
@@ -487,7 +508,7 @@ function _keyup(e)
 {
 	key[e.keyCode] = false;
 	released[e.keyCode] = true;
-	if (e.keyCode!=KEY_F5) e.preventDefault();
+	if (_enabled_keys.indexOf(e.keyCode)==-1) e.preventDefault();
 }
 
 //@}
@@ -572,7 +593,7 @@ var SCREEN_H = 0;
 var font;
 
 /// Enables graphics.
-/// This function should be before calling any other graphics routines.
+/// This function should be before calling any other graphics routines. It selects the canvas element for rendering and sets the resolution. It also loads the default font.
 /// @param canvas_id id attribute of canvas to be used for drawing.
 /// @param width canvas width in pixels
 /// @param height canvas height in pixels
@@ -588,7 +609,6 @@ function set_gfx_mode(canvas_id,width,height)
 	cv.width = width;
 	cv.height = height;
 	var ctx = cv.getContext("2d");
-	//_debug(ctx);
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
@@ -634,7 +654,6 @@ function DEG(r) { return -r*180.0/PI;}
 function _fillstyle(bitmap,color)
 {
 	bitmap.context.fillStyle = 'rgba('+ getr(color) + ',' + getg(color) + ',' + getb(color) + ',' + getaf(color) + ')';
-	//_debug(getaf(color));
 }
 
 /// Helper for setting stroke style
@@ -966,7 +985,6 @@ function circlefill(bitmap,x,y,radius,color)
 /// @param width line width
 function arc(bitmap,x,y,ang1,ang2,r,color,width)
 {
-//_debug(ang1 +" "+ ang2 +" "+ r);
 	_strokestyle(bitmap,color,width);
 	bitmap.context.beginPath();
 	if (ang1>ang2)
@@ -1102,7 +1120,6 @@ function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 /// @todo tell everyone that blitting to itself is slower than youn thing (requires copy?)
 function blit(source,dest,sx,sy,dx,dy,w,h)
 {
-	//_debug(dest);
 	 dest.context.drawImage(source.canvas,sx,sy,w,h,dx,dy,w,h);
 }
 
@@ -1127,14 +1144,13 @@ function stretch_blit(source,dest,sx,sy,sw,sh,dx,dy,dw,dh)
 var _num_fonts = 0;
 
 /// Loads font from file.
-/// This actually creates a style element, puts code isnide and appends it to class. I heard it works all the time most of the time.
+/// This actually creates a style element, puts code isnide and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been laoded in js, thus laod your fonts first thing, and everything should be fine.
 /// @param filename Font file URL
 /// @return font object
 function load_font(filename)
 {
 	var s = document.createElement('style');
 	var fontname = "font" + (_num_fonts++);
-	//_debug(fontname);
 	s.id = fontname;
 	s.type = "text/css";
 	document.head.appendChild(s);
@@ -1151,10 +1167,10 @@ function load_font(filename)
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
 /// @param outline outline color, or omit for no outline
+/// @param width outline width
 function textout(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name ;
-	//_debug(bitmap.context.font );
 	bitmap.context.textAlign = "left";
 	_fillstyle(bitmap,color);
 	bitmap.context.fillText(s,x,y);
@@ -1173,7 +1189,8 @@ function textout(bitmap,f,s,x,y,size,color,outline,width)
 /// @param x,w position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
-/// @param outline outline color, or -1 for no outline
+/// @param outline outline color, or omit for no outline
+/// @param width outline width
 function textout_centre(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
@@ -1195,7 +1212,8 @@ function textout_centre(bitmap,f,s,x,y,size,color,outline,width)
 /// @param x,w position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param color text color
-/// @param outline outline color, or -1 for no outline
+/// @param outline outline color, or omit for no outline
+/// @param width outline width
 function textout_right(bitmap,f,s,x,y,size,color,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
@@ -1204,7 +1222,7 @@ function textout_right(bitmap,f,s,x,y,size,color,outline,width)
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
-		_strokestyle(bitmap,color,width);
+		_strokestyle(bitmap,outline,width);
 		bitmap.context.strokeText(s,x,y);
 	}
 }
@@ -1243,7 +1261,7 @@ function get_volume()
 }
 
 /// Loads a sample from file
-/// Loads a sample from file and returns it. Doesn't stall for loading.
+/// Loads a sample from file and returns it. Doesn't stall for loading, use ready() to make sure your samples are loaded! Note that big files, such as music jingles, will most probably get streamed isntead of being fully loaded into memory, metadata should be acessible tho.
 /// @param filename name of the audio file
 /// @return sample object
 function load_sample(filename)
@@ -1270,7 +1288,7 @@ function destroy_sample(filename)
 }
 
 /// Plays given sample.
-/// Plays a sample object using given values. Note how pan is left out, as it doesn't seem to have a js counterpart. freq will prolly not work everywhere too!
+/// Plays a sample object using given values. Note how pan is left out, as it doesn't seem to have a js counterpart. Freq will prolly not work everywhere too!
 /// @param sample sample to be played
 /// @param vol playback volume
 /// @param freq speed, 1.0 is normal
@@ -1279,8 +1297,9 @@ function play_sample(sample,vol,freq,loop)
 {
 	if (!vol && vol!=0) vol=1.0;
 	if (!freq && freq!=0) freq=1.0;
-	if (!loop && loop!=0) loop=0;
+	if (!loop) loop=false;
 	adjust_sample(sample,vol,freq,loop)
+	sample.currentTime = 0;
 	sample.element.play();
 }
 
@@ -1304,6 +1323,15 @@ function adjust_sample(sample,vol,freq,loop)
 function stop_sample(sample)
 {
 	sample.element.pause();
+	sample.currentTime = 0;
+}
+
+/// Pauses playing
+/// Also doesn't reset position. Use play_sample() to resume.
+/// @param sample sample to be stopped
+function stop_sample(sample)
+{
+	sample.element.pause();
 }
 
 //@}
@@ -1317,6 +1345,14 @@ function stop_sample(sample)
 function rand()
 {
 	return Math.floor(65536 * Math.random());
+}
+
+/// Returns a random number from -2147483648 to 2147483647
+/// Result is always integer. Use abs() if you only want positive values.
+/// @return a random number in -2147483648-2147483648 inclusive range
+function rand32()
+{
+	return rand()|(rand()<<16);
 }
 
 /// Returbns a random number from 0.0 to 1.0
@@ -1490,17 +1526,13 @@ function scaleclamp(value,min,max,min2,max2)
 /// @name DEBUG FUNCTIONS
 //@{
 
-/// Set this to 1 to get debug messages
-var ALLEGRO_DEBUG = 1;
-
 var _debug_enabled = false;
 var _debug_element;
 
 /// Fatal error displays alert and logs to console
 function _error(string)
 {
-	if (!ALLEGRO_DEBUG) return;
-	console.log("[ERROR] " + string);
+	log("[ERROR] " + string);
 	alert(string);
 }
 
@@ -1528,13 +1560,6 @@ function wipe_log()
 {
 	if (!_debug_enabled) return;
 	_debug_element.innerHTML = "";
-}
-
-/// Logs to console
-function _debug(string)
-{
-	if (!ALLEGRO_DEBUG) return;
-	log(string);
 }
 
 //@}

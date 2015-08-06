@@ -18,16 +18,16 @@ border: 1px solid black;
 }
 
 canvas {
- image-rendering: optimizeSpeed;             /* Older versions of FF          */
- image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
- image-rendering: -webkit-optimize-contrast; /* Safari                        */
- image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
- image-rendering: pixelated;                 /* Awesome future-browsers       */
- -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
- border:2px solid black;
- box-shadow:#888 4px 4px 16px;
- margin: 10px auto;
- display:block;
+image-rendering: optimizeSpeed;             /* Older versions of FF          */
+image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+image-rendering: -webkit-optimize-contrast; /* Safari                        */
+image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+image-rendering: pixelated;                 /* Awesome future-browsers       */
+-ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+border:2px solid black;
+box-shadow:#888 4px 4px 16px;
+margin: 10px auto;
+display:block;
 }
  
 #debug {
@@ -88,5 +88,5 @@ padding:10px;
 }
 
 #footer {
-
+text-align:center;
 }

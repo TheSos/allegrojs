@@ -1,7 +1,9 @@
-# jAllegro tutorial
+# [jAllegro](http://jallegro.sos.gd/) tutorial
  
 ## Getting started
-jAllegro aims to be the easiest HTML5 thing around, but that doesn't mean you can get away without a bunch of tools to help you out. Firtly, you are going to need a text editor. Fancy enw text editors support sytax highlighting, so that your code will look much prettier. For Windows I suggest Notepad++ as it's free and does the job. I don't know about Mac, but if you use Linux, you probably don't need a text editor suggestion.
+jAllegro aims to be the easiest HTML5 thing around, but that doesn't mean you can get away without a bunch of tools to help you out. Firtly, you are going to need a text editor. Fancy enw text editors support sytax highlighting, so that your code will look much prettier. For Windows I suggest [Notepad++](https://notepad-plus-plus.org/) as it's free and does the job. I don't know about Mac, but if you use Linux, you probably don't need a text editor suggestion. You will also need a browser, but you probably have that already. Most browsers have built-in developer tools under F12 button. Press F12 now to see if it works! Personally, I recommend [Firefox](https://www.mozilla.org/en-US/firefox/desktop/) browser with [FireBug](http://getfirebug.com/) plugin for development.
+
+### [Read on GitHub for cool syntax highlighting!](https://github.com/TheSos/jallegro/tree/master/tutorial)
 
 ## Setting up!
 * Create an empty directory
@@ -135,6 +137,12 @@ function update()
 * Declare `weapon2` on top of the code and add `weapon2  = load_bmp('weapon2.png');` to `main()`
 * Save the file and enjoy!
 
+### Finishing touches
+* To make it look way better, let's add a background image. 
+* Download [window.png](http://jallegro.sos.gd/tutorial/project/window.png) and put it in your project file.
+* Look for a line that says `deaths = create_bitmap(SCREEN_W,SCREEN_H);` anmd replace it with `deaths = load_bmp("project/window.png");`
+* Save and refresh, and voila! Isntead of an empty splatscreen, we now have a window loaded by default to which we are blitting images of dead insect.
+
 ## Finished product
 After you are done, your code shoudl look like this:
 ```javascript
@@ -178,7 +186,7 @@ function main()
 	weapon2  = load_bmp('weapon2.png');
 	miss = load_sample("miss.mp3");
 	hit = load_sample("hit.mp3");
-	deaths = create_bitmap(SCREEN_W,SCREEN_H);
+	deaths = load_bmp("window.png");
 	hide_mouse();
 	ready(function(){
 		loop(function(){
@@ -192,3 +200,6 @@ function main()
 END_OF_MAIN();
 ```
 
+## The game
+
+### [Read on the website to play the ready game!](http://jallegro.sos.gd/tutorial)
