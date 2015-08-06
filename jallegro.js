@@ -45,7 +45,7 @@ function END_OF_MAIN()
 //@{
 
 /// Mouse button bitmask.
-/// Each bit in the mask represents a seoparate mouse button state. If right mouse button is down, mouse_b value would be 4, 00100 in binary. Each bit represents one mouse button. use something like if (mouse_b&1) to check for separate buttons.
+/// Each bit in the mask represents a separate mouse button state. If right mouse button is down, mouse_b value would be 4, 00100 in binary. Each bit represents one mouse button. use something like if (mouse_b&1) to check for separate buttons.
 /// * Button 0 is LMB. (mouse_b&1)
 /// * Button 1 is MMB / wheel. (mouse_b&2)
 /// * Button 2 is RMB. (mouse_b&4)
@@ -66,31 +66,31 @@ var mouse_x = -1;
 var mouse_y = -1;
 
 /// Mouse wheel position.
-/// This might not work consistently accross all browsers!
+/// This might not work consistently across all browsers!
 var mouse_z = -1;
 
 /// Mouse mickey, X position since last loop().
-/// Only workis inside loop()
+/// Only works inside loop()
 var mouse_mx = 0;
 
 /// Mouse mickey, Y position since last loop().
-/// Only workis inside loop()
+/// Only works inside loop()
 var mouse_my = 0;
 
-/// Mouse mickey, wheel positon since last loop().
-/// Only workis inside loop()
+/// Mouse mickey, wheel position since last loop().
+/// Only works inside loop()
 var mouse_mz = 0;
 
 /// Checks if mouse was installed
 var _mouse_installed = false;
 
-/// last mosue x position 
+/// last mouse x position 
 var _last_mouse_x = -1;
 
-/// last mosue y position 
+/// last mouse y position 
 var _last_mouse_y = -1;
 
-/// last mosue wheel position 
+/// last mouse wheel position 
 var _last_mouse_z = -1;
 
 /// is context menu enabled?
@@ -157,8 +157,8 @@ function show_mouse()
 	return 0;
 }
 
-/// Disables system mosue cursor over canvas.
-/// Use this if you would like to provide your own curseor bitmap
+/// Disables system mouse cursor over canvas.
+/// Use this if you would like to provide your own cursor bitmap
 function hide_mouse()
 {
 	if (!_mouse_installed)
@@ -170,13 +170,13 @@ function hide_mouse()
 	return 0;
 }
 
-/// Mosue context menu suppressor
+/// Mouse context menu suppressor
 function _mousemenu(e)
 {
 	e.preventDefault();
 }
 
-/// mouseup event handler
+/// mouse up event handler
 function _mouseup(e)
 {
 	mouse_b = mouse_b&~(1<<(e.which-1));
@@ -184,7 +184,7 @@ function _mouseup(e)
 	e.preventDefault();
 }
 
-/// mousedown event handler
+/// mouse down event handler
 function _mousedown(e)
 {
 	mouse_b = mouse_b|(1<<(e.which-1));
@@ -192,7 +192,7 @@ function _mousedown(e)
 	e.preventDefault();
 }
 
-/// mousemove event handler
+/// mouse move event handler
 function _mousemove(e)
 {
 	mouse_x = e.offsetX;
@@ -200,7 +200,7 @@ function _mousemove(e)
 	e.preventDefault();
 }
 
-/// mosuewheel event handler
+/// mouse wheel event handler
 function _mousewheel(e)
 {
 	mouse_z += e.deltaY;
@@ -230,7 +230,7 @@ function _timer_lookup(proc)
 
 /// Converts seconds to install_int_ex interval units
 /// @param secs number of seconds
-/// @return value converted to miliseconds
+/// @return value converted to milliseconds
 function SECS_TO_TIMER(secs) {return secs*1000;}
 
 /// Converts milliseconds to install_int_ex interval units
@@ -254,7 +254,7 @@ function install_timer()
 	
 }
 
-/// Unix timestamp!
+/// Unix time stamp!
 /// Returns number of milliseconds since 1970 started.
 function time()
 {
@@ -273,7 +273,7 @@ function install_int(procedure,msec)
 /// Installs interrupt function.
 /// With this one, you must use helper functions to set the interval in the second argument. The lowest interval is 1 msec, but you probably don't want to go below 17 msec. Suggested values are BPS_TO_TIMER(30) or BPS_TO_TIMER(60). It cannot be used to alter previously installed interrupt function as well.
 /// * SECS_TO_TIMER(secs) - seconds
-/// * MSEC_TO_TIMER(msec) - miliseconds (1/1000th)
+/// * MSEC_TO_TIMER(msec) - milliseconds (1/1000th)
 /// * BPS_TO_TIMER(bps) - beats per second
 /// * BPM_TO_TIMER(bpm) - beats per minute
 /// @param procedure function to be called
@@ -288,7 +288,7 @@ function install_int_ex(procedure,speed)
 /// registered loop procedure
 var _loopproc;
 
-/// Performes some loop tasks, such as cleaning up pressed[] and released[]
+/// Performs some loop tasks, such as cleaning up pressed[] and released[]
 function _uberloop()
 {
 	if (_mouse_installed)
@@ -320,8 +320,8 @@ function _uberloop()
 }
 
 /// Game loop interrupt
-/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realies on events and timers, you cannot hasve your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function! Note that mouse mickeys (mouse_mx, etc), and pressed indicators (pressed[] and mouse_pressed) will only work inside loop()
-/// @param procedure function to be looped, prteferably inline, but let's not talk coding styles here
+/// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realise on events and timers, you cannot have your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function! Note that mouse mickeys (mouse_mx, etc.), and pressed indicators (pressed[] and mouse_pressed) will only work inside loop()
+/// @param procedure function to be looped, preferably inline, but let's not talk coding styles here
 /// @param speed speed in the same format as install_int_ex()
 function loop(procedure,speed)
 {
@@ -340,7 +340,7 @@ var _ready_proc;
 /// Holds the download complete handler function
 var _bar_proc;
 
-/// cchecks if everythign has downlaoded in intervals
+/// checks if everything has downloaded in intervals
 function _progress_check()
 { 
 	var num_assets = 0;
@@ -373,9 +373,9 @@ function loading_bar(progress)
 	rectfill(canvas,20,SCREEN_H-40,scaleclamp(progress,0,1,0,(SCREEN_W-40)),20,makecol(255,255,255));
 }
 
-/// Installs a handler to check if everything has downlaoded. 
-/// You shoudl always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this halnder will only get executed after everything has laoded making sure youc an access bitmap properties and data and play samples right away.  Note that load_font() does nto affect ready(), so you shoudl always load your fonts first.
-/// @param procedure function to be called when eveything has loaded.
+/// Installs a handler to check if everything has downloaded. 
+/// You should always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this hander will only get executed after everything has loaded making sure you can access bitmap properties and data and play samples right away.  Note that load_font() does not affect ready(), so you should always load your fonts first.
+/// @param procedure function to be called when everything has loaded.
 /// @param bar loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
 function ready(procedure,bar)
 {
@@ -421,7 +421,7 @@ function remove_all_ints()
 var KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45, KEY_F = 0x46, KEY_G = 0x47, KEY_H = 0x48, KEY_I = 0x49, KEY_J = 0x50, KEY_K = 0x51, KEY_L = 0x52, KEY_M = 0x53, KEY_N = 0x54, KEY_O = 0x55, KEY_P = 0x56, KEY_Q = 0x57, KEY_R = 0x58, KEY_S = 0x59, KEY_T = 0x50, KEY_U = 0x51, KEY_V = 0x52, KEY_W = 0x53, KEY_X = 0x54, KEY_Y = 0x55, KEY_Z = 0x56, KEY_0 = 0x30, KEY_1 = 0x31, KEY_2 = 0x32, KEY_3 = 0x33, KEY_4 = 0x34, KEY_5 = 0x35, KEY_6 = 0x36, KEY_7 = 0x37, KEY_8 = 0x38, KEY_9 = 0x39, KEY_0_PAD = 0x60, KEY_1_PAD = 0x61, KEY_2_PAD = 0x62, KEY_3_PAD = 0x63, KEY_4_PAD = 0x64, KEY_5_PAD = 0x65, KEY_6_PAD = 0x66, KEY_7_PAD = 0x67, KEY_8_PAD = 0x68, KEY_9_PAD = 0x69, KEY_F1 = 0x70, KEY_F2 = 0x71, KEY_F3 = 0x72, KEY_F4 = 0x73, KEY_F5 = 0x74, KEY_F6 = 0x75, KEY_F7 = 0x76, KEY_F8 = 0x77, KEY_F9 = 0x78, KEY_F10 = 0x79, KEY_F11 = 0x7a, KEY_F12 = 0x7b, KEY_ESC = 0x1B, KEY_TILDE = 0xc0, KEY_MINUS = 0xbd, KEY_EQUALS = 0xbb, KEY_BACKSPACE = 0x08, KEY_TAB = 0x09, KEY_OPENBRACE = 0xdb, KEY_CLOSEBRACE = 0xdd, KEY_ENTER = 0x0D, KEY_COLON = 0xba, KEY_QUOTE = 0xde, KEY_BACKSLASH = 0xdc, KEY_COMMA = 0xbc, KEY_STOP = 0xbe, KEY_SLASH = 0xBF, KEY_SPACE = 0x20, KEY_INSERT = 0x2D, KEY_DEL = 0x2E, KEY_HOME = 0x24, KEY_END = 0x23, KEY_PGUP = 0x21, KEY_PGDN = 0x22, KEY_LEFT = 0x25, KEY_RIGHT = 0x27, KEY_UP = 0x26, KEY_DOWN = 0x28, KEY_SLASH_PAD = 0x6F, KEY_ASTERISK = 0x6A, KEY_MINUS_PAD = 0x6D, KEY_PLUS_PAD = 0x6B, KEY_ENTER_PAD = 0x0D, KEY_PRTSCR = 0x2C, KEY_PAUSE = 0x13, KEY_EQUALS_PAD = 0x0C, KEY_LSHIFT = 0x10, KEY_RSHIFT = 0x10, KEY_LCONTROL = 0x11, KEY_RCONTROL = 0x11, KEY_ALT = 0x12, KEY_ALTGR = 0x12, KEY_LWIN = 0x5b, KEY_RWIN = 0x5c, KEY_MENU = 0x5d, KEY_SCRLOCK = 0x9d, KEY_NUMLOCK = 0x90, KEY_CAPSLOCK = 0x14;
 
 /// Array of flags indicating state of each key. 
-/// Available keyboard scancodes are as follows:
+/// Available keyboard scan codes are as follows:
 /// *     KEY_A ... KEY_Z,
 /// *     KEY_0 ... KEY_9,
 /// *     KEY_0_PAD ... KEY_9_PAD,
@@ -442,20 +442,20 @@ var pressed = [];
 /// Note that this will only work inside loop()
 var released = [];
 
-/// Is keybaord even isntalled
+/// Is keyboard even installed
 var _keyboard_installed = false;
 
-/// default keys to not supress
+/// default keys to not suppress
 var _default_enabled_keys = [KEY_F1,KEY_F2,KEY_F3,KEY_F4,KEY_F5,KEY_F6,KEY_F7,KEY_F8,KEY_F9,KEY_F10,KEY_F11,KEY_F12];
 
 
-/// arrayu of preventdefault avoiders
+/// array of prevent default avoiders
 var _enabled_keys = [];
 
 
 /// Installs keyboard handlers
-/// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppresse
-/// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the onyl ones on the list.
+/// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppressed
+/// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the only ones on the list.
 function install_keyboard(enable_keys)
 {
 	if (_keyboard_installed)
@@ -495,7 +495,7 @@ function remove_keyboard()
 	log("Keybaord removed!");
 }
 
-/// keydown event handler
+/// key down event handler
 function _keydown(e)
 {
 	if (!key[e.keyCode]) pressed[e.keyCode] = true;
@@ -503,7 +503,7 @@ function _keydown(e)
 	if (_enabled_keys.indexOf(e.keyCode)==-1) e.preventDefault();
 }
 
-/// keyup event handler
+/// key up event handler
 function _keyup(e)
 {
 	key[e.keyCode] = false;
@@ -526,12 +526,12 @@ function _keyup(e)
 //@{
 
 /// Bitmap object, This is not a function.
-/// This is not a function, it's the structure of bitmap object returned from load_bitmap() and create_bitmap(). For every bitmap laoded or created, a canvas element is created. Loaded images are then drawn onto the canvas, so that you can easily manipulate images and everything is consistent. You can also load a single fiel two times and modify it differently for each instance.
+/// This is not a function, it's the structure of bitmap object returned from load_bitmap() and create_bitmap(). For every bitmap laoded or created, a canvas element is created. Loaded images are then drawn onto the canvas, so that you can easily manipulate images and everything is consistent. You can also load a single file two times and modify it differently for each instance.
 /// @param w bitmap width
 /// @param h bitmap height
 /// @param canvas underlying canvas element, used to draw the bitmap onto stuff
 /// @param context canvas' rendering context, used to draw stuff onto this bitmap
-/// @param ready flags whether laoding of the bitmap is complete
+/// @param ready flags whether loading of the bitmap is complete
 function BITMAP_OBJECT(w,h,canvas,context,ready) {}
 
 /// Creates empty bitmap.
@@ -550,7 +550,7 @@ function create_bitmap(width,height)
 }
 
 /// Loads bitmap from file
-/// Loads image from file async. This means that the executioon won't stall for the image, and it's data won't be accessible right off the start. You can check for bitmap object's 'ready' member to see if it has loaded, but you probably should avoid stallign execution for that, as JS doesn't really like that.
+/// Loads image from file asynchronously. This means that the execution won't stall for the image, and it's data won't be accessible right off the start. You can check for bitmap object's 'ready' member to see if it has loaded, but you probably should avoid stalling execution for that, as JS doesn't really like that.
 /// @param filename URL of image
 /// @return bitmap object, or -1 on error
 function load_bitmap(filename)
@@ -660,26 +660,26 @@ function RAD(d) { return -d*PI/180.0;}
 function DEG(r) { return -r*180.0/PI;}
 
 /// Helper for setting fill style
-function _fillstyle(bitmap,color)
+function _fillstyle(bitmap,colour)
 {
-	bitmap.context.fillStyle = 'rgba('+ getr(color) + ',' + getg(color) + ',' + getb(color) + ',' + getaf(color) + ')';
+	bitmap.context.fillStyle = 'rgba('+ getr(colour) + ',' + getg(colour) + ',' + getb(colour) + ',' + getaf(colour) + ')';
 }
 
 /// Helper for setting stroke style
-function _strokestyle(bitmap,color,width)
+function _strokestyle(bitmap,colour,width)
 {
 	if (!width) width=1;
 	bitmap.context.lineWidth = width;
-	bitmap.context.strokeStyle = 'rgba('+ getr(color) + ',' + getg(color) + ',' + getb(color) + ',' + getaf(color) + ')';
+	bitmap.context.strokeStyle = 'rgba('+ getr(colour) + ',' + getg(colour) + ',' + getb(colour) + ',' + getaf(colour) + ')';
 }
 
 /// Creates a 0xAARRGGBB from values
-/// Overdrive is not permitted, so values over 255 (0xff) will get clipped. Feel free to add it to bugtracker if it's bothering you! I might change it! Adds alpha to colors. I have no idea which one is JS's language, but makecol() will always represent the default one. Also, endians? This is not C anymore, right? Do I have to know my endians?
+/// Overdrive is not permitted, so values over 255 (0xff) will get clipped.
 /// @param r red component in 0-255 range
 /// @param g green component in 0-255 range
 /// @param b blue  component in 0-255 range
 /// @param a alpha component in 0-255 range, defaults to 255 (fully opaque)
-/// @return color in 0xAARRGGBB format
+/// @return colour in 0xAARRGGBB format
 function makecol(r,g,b,a)
 {
 	if (!a) a=255;
@@ -692,7 +692,7 @@ function makecol(r,g,b,a)
 /// @param g green component in 0.0-1.0 range
 /// @param b blue  component in 0.0-1.0 range
 /// @param a alpha component in 0.0-1.0 range, defaults to 1.0 (fully opaque)
-/// @return color in 0xAARRGGBB format
+/// @return colour in 0xAARRGGBB format
 function makecolf(r,g,b,a)
 {
 		if (!a) a=1.0;
@@ -701,93 +701,93 @@ function makecolf(r,g,b,a)
 
 /// Gets red bits from 0xRRGGBB
 /// This one does clip.
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return red component in 0-255 range
-function getr(color)
+function getr(colour)
 {
-	return (color>>16)&0xff;
+	return (colour>>16)&0xff;
 }
 
 /// Gets red bits from 0xRRGGBB
 /// This one too.
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return green component in 0-255 range
-function getg(color)
+function getg(colour)
 {
-	return (color>>8)&0xff;
+	return (colour>>8)&0xff;
 }
 
 /// Gets red bits from 0xRRGGBB
 /// This one clips as well.
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return blue component in 0-255 range
-function getb(color)
+function getb(colour)
 {
-	return color&0xff;
+	return colour&0xff;
 }
 
 /// Gets alpha bits from 0xAARRGGBB
 /// This one doesn't.
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return alpha component in 0-255 range
-function geta(color)
+function geta(colour)
 {
-	return color>>>24;
+	return colour>>>24;
 }
 
 /// Float (0.0-1.0) version of getr()
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return red component in 0.0-1.0 range
-function getrf(color)
+function getrf(colour)
 {
-	return (color>>16)&0xff;
+	return (colour>>16)&0xff;
 }
 
 /// Float (0.0-1.0) version of getg()
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return green component in 0.0-1.0 range
-function getgf(color)
+function getgf(colour)
 {
-	return (color>>8)&0xff;
+	return (colour>>8)&0xff;
 }
 
 /// Float (0.0-1.0) version of getb()
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return blue component in 0.0-1.0 range
-function getbf(color)
+function getbf(colour)
 {
-	return color&0xff;
+	return colour&0xff;
 }
 
 /// Float (0.0-1.0) version of geta()
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @return alpha component in 0.0-1.0 range
-function getaf(color)
+function getaf(colour)
 {
-	return (color>>>24)/255.0;
+	return (colour>>>24)/255.0;
 }
 
-/// Gets pixel color from bitmap
+/// Gets pixel colour from bitmap
 /// Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
-/// @param bitmap biotmap object to poll
+/// @param bitmap bitmap object to poll
 /// @param x x coordinate of pixel
 /// @param y y coordinate of pixel
-/// @return color in 0xAARRGGBB format
+/// @return colour in 0xAARRGGBB format
 function getpixel(bitmap,x,y)
 {
 	var data = bitmap.context.getImageData(x,y,1,1).data;
 	return (data[3]<<24)|((data[0]&0xff)<<16)|((data[1]&0xff)<<8)|((data[2]&0xff));
 }
 
-/// Gets pixel color from bitmap
+/// Gets pixel colour from bitmap
 /// Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
 /// @param bitmap bitmap object to update
 /// @param x x coordinate of pixel
 /// @param y y coordinate of pixel
-/// @param color color in 0xAARRGGBB format
-function putpixel(bitmap,x,y,color)
+/// @param colour colour in 0xAARRGGBB format
+function putpixel(bitmap,x,y,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x,y,1,1);
 }
 
@@ -800,26 +800,26 @@ function clear_bitmap(bitmap)
 	bitmap.context.fillRect(0,0,bitmap.w,bitmap.h);
 }
 
-/// Clears bitmap to specified color.
-/// Fills the entire bitmap with color value.
+/// Clears bitmap to specified colour.
+/// Fills the entire bitmap with colour value.
 /// @param bitmap bitmap to be cleared
-/// @param color color in 0xAARRGGBB format
-function clear_to_color(bitmap,color)
+/// @param colour colour in 0xAARRGGBB format
+function clear_to_color(bitmap,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(0,0,bitmap.w,bitmap.h);
 }
 
 /// Draws a line.
-/// Draws a line from one point to another using given color.
+/// Draws a line from one point to another using given colour.
 /// @param bitmap to be drawn to
 /// @param x1,y1 start point coordinates
 /// @param x2,y2 end point coordinates
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function line(bitmap,x1,y1,x2,y2,color,width)
+function line(bitmap,x1,y1,x2,y2,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.beginPath();
 	bitmap.context.moveTo(x1,y1);
 	bitmap.context.lineTo(x2,y2);
@@ -827,30 +827,30 @@ function line(bitmap,x1,y1,x2,y2,color,width)
 }
 
 /// Draws a vertical line.
-/// Draws a vertical line from one point to another using given color. Probably slightly faster than line() method, since this one uses rectfill to draw the line.
+/// Draws a vertical line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
 /// @param bitmap to be drawn to
 /// @param x column to draw the line to
 /// @param y1,y2 line endpoints
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function vline(bitmap,x,y1,y2,color,width)
+function vline(bitmap,x,y1,y2,colour,width)
 {
 	if (!width) width=1;
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x,y1,width,y2-y1);
 }
 
 /// Draws a horizontal line.
-/// Draws a horizontal line from one point to another using given color. Probably slightly faster than line() method, since this one uses rectfill to draw the line.
+/// Draws a horizontal line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
 /// @param bitmap to be drawn to
 /// @param y row to draw the line to
 /// @param x1,x2 line endpoints
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function hline(bitmap,x1,y,x2,color,width)
+function hline(bitmap,x1,y,x2,colour,width)
 {
 	if (!width) width=1;
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x1,y,x2-x1,width);
 }
 
@@ -860,11 +860,11 @@ function hline(bitmap,x1,y,x2,color,width)
 /// @param x1,y1 first point coordinates
 /// @param x2,y2 second point coordinates
 /// @param x3,y3 third point coordinates
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function triangle(bitmap,x1,y1,x2,y2,x3,y3,color,width)
+function triangle(bitmap,x1,y1,x2,y2,x3,y3,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.beginPath();
 	bitmap.context.moveTo(x1,y1);
 	bitmap.context.lineTo(x2,y2);
@@ -879,10 +879,10 @@ function triangle(bitmap,x1,y1,x2,y2,x3,y3,color,width)
 /// @param x1,y1 first point coordinates
 /// @param x2,y2 second point coordinates
 /// @param x3,y3 third point coordinates
-/// @param color color in 0xAARRGGBB format
-function trianglefill(bitmap,x1,y1,x2,y2,x3,y3,color)
+/// @param colour colour in 0xAARRGGBB format
+function trianglefill(bitmap,x1,y1,x2,y2,x3,y3,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.beginPath();
 	bitmap.context.moveTo(x1,y1);
 	bitmap.context.lineTo(x2,y2);
@@ -896,11 +896,11 @@ function trianglefill(bitmap,x1,y1,x2,y2,x3,y3,color)
 /// @param bitmap to be drawn to
 /// @param vertices number of vertices to draw
 /// @param points array containing vertices*2 elements of polygon coordinates in [x1,y1,x2,y2,x3...] format
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function polygon(bitmap,vertices,points,color,width)
+function polygon(bitmap,vertices,points,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.beginPath();
 	for (var c=0;c<vertices;c++)
 	{
@@ -916,10 +916,10 @@ function polygon(bitmap,vertices,points,color,width)
 /// @param bitmap to be drawn to
 /// @param vertices number of vertices to draw
 /// @param points array containing vertices*2 elements of polygon coordinates in [x1,y1,x2,y2,x3...] format
-/// @param color color in 0xAARRGGBB format
-function polygonfill(bitmap,vertices,points,color)
+/// @param colour colour in 0xAARRGGBB format
+function polygonfill(bitmap,vertices,points,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.beginPath();
 	for (var c=0;c<vertices;c++)
 	{
@@ -931,70 +931,70 @@ function polygonfill(bitmap,vertices,points,color)
 }
 
 /// Draws a rectangle.
-/// Draws a rectangle from one point to another using given color. The rect is not filled.
+/// Draws a rectangle from one point to another using given colour. The rectangle is not filled.
 /// @param bitmap to be drawn to
 /// @param x1,y1 start point coordinates
 /// @param x2,y2 end point coordinates
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function rect(bitmap,x1,y1,x2,y2,color,width)
+function rect(bitmap,x1,y1,x2,y2,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.strokeRect(x1,y1,x2,y2);
 }
 
 /// Draws a rectangle.
-/// Draws a rectangle from one point to another using given color. The rect is filled.
+/// Draws a rectangle from one point to another using given colour. The rectangle is filled.
 /// @param bitmap to be drawn to
 /// @param x1,y1 start point coordinates
 /// @param x2,y2 end point coordinates
-/// @param color color in 0xAARRGGBB format
-function rectfill(bitmap,x1,y1,x2,y2,color)
+/// @param colour colour in 0xAARRGGBB format
+function rectfill(bitmap,x1,y1,x2,y2,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x1,y1,x2,y2);
 }
 
 /// Draws a circle.
-/// Draws a circle at specified center poitn and radius. The circle is not filled
+/// Draws a circle at specified centre point and radius. The circle is not filled
 /// @param bitmap to be drawn to
-/// @param x,y center point coordinates
+/// @param x,y centre point coordinates
 /// @param r circle radius
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function circle(bitmap,x,y,radius,color,width)
+function circle(bitmap,x,y,radius,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.beginPath();
 	bitmap.context.arc(x,y,radius,0,PI2);
 	bitmap.context.stroke();
 }
 
 /// Draws a circle.
-/// Draws a circle at specified center poitn and radius. The circle is filled
+/// Draws a circle at specified centre point and radius. The circle is filled
 /// @param bitmap to be drawn to
-/// @param x,y center point coordinates
+/// @param x,y centre point coordinates
 /// @param r circle radius
-/// @param color color in 0xAARRGGBB format
-function circlefill(bitmap,x,y,radius,color)
+/// @param colour colour in 0xAARRGGBB format
+function circlefill(bitmap,x,y,radius,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.beginPath();
 	bitmap.context.arc(x,y,radius,0,PI2);
 	bitmap.context.fill();
 }
 
 /// Draws a arc.
-/// Draws a circle at specified center poitn and radius. The arc is not filled
+/// Draws a circle at specified centre point and radius. The arc is not filled
 /// @param bitmap to be drawn to
-/// @param x,y center point coordinates
+/// @param x,y centre point coordinates
 /// @param ang1,ang2 angles to draw the arc between measured anticlockwise from the positive x axis in degrees
 /// @param r radius
-/// @param color color in 0xAARRGGBB format
+/// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function arc(bitmap,x,y,ang1,ang2,r,color,width)
+function arc(bitmap,x,y,ang1,ang2,r,colour,width)
 {
-	_strokestyle(bitmap,color,width);
+	_strokestyle(bitmap,colour,width);
 	bitmap.context.beginPath();
 	if (ang1>ang2)
 	{
@@ -1006,15 +1006,15 @@ function arc(bitmap,x,y,ang1,ang2,r,color,width)
 }
 
 /// Draws a arc.
-/// Draws a circle at specified center poitn and radius. The arc is filled
+/// Draws a circle at specified centre point and radius. The arc is filled
 /// @param bitmap to be drawn to
-/// @param x,y center point coordinates
+/// @param x,y centre point coordinates
 /// @param ang1,ang2 angles to draw the arc between measured anticlockwise from the positive x axis in degrees
 /// @param r radius
-/// @param color color in 0xAARRGGBB format
-function arcfill(bitmap,x,y,ang1,ang2,r,color)
+/// @param colour colour in 0xAARRGGBB format
+function arcfill(bitmap,x,y,ang1,ang2,r,colour)
 {
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.beginPath();
 	if (ang1>ang2)
 	{
@@ -1085,7 +1085,7 @@ function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 }
 
 /// Draws a rotated sprite and scales it
-/// Draws a sprite rotating it around its centre point. Opposed to traditional allegro approach, sprite is drawn centered. The  sprite is also scaled.
+/// Draws a sprite rotating it around its centre point. Opposed to traditional allegro approach, sprite is drawn centred. The  sprite is also scaled.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
@@ -1126,7 +1126,7 @@ function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 /// @param dx,dy top-left bitmap corner coordinates in target bitmap
 /// @param w,h blit size
 /// @todo make rotated versions of this
-/// @todo tell everyone that blitting to itself is slower than youn thing (requires copy?)
+/// @todo tell everyone that blitting to itself is slower than the other thing (requires copy?)
 function blit(source,dest,sx,sy,dx,dy,w,h)
 {
 	 dest.context.drawImage(source.canvas,sx,sy,w,h,dx,dy,w,h);
@@ -1155,12 +1155,12 @@ var _num_fonts = 0;
 /// Font object, this is not a function.
 /// This is not a function but a reference entry for font object returned by load_font() and create_cont(). 
 /// @param element <style> element containing the font-face declaration. Not available for create_font() fonts and default font object.
-/// @param file font filename, empty string for default font and create_font() typefaces.
+/// @param file font file name, empty string for default font and create_font() typefaces.
 /// @param name font-family name
 function FONT_OBJECT(element,file,name) {}
 
 /// Loads font from file.
-/// This actually creates a style element, puts code isnide and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been laoded in js, thus laod your fonts first thing, and everything should be fine.
+/// This actually creates a style element, puts code inside and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been loaded in js, thus load your fonts first thing, and everything should be fine.
 /// @param filename Font file URL
 /// @return font object
 function load_font(filename)
@@ -1175,7 +1175,7 @@ function load_font(filename)
 }
 
 /// Creates a font objects from font-family
-/// This creates a fotn element using an existing font-family name.
+/// This creates a font element using an existing font-family name.
 /// @param family font-family property, can be 'serif', 'sans-serif' or anything else that works
 /// @return font object
 function create_font(family)
@@ -1184,20 +1184,20 @@ function create_font(family)
 }
 
 /// Draws text on bitmap.
-/// This draws text using given font, size and color. You can also specify outline, or make it -1 to disable outline.
+/// This draws text using given font, size and colour. You can also specify outline, or make it -1 to disable outline.
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
 /// @param x,w position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
-/// @param color text color
-/// @param outline outline color, or omit for no outline
+/// @param colour text colour
+/// @param outline outline colour, or omit for no outline
 /// @param width outline width
-function textout(bitmap,f,s,x,y,size,color,outline,width)
+function textout(bitmap,f,s,x,y,size,colour,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name ;
 	bitmap.context.textAlign = "left";
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
@@ -1206,21 +1206,21 @@ function textout(bitmap,f,s,x,y,size,color,outline,width)
 	}
 }
 
-/// Draws centered text on bitmap.
-/// This draws centered text using given font, size and color. You can also specify outline, or make it -1 to disable outline.
+/// Draws centred text on bitmap.
+/// This draws centred text using given font, size and colour. You can also specify outline, or make it -1 to disable outline.
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
 /// @param x,w position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
-/// @param color text color
-/// @param outline outline color, or omit for no outline
+/// @param colour text colour
+/// @param outline outline colour, or omit for no outline
 /// @param width outline width
-function textout_centre(bitmap,f,s,x,y,size,color,outline,width)
+function textout_centre(bitmap,f,s,x,y,size,colour,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "center";
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
@@ -1230,20 +1230,20 @@ function textout_centre(bitmap,f,s,x,y,size,color,outline,width)
 }
 
 /// Draws right-aligned text on bitmap.
-/// This draws right-aligned text using given font, size and color. You can also specify outline, or make it -1 to disable outline.
+/// This draws right-aligned text using given font, size and colour. You can also specify outline, or make it -1 to disable outline.
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
 /// @param x,w position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
-/// @param color text color
-/// @param outline outline color, or omit for no outline
+/// @param colour text colour
+/// @param outline outline colour, or omit for no outline
 /// @param width outline width
-function textout_right(bitmap,f,s,x,y,size,color,outline,width)
+function textout_right(bitmap,f,s,x,y,size,colour,outline,width)
 {
 	bitmap.context.font = size.toFixed() + 'px ' + f.name;
 	bitmap.context.textAlign = "right";
-	_fillstyle(bitmap,color);
+	_fillstyle(bitmap,colour);
 	bitmap.context.fillText(s,x,y);
 	if (outline) 
 	{
@@ -1265,13 +1265,13 @@ var _samples = [];
 /// Sample object, this is not a function.
 /// This is not a function. This is a sample object structure returned by load_sample().
 /// @param element HTML <audio> element containing the sound properties
-/// @param file sample filename
+/// @param file sample file name
 /// @param volume sample volume, this is combined with global volume
 /// @param ready loaded indicator flag
 function SAMPLE_OBJECT(element,file,volume,ready) {}
 
 /// Install sound
-/// @todo: stuff here? AudioContext? comaptibility first!
+/// @todo: stuff here? AudioContext? compatibility first!
 function install_sound()
 {
 
@@ -1294,7 +1294,7 @@ function get_volume()
 }
 
 /// Loads a sample from file
-/// Loads a sample from file and returns it. Doesn't stall for loading, use ready() to make sure your samples are loaded! Note that big files, such as music jingles, will most probably get streamed isntead of being fully loaded into memory, metadata should be acessible tho.
+/// Loads a sample from file and returns it. Doesn't stall for loading, use ready() to make sure your samples are loaded! Note that big files, such as music jingles, will most probably get streamed instead of being fully loaded into memory, meta data should be accessible tho.
 /// @param filename name of the audio file
 /// @return sample object
 function load_sample(filename)
@@ -1316,7 +1316,7 @@ function load_sample(filename)
 	return sample;
 }
 
-/// Does noithing.
+/// Does nothing.
 /// @todo: something that happens here
 function destroy_sample(filename)
 {
@@ -1324,7 +1324,7 @@ function destroy_sample(filename)
 }
 
 /// Plays given sample.
-/// Plays a sample object using given values. Note how pan is left out, as it doesn't seem to have a js counterpart. Freq will prolly not work everywhere too!
+/// Plays a sample object using given values. Note how pan is left out, as it doesn't seem to have a js counterpart. Freq will probably not work everywhere too!
 /// @param sample sample to be played
 /// @param vol playback volume
 /// @param freq speed, 1.0 is normal
@@ -1340,7 +1340,7 @@ function play_sample(sample,vol,freq,loop)
 }
 
 /// Adjust sample during playback
-/// Adjusts sample data Note how pan is left out, as it doesn't seem to have a js counterpart. freq will prolly not work everywhere too!
+/// Adjusts sample data Note how pan is left out, as it doesn't seem to have a js counterpart. freq will probably not work everywhere too!
 /// @param sample sample 
 /// @param vol playback volume
 /// @param freq speed, 1.0 is normal
@@ -1391,8 +1391,8 @@ function rand32()
 	return rand()|(rand()<<16);
 }
 
-/// Returbns a random number from 0.0 to 1.0
-/// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 willr eturn a value from 0.0 to 10.0
+/// Returns a random number from 0.0 to 1.0
+/// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 will return a value from 0.0 to 10.0
 /// @return a random floating point value from 0.0 to 1.0
 function frand()
 {
@@ -1400,12 +1400,12 @@ function frand()
 }
 
 /// Returns absolute value of a
-/// Removes minus sign from the value, shoudl there be any.
+/// Removes minus sign from the value, should there be any.
 /// @param a value to be absoluted
 /// @return absolute value of a
 function abs(a) {return (a<0)?(-a):(a);}
 
-/// Returns legth of a vector
+/// Returns length of a vector
 /// @param x,y vector coordinates
 /// @return length of the vector
 function length(x,y)
@@ -1416,17 +1416,17 @@ function length(x,y)
 /// Calculates distance between two points
 /// @param x1,x2 first point
 /// @param x2,y2 second point
-/// @return diostance between the points
+/// @return distance between the points
 function distance(x1,y1,x2,y2)
 {
 	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
 /// Calculates squared distance between two points
-/// This verison is just a tad faster
+/// This version is just a tad faster
 /// @param x1,x2 first point
 /// @param x2,y2 second point
-/// @return diostance between the points
+/// @return distance between the points
 function distance2(x1,y1,x2,y2)
 {
 	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
@@ -1498,7 +1498,7 @@ function angle(x1,y1,x2,y2)
 	return a < 0 ? a + 360 : a;
 }
 
-/// Returns a diference between angles
+/// Returns a difference between angles
 /// @param a,b, angles
 /// @return angle difference, in -180 to 180 range
 function anglediff(a,b)
@@ -1573,7 +1573,7 @@ function _error(string)
 }
 
 /// Enables debugging to a console.
-/// 'console' can be any html element that can accept text, preffereably a <div>
+/// 'console' can be any html element that can accept text, preferably a <div>
 /// @param id id of the element to be the console
 function enable_debug(id)
 {

@@ -6,7 +6,7 @@
 
 ### What is jAllegro?
 
-*jAllegro* is a minimal javascript port of a really popular gaem programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simpel game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it varies greatly in how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
+*jAllegro* is a minimal javascript port of a really popular game programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simple game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it varies greatly in how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
 
 ### How do you use jAllegro?
 
@@ -47,11 +47,11 @@ Where jallegro.js is the jAllegro library file, and exhello.js contains the afor
 
 ### Who is jAllegro for?
 
-I hope for jAllegro to be a tool prefectly suitable for absolute beginners, who never had experience using game engines, such as I was when I started in Allegro, but it is also perfectly suitable for ewxperienced Javascript developers who are looking for a ligthweight solution, game jammers seeking for a RAD game making tool, developers looking for a non-OOP tool to create games and obviously, hard core old school classic Allegro nerds who somehow prevailed and want to coem back to usign it.
+I hope for jAllegro to be a tool perfectly suitable for absolute beginners, who never had experience using game engines, such as I was when I started in Allegro, but it is also perfectly suitable for experienced Javascript developers who are looking for a lightweight solution, game jammers seeking for a RAD game making tool, developers looking for a non-OOP tool to create games and obviously, hard core old school classic Allegro nerds who somehow prevailed and want to come back to using it.
 
 ### Where can I learn jAllegro?
 
-First up, read all of this README! Then, there are several placesd you can go to get documentation
+First up, read all of this README! Then, there are several placed you can go to get documentation
 * Study [examples](http://jallegro.sos.gd/examples) to see how to use different functions of jAllegro
 * Check the neat and pretty [jAllegro function reference](http://jallegro.sos.gd/docs)
 * Check out the [jAllegro tutorial](http://jallegro.sos.gd/tutorial).
@@ -71,16 +71,16 @@ First up, read all of this README! Then, there are several placesd you can go to
 
 ### What are the differences between this and original Allegro?
 
-Since the underlying system is completely different for jAllegro (Allegro used C and a bit of asembly inside too), there are a bunch of thigns that doesn't make sense for jAllegro, but there are new things that make perfect sense here, while they didn't back in the days. As I will try to keep it as close to original as possible, not to break the feel, there are bound to be discrepancies, and I'kll list them right here!
+Since the underlying system is completely different for jAllegro (Allegro used C and a bit of assembly inside too), there are a bunch of things that doesn't make sense for jAllegro, but there are new things that make perfect sense here, while they didn't back in the days. As I will try to keep it as close to original as possible, not to break the feel, there are bound to be discrepancies, and I'll list them right here!
 
 * `set_gfx_mode` takes canvas id, and pixel dimensions as arguments.
-* `rotate_sprite` draws the rotated sprite centered, as opposed to top-left alignment
-* all of the color modes are gone, as js has uniform standardised color format
+* `rotate_sprite` draws the rotated sprite centred, as opposed to top-left alignment
+* all of the colour modes are gone, as js has uniform standardised colour format
 * software 3d functions are gone, but you can still use WebGL!
 * helper math functions have been added
 * `END_OF_FUNCTION()` and `LOCK_` macros are no longer necessary
 * game loop must be wrapped in a `loop()` function, as js doesn't support blocking code
-* assets are loadded asynchronously, thus `ready()` function wrapper lets you execute code ensurign everything has beel loaded already.
+* assets are loaded asynchronously, thus `ready()` function wrapper lets you execute code ensuring everything has been loaded already.
 * `ready()` can display a custom loading bar as well as a default one
 * `remove_all_ints()` has been added for simplicity
 * a couple of keyboard keys might not work in js
@@ -93,7 +93,7 @@ Since the underlying system is completely different for jAllegro (Allegro used C
 * `masked_blit` functions are no longer needed, sicne everythign relies on alpha channel
 * `textprintf` functions are gone, since `textout` can do the same without `printf` stuff
 * `textout` has a size argument now, due to all fonts being ttf
-* `play_sample` no logner supports panning
+* `play_sample` no longer supports panning
 
 ### But can it really make games?
 
@@ -156,7 +156,7 @@ END_OF_MAIN();
 
 jAllegro was made by me, Sos Sosowski. I always liked Allegro 4, and it felt wrong that it's gone already, so I wanted to give it a new life in form of this library. I hope that not only Allegro freaks like me, but also people new to javascript, or even game making in general will pick this up and create amazing stuff.
 
-If you heve any questions, suggestions, bug reports or would like to show me a game made with jAllegro (I'd love to know!) Drop me a line!
+If you have any questions, suggestions, bug reports or would like to show me a game made with jAllegro (I'd love to know!) Drop me a line!
 
 * You can email me at just.sos.it@gmail.com
 * You can find me on Twitter as [@Sosowski](https://twitter.com/Sosowski)
@@ -204,11 +204,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #### v4.0.2
 * fixed examples
 * fixed volume
-* rearanged code
+* rearranged code
 * fixed and styled documentation
 * added mouse mickeys
 * started on the website!
-* added mouse menu supress option
+* added mouse menu suppress option
 * added show_mouse and hide_mouse
 * wrote the tutorial
 * fixed up missing css files
@@ -226,7 +226,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * ~~todo: cleanup~~
 * ~~todo: website~~
 * ~~todo: set/get_volume~~
-* ~~todo: fix/remvoe freq from play_sample~~
+* ~~todo: fix/remove freq from play_sample~~
 * ~~todo: crunched version~~
 * ~~todo: reference style~~
 * ~~todo: remove vga.ttf~~
