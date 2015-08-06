@@ -136,30 +136,6 @@ function remove_mouse()
 	return 0;
 }
 
-/// Enables mosue cursor over canvas
-function show_mouse()
-{
-	if (!_mouse_installed)
-	{
-		_error("You must call install_mouse before show_mouse");
-		return -1;
-	}
-	canvas.canvas.style.cursor = "auto";
-	return 0;
-}
-
-/// Disables mosue cursor over canvas
-function hide_mouse()
-{
-	if (!_mouse_installed)
-	{
-		_error("You must call install_mouse before hide_mouse");
-		return -1;
-	}
-	canvas.canvas.style.cursor = "none";
-	return 0;
-}
-
 function _mousemenu(e)
 {
 	e.preventDefault();

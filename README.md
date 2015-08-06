@@ -199,6 +199,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * added mouse mickeys
 * started on the website!
 * added mouse menu supress option
+* added show_mouse and hide_mouse
+* wrote the tutorial
 
 #### v4.0.1
 * This is the first version
