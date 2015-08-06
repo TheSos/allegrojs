@@ -191,6 +191,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Changelog
 
+#### v4.0.2
+* fixed examples
+* fixed volume
+* rearanged code
+* fixed and styled documentation
+* added mouse mickeys
+* started on the website!
+
+
 #### v4.0.1
 * This is the first version
 * lots of stuff still broken
