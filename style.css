@@ -64,3 +64,30 @@ text-decoration:none;
 #src {
 font-size:200%;
 } 
+
+#footer {
+text-align:center;
+}
+
+#downloads {
+text-align:center;
+width:960px;
+border:2px solid black;
+font: 16px monospace;
+overflow: auto;
+background-color:#ffc;
+box-shadow:#888 4px 4px 16px;
+margin: 10px auto;
+padding:10px;
+}
+
+.download {
+display:inline-block;
+width:300px;
+color:#027;
+font-family:serif;
+}
+
+.download:hover{
+color:#47c;
+}

@@ -142,7 +142,6 @@ function draw()
 	}   else if (stage==28)
 	{
 		title = "mouse";
-		//circlefill(canvas,mouse_x,mouse_y,10,makecol(0,0,0));
 		line(canvas,mouse_x,mouse_y,mouse_x-mouse_mx,mouse_y-mouse_my,makecol(255,255,235),width);
 		if (mouse_b&1) circlefill(canvas,mouse_x,mouse_y,20,makecol(0,0,255));
 		if (mouse_b&2) circlefill(canvas,mouse_x,mouse_y,20,makecol(255,0,0));
@@ -156,9 +155,6 @@ function draw()
 		if (mouse_released&2) circlefill(canvas,mouse_x,mouse_y,20,makecol(255,255,128));
 		if (mouse_released&4) circlefill(canvas,mouse_x,mouse_y,20,makecol(128,255,255));
 		width+=mouse_mz;
-		wipe_log();
-		_debug(mouse_z + " " + mouse_mz);
-		
 	}    else if (stage==29)
 	{
 		title = "keyboard";
@@ -226,7 +222,7 @@ function draw()
 	{
 		title = "The End";
 		remove_all_ints();
-	
+		stage++;
 	}  
 	textout_centre(canvas,font,title,SCREEN_W/2,64,64,makecol(255,0,0));
 	textout(canvas,font,subtitle,10,SCREEN_H-10,24,makecol(255,0,0));

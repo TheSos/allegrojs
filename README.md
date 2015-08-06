@@ -1,7 +1,7 @@
 # jAllegro
 ## A lousy javascript port of a game programming library
 ---
-[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Reference manual](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/jallegro.js)
+[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [Documentation](http://jallegro.sos.gd/docs) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial.html)
 ---
 ### Disclaimer
 This is all WIP, watch out!
@@ -198,7 +198,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * fixed and styled documentation
 * added mouse mickeys
 * started on the website!
-
+* added mouse menu supress option
 
 #### v4.0.1
 * This is the first version

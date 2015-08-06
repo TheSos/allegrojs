@@ -67,6 +67,26 @@ padding:10px;
 .example {
 display:inline-block;
 width:320px;
-color:black;
+color:#027;
 font-family:serif;
+}
+
+.example:hover{
+color:#47c;
+}
+
+#tests {
+text-align:center;
+width:330px;
+border:2px solid black;
+font: 16px monospace;
+overflow: auto;
+background-color:#ffc;
+box-shadow:#888 4px 4px 16px;
+margin: 10px auto;
+padding:10px;
+}
+
+#footer {
+
 }

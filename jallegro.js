@@ -85,10 +85,12 @@ var _last_mouse_x = -1;
 var _last_mouse_y = -1;
 var _last_mouse_z = -1;
 
+var _menu = false;
 
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
-function install_mouse()
+/// @param menu If true, context menu will be available on right click on jAllegro. Default is false.
+function install_mouse(menu)
 {
 	if (!canvas)
 	{
@@ -104,7 +106,13 @@ function install_mouse()
 	canvas.canvas.addEventListener('mousedown',_mousedown);
 	canvas.canvas.addEventListener('mousemove',_mousemove);
 	canvas.canvas.addEventListener('wheel',_mousewheel);
-	canvas.canvas.addEventListener('contextmenu',_mousemenu);
+	if (menu) 
+	{
+		_menu_supress=true;
+	} else {
+		canvas.canvas.addEventListener('contextmenu',_mousemenu);
+		_menu_supress=false;
+	}
 	_mouse_installed = true;
 	log("Mouse installed!");
 	return 0;
@@ -122,7 +130,7 @@ function remove_mouse()
 	canvas.canvas.removeEventListener('mousedown',_mousedown);
 	canvas.canvas.removeEventListener('mousemove',_mousemove);
 	canvas.canvas.removeEventListener('wheel',_mousewheel);
-	canvas.canvas.removeEventListener('contextmenu',_mousemenu);
+	if (_menu_supress) canvas.canvas.removeEventListener('contextmenu',_mousemenu);
 	_mouse_installed = false;
 	log("Mouse removed!");
 	return 0;
@@ -130,7 +138,7 @@ function remove_mouse()
 
 function _mousemenu(e)
 {
-	//e.preventDefault();
+	e.preventDefault();
 }
 
 /// mouseup event handler
@@ -371,6 +379,7 @@ function remove_all_ints()
 			window.clearInterval(_installed_timers[c].id);
 	}
 	_installed_timers = [];
+	log("Removed all interrupts!");
 }
 
 //@}
