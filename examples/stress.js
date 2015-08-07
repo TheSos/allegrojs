@@ -4,6 +4,7 @@ var last_time = 0;
 
 function main()
 {
+	
 	enable_debug('debug');
 	allegro_init_all("stress", 640, 480,true);
 	bmp = load_bmp("data/planet.png");

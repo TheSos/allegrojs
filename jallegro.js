@@ -473,7 +473,7 @@ function install_keyboard(enable_keys)
 	} else {
 		_enabled_keys = _default_enabled_keys;
 	}
-	for (var c=0;c<0x7f;c++) 
+	for (var c=0;c<0x80;c++) 
 	{
 		key[c] = false;
 		pressed[c] = false;
@@ -1572,6 +1572,10 @@ function scaleclamp(value,min,max,min2,max2)
 var _debug_enabled = false;
 var _debug_element;
 
+/// Set this to true if you want to debug to browser console.
+/// Setting this will make log() log to browser debugger console using console.log().
+var ALLEGRO_CONSOLE = false;
+
 /// Fatal error displays alert and logs to console
 function _error(string)
 {
@@ -1593,6 +1597,7 @@ function enable_debug(id)
 /// @param string text to log
 function log(string)
 {
+	if (ALLEGRO_CONSOLE && console) console.log(string);
 	if (!_debug_enabled) return;
 	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
 }
