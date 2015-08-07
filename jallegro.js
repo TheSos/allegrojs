@@ -348,6 +348,10 @@ function _progress_check()
 	for (var c=0;c<_downloadables.length;c++)
 	{
 		num_assets++;
+		if (_downloadables[c].type=="snd")
+		{
+				if (_downloadables[c].element.readyState>=_downloadables[c].element.HAVE_FUTURE_DATA) _downloadables[c].ready=true;			
+		} 
 		if (_downloadables[c].ready) num_loaded++;
 	}
 	if (_bar_proc) _bar_proc(num_assets/num_loaded);
@@ -532,7 +536,8 @@ function _keyup(e)
 /// @param canvas underlying canvas element, used to draw the bitmap onto stuff
 /// @param context canvas' rendering context, used to draw stuff onto this bitmap
 /// @param ready flags whether loading of the bitmap is complete
-function BITMAP_OBJECT(w,h,canvas,context,ready) {}
+/// @param type object type, "bmp" in this case
+function BITMAP_OBJECT(w,h,canvas,context,ready,type) {}
 
 /// Creates empty bitmap.
 /// Creates a bitmap object of given dimensions and returns it.
@@ -546,7 +551,7 @@ function create_bitmap(width,height)
 	cv.width = width;
 	cv.height = height;
 	var ctx = cv.getContext("2d");
-	return {w:width,h:height,canvas:cv,context:ctx,ready:true};
+	return {w:width,h:height,canvas:cv,context:ctx,ready:true,type:"bmp"};
 }
 
 /// Loads bitmap from file
@@ -561,7 +566,7 @@ function load_bitmap(filename)
 	var now = time();
 	var cv = document.createElement('canvas');
 	var ctx = cv.getContext("2d");
-	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false};
+	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false,type:"bmp"};
 	_downloadables.push(bmp);
 	img.onload = function(){
 		log("Bitmap " + filename + " loaded, size: " + img.width + " x " + img.height + "!");
@@ -621,7 +626,7 @@ function set_gfx_mode(canvas_id,width,height)
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
-	font = {element:null,file:"",name:"monospace"};
+	font = create_font("monospace");
 	_gfx_installed = true;
 	
 	return 0;
@@ -1157,7 +1162,8 @@ var _num_fonts = 0;
 /// @param element <style> element containing the font-face declaration. Not available for create_font() fonts and default font object.
 /// @param file font file name, empty string for default font and create_font() typefaces.
 /// @param name font-family name
-function FONT_OBJECT(element,file,name) {}
+/// @param type object type, "fnt" in this case
+function FONT_OBJECT(element,file,name,type) {}
 
 /// Loads font from file.
 /// This actually creates a style element, puts code inside and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been loaded in js, thus load your fonts first thing, and everything should be fine.
@@ -1171,7 +1177,7 @@ function load_font(filename)
 	s.type = "text/css";
 	document.head.appendChild(s);
 	s.textContent = "@font-face { font-family: " + fontname + "; src:url('" + filename + "');}";
-	return {element:s,file:filename,name:fontname};
+	return {element:s,file:filename,name:fontname,type:"fnt"};
 }
 
 /// Creates a font objects from font-family
@@ -1180,7 +1186,7 @@ function load_font(filename)
 /// @return font object
 function create_font(family)
 {
-	return {element:null,file:"",name:family};
+	return {element:null,file:"",name:family,type:"fnt"};
 }
 
 /// Draws text on bitmap.
@@ -1268,7 +1274,8 @@ var _samples = [];
 /// @param file sample file name
 /// @param volume sample volume, this is combined with global volume
 /// @param ready loaded indicator flag
-function SAMPLE_OBJECT(element,file,volume,ready) {}
+/// @param type object type, "snd" in this case
+function SAMPLE_OBJECT(element,file,volume,ready,type) {}
 
 /// Install sound
 /// @todo: stuff here? AudioContext? compatibility first!
@@ -1301,7 +1308,7 @@ function load_sample(filename)
 {
 	var audio = document.createElement('audio');
 	audio.src = filename;
-	var sample = {element:audio,file:filename,volume:1.0,ready:false};
+	var sample = {element:audio,file:filename,volume:1.0,ready:false,type:"snd"};
 	_downloadables.push(sample);
 	_samples.push(sample);
 	log("Loading sample " + filename + "...");

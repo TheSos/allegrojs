@@ -1,0 +1,1 @@
+# [Click here for neatly formatted API reference](http://jallegro.sos.gd/api)
