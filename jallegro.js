@@ -483,6 +483,8 @@ function install_keyboard(enable_keys)
 	window.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
 	log("Keybaord installed!");
+	
+	return 0;
 }
 
 /// Uninstalls keyboard
@@ -497,6 +499,8 @@ function remove_keyboard()
 	window.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
 	log("Keybaord removed!");
+	
+	return 0;
 }
 
 /// key down event handler
@@ -1338,8 +1342,8 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
-	if (!vol && vol!=0) vol=1.0;
-	if (!freq && freq!=0) freq=1.0;
+	if (!vol) vol=1.0;
+	if (!freq) freq=1.0;
 	if (!loop) loop=false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
