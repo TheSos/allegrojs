@@ -483,6 +483,7 @@ function install_keyboard(enable_keys)
 	window.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
 	log("Keybaord installed!");
+	return 0;
 }
 
 /// Uninstalls keyboard
@@ -497,6 +498,7 @@ function remove_keyboard()
 	window.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
 	log("Keybaord removed!");
+	return 0;
 }
 
 /// key down event handler
@@ -687,7 +689,7 @@ function _strokestyle(bitmap,colour,width)
 /// @return colour in 0xAARRGGBB format
 function makecol(r,g,b,a)
 {
-	if (!a) a=255;
+	if (a==undefined) a=255;
 	return (a<<24)|((r&0xff)<<16)|((g&0xff)<<8)|((b&0xff));
 }
 
@@ -700,7 +702,7 @@ function makecol(r,g,b,a)
 /// @return colour in 0xAARRGGBB format
 function makecolf(r,g,b,a)
 {
-		if (!a) a=1.0;
+	if (a==undefined) a=1.0;
 	return makecol(r*255,g*255,b*255,a*255);
 }
 
@@ -745,7 +747,7 @@ function geta(colour)
 /// @return red component in 0.0-1.0 range
 function getrf(colour)
 {
-	return (colour>>16)&0xff;
+	return (colour>>16)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getg()
@@ -753,7 +755,7 @@ function getrf(colour)
 /// @return green component in 0.0-1.0 range
 function getgf(colour)
 {
-	return (colour>>8)&0xff;
+	return (colour>>8)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getb()
@@ -761,7 +763,7 @@ function getgf(colour)
 /// @return blue component in 0.0-1.0 range
 function getbf(colour)
 {
-	return colour&0xff;
+	return colour&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of geta()
@@ -840,7 +842,7 @@ function line(bitmap,x1,y1,x2,y2,colour,width)
 /// @param width line width
 function vline(bitmap,x,y1,y2,colour,width)
 {
-	if (!width) width=1;
+	if (width==undefined) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x,y1,width,y2-y1);
 }
@@ -854,7 +856,7 @@ function vline(bitmap,x,y1,y2,colour,width)
 /// @param width line width
 function hline(bitmap,x1,y,x2,colour,width)
 {
-	if (!width) width=1;
+	if (width==undefined) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x1,y,x2-x1,width);
 }
@@ -1338,9 +1340,9 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
-	if (!vol && vol!=0) vol=1.0;
-	if (!freq && freq!=0) freq=1.0;
-	if (!loop) loop=false;
+	if (vol==undefined) vol=1.0;
+	if (freq==undefined) freq=1.0;
+	if (loop==undefined) loop=false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
 	sample.element.play();
