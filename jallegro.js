@@ -5,9 +5,11 @@
 //@{
 
 /// Installs allegro.
-/// This function must be called before anything else, even though it does nothing.
+/// This function must be called before anything else. It makes sure Date.now() exists.
 function install_allegro()
 {
+	if (!Date.now)
+		Date.now = function now() { return new Date().getTime(); };
 	log("Allegro installed!");
 }
 
@@ -258,7 +260,7 @@ function install_timer()
 /// Returns number of milliseconds since 1970 started.
 function time()
 {
-	return new Date().getTime();
+	return Date.now();
 }
 
 /// Installs interrupt function.
@@ -1442,28 +1444,23 @@ function distance2(x1,y1,x2,y2)
 }
 
 /// Distance between a point  and a line segment
-/// @param x1,y1 first end of line segment
-/// @param x2,y2 second end of line segment
-/// @param x3,y3 point coordinates
-/// @return distance of point x3,y3 from line x1,y1-x2,y2
-function linedist(x1,y1,x2,y2,x3,y3)
+/// @param ex1,ey1 first end of line segment
+/// @param ex2,ey2 second end of line segment
+/// @param x,y point coordinates
+/// @return distance of point x,y from line ex1,ey1-ex2,ey2
+function linedist(ex1,ey1,ex2,ey2,x,y)
 {
-	var px = x2-x1
-	var py = y2-y1
-  var something = px*px + py*py
-	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
+	var px = ex2-ex1;
+	var py = ey2-ey1;
+	var u = ((x - ex1) * px + (y - ey1) * py) / (px*px + py*py);
 	if (u > 1)
-		u = 1
+		u = 1;
 	else if (u < 0)
-		u = 0
+		u = 0;
 
-	var x = x1 + u * px
-	var y = y1 + u * py
-  var dx = x - x3
-  var dy = y - y3
-
-  var dist = Math.sqrt(dx*dx + dy*dy)
-  return dist
+	var dx = ex1 + u * px - x;
+	var dy = ey1 + u * py - y;
+	return Math.sqrt(dx*dx + dy*dy);
 }
 
 /// Linear interpolation between two values
