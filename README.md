@@ -1,7 +1,7 @@
-# allegro.js
+# [allegro.js](http://allegrojs.net/) 
 ## A HTML5 game making library
 ---
-[Website](http://allegrojs.net/) | [GitHub](https://github.com/TheSos/allegrojs) | [API reference](http://allegrojs.net/api) | [Examples](http://allegrojs.net/examples) | [Download](http://allegrojs.net/download.html) | [Tutorial](http://allegrojs.net/tutorial) | [Games](http://allegrojs.net/games)
+[Website](http://allegrojs.net/) | [GitHub](https://github.com/TheSos/allegrojs) | [API reference](http://allegrojs.net/api) | [Examples](http://allegrojs.net/examples) | [Download](http://allegrojs.net/download.html) | [Tutorial](http://allegrojs.net/tutorial)
 ---
 
 ### What is allegro.js?
