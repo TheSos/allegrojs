@@ -11,7 +11,7 @@ background-image:url('../bg.png');
 background-attachment:fixed;
 margin:0;
 padding:0;
-animation: scroll 32s linear infinite;
+background-position:center;
 }
 
 h1 {

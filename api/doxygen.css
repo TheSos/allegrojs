@@ -1,12 +1,9 @@
-@keyframes scroll {
-	from { background-position: 0 0; }
-	to { background-position: 512px 512px; }
-}
 body {
 	font-family:monospace;
+	background:#eee;
 	background-image:url('../bg.png');
 	background-attachment:fixed;
-	animation: scroll 32s linear infinite;
+	background-position:center;
 }
 
 a {
