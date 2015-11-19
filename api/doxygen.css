@@ -1,11 +1,17 @@
+@keyframes scroll {
+	from { background-position: 0 0; }
+	to { background-position: 512px 512px; }
+}
 body {
 	font-family:monospace;
-	background-image:url('../webbg.png');
+	background-image:url('../bg.png');
+	background-attachment:fixed;
+	animation: scroll 32s linear infinite;
 }
 
 a {
 text-decoration:none;
-color: #46c;
+color: #007700;
 }
 a:hover {
 text-decoration:underline;
@@ -23,6 +29,7 @@ display:none;
 .headertitle {
 font-size:400%;
 text-align:center;
+margin-top:32px;
 }
 
 .contents p {
@@ -41,11 +48,12 @@ text-align:left;
 
 .memberdecls {
 width:800px;
-border: 2px solid black;
+border: 1px solid #888;
+border-radius:12px;
 margin: 20px auto;
-background-color: #ffd;
+background-color: #fff;
 padding:5px 20px;
-box-shadow:#888 4px 4px 16px;
+box-shadow:#888 0px 0px 32px;
 }
 
 .memSeparator {
@@ -65,15 +73,17 @@ font-family:sans-serif;
 
 .memitem {
 width:800px;
-border: 2px solid black;
+border: 1px solid #888;
+border-radius:12px;
 margin: 20px auto;
-background-color: #ffd;
-box-shadow:#888 4px 4px 16px;
+background-color: #fff;
+box-shadow:#888 0px 0px 32px;
 }
 
 .memproto {
-border-bottom: 2px solid black;
-background-color: #cdf;
+border-bottom: 1px solid #888;
+border-radius:12px 12px 0px 0px;
+background-color: #ddd;
 font-size:150%;
 padding:5px 10px;
 }

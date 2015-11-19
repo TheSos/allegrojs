@@ -1,1 +1,1 @@
-# [Click here for neatly formatted API reference](http://jallegro.sos.gd/api)
+# [Click here for neatly formatted API reference](http://allegrojs.net/api)

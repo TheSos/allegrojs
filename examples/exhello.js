@@ -1,6 +1,6 @@
 function main()
 {
-	// Initialising jAllegro
+	// Initialising allegro.js
 	allegro_init();
 	
 	// Selecting canvas element adn setting it up for display at 640x480

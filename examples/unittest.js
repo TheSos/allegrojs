@@ -3,7 +3,7 @@ var beep;
 
 var stage=-1;
 var delay=0;
-var title = "jAllegro unit test";
+var title = "allegro.js test";
 var subtitle = "press space";
 
 var timercolor = makecol(192,168,1,254);

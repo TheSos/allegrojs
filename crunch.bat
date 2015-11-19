@@ -1,4 +1,4 @@
 @echo off
-echo Crunching jallegro.js
-java -jar compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS --generate_exports --js jallegro.js --js_output_file jalleg.js
-echo Written crunched jallegro to jalleg.js
+echo Crunching allegro.js
+java -jar compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS --generate_exports --js allegro.js --js_output_file alleg.js
+echo Written crunched allegro to alleg.js

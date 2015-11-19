@@ -1,16 +1,16 @@
-# jAllegro
-## A lousy javascript port of a game programming library
+# allegro.js
+## A HTML5 game making library
 ---
-[Website](http://jallegro.sos.gd/) | [GitHub](https://github.com/TheSos/jallegro) | [API reference](http://jallegro.sos.gd/api) | [Examples](http://jallegro.sos.gd/examples) | [Download](http://jallegro.sos.gd/download.html) | [Tutorial](http://jallegro.sos.gd/tutorial)
+[Website](http://allegrojs.net/) | [GitHub](https://github.com/TheSos/allegrojs) | [API reference](http://allegrojs.net/api) | [Examples](http://allegrojs.net/examples) | [Download](http://allegrojs.net/download.html) | [Tutorial](http://allegrojs.net/tutorial) | [Games](http://allegrojs.net/games)
 ---
 
-### What is jAllegro?
+### What is allegro.js?
 
-*jAllegro* is a minimal javascript port of a really popular game programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simple game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it varies greatly in how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
+*allegro.js* is a minimal javascript port of a really popular game programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simple game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it varies greatly in how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
 
-### How do you use jAllegro?
+### How do you use allegro.js?
 
-Here's a simple Hello World code for jAllegro. Hopefully, it doesn't need much explanation.
+Here's a simple Hello World code for allegro.js. Hopefully, it doesn't need much explanation.
 
 ```javascript
 
@@ -33,7 +33,7 @@ And here is the html code you need to provide to launch this.
 <!doctype html>
 <html>
 	<head>
-		<script src="jallegro.js"></script>
+		<script src="allegro.js"></script>
 		<script src="exhello.js"></script>
 	</head>
 	<body>
@@ -43,20 +43,20 @@ And here is the html code you need to provide to launch this.
 
 ```
 
-Where jallegro.js is the jAllegro library file, and exhello.js contains the aforementioned code. This is all you need to get started! jAllegro aim is to provide a dive-in experience, without worrying about complicated concepts. 
+Where allegro.js is the library file, and exhello.js contains the aforementioned code. This is all you need to get started! allegro.js aim is to provide a dive-in experience, without worrying about complicated concepts. 
 
-### Who is jAllegro for?
+### Who is allegro.js for?
 
-I hope for jAllegro to be a tool perfectly suitable for absolute beginners, who never had experience using game engines, such as I was when I started in Allegro, but it is also perfectly suitable for experienced Javascript developers who are looking for a lightweight solution, game jammers seeking for a RAD game making tool, developers looking for a non-OOP tool to create games and obviously, hard core old school classic Allegro nerds who somehow prevailed and want to come back to using it.
+I hope for allegro.js to be a tool perfectly suitable for absolute beginners, who never had experience using game engines, such as I was when I started in Allegro, but it is also perfectly suitable for experienced Javascript developers who are looking for a lightweight solution, game jammers seeking for a RAD game making tool, developers looking for a non-OOP tool to create games and obviously, hard core old school classic Allegro nerds who somehow prevailed and want to come back to using it.
 
-### Where can I learn jAllegro?
+### Where can I learn allegro.js?
 
 First up, read all of this README! Then, there are several placed you can go to get documentation
-* Study [examples](http://jallegro.sos.gd/examples) to see how to use different functions of jAllegro
-* Check the neat and pretty [jAllegro function reference](http://jallegro.sos.gd/docs)
-* Check out the [jAllegro tutorial](http://jallegro.sos.gd/tutorial).
+* Study [examples](http://allegrojs.net/examples) to see how to use different functions of allegro.js
+* Check the neat and pretty [allegro.js function reference](http://allegrojs.net/docs)
+* Check out the [allegro.js tutorial](http://allegrojs.net/tutorial).
 
-### What can jAllegro do?
+### What can allegro.js do?
 
 * It load and draw images, using `load_bitmap()`, `draw_sprite()`, `stretch_sprite()`, `rotate_sprite()`, `pivot_sprite()`, `rotate_scaled_sprite()`, `pivot_scaled_sprite()`, `blit()`, `stretch_blit()`
 * It can load and play sounds, using `load_sample()` and `play_sample()`
@@ -71,7 +71,7 @@ First up, read all of this README! Then, there are several placed you can go to 
 
 ### What are the differences between this and original Allegro?
 
-Since the underlying system is completely different for jAllegro (Allegro used C and a bit of assembly inside too), there are a bunch of things that doesn't make sense for jAllegro, but there are new things that make perfect sense here, while they didn't back in the days. As I will try to keep it as close to original as possible, not to break the feel, there are bound to be discrepancies, and I'll list them right here!
+Since the underlying system is completely different for allegro.js (Allegro used C and a bit of assembly inside too), there are a bunch of things that doesn't make sense for allegro.js, but there are new things that make perfect sense here, while they didn't back in the days. As I will try to keep it as close to original as possible, not to break the feel, there are bound to be discrepancies, and I'll list them right here!
 
 * `set_gfx_mode` takes canvas id, and pixel dimensions as arguments.
 * `rotate_sprite` draws the rotated sprite centred, as opposed to top-left alignment
@@ -152,22 +152,22 @@ END_OF_MAIN();
 
 ```
 
-### Who made jAllegro?
+### Who made allegro.js?
 
-jAllegro was made by me, Sos Sosowski. I always liked Allegro 4, and it felt wrong that it's gone already, so I wanted to give it a new life in form of this library. I hope that not only Allegro freaks like me, but also people new to javascript, or even game making in general will pick this up and create amazing stuff.
+allegro.js was made by me, Sos Sosowski. I always liked Allegro 4, and it felt wrong that it's gone already, so I wanted to give it a new life in form of this library. I hope that not only Allegro freaks like me, but also people new to javascript, or even game making in general will pick this up and create amazing stuff.
 
-If you have any questions, suggestions, bug reports or would like to show me a game made with jAllegro (I'd love to know!) Drop me a line!
+If you have any questions, suggestions, bug reports or would like to show me a game made with allegro.js (I'd love to know!) Drop me a line!
 
 * You can email me at just.sos.it@gmail.com
 * You can find me on Twitter as [@Sosowski](https://twitter.com/Sosowski)
 * You can go to [my website](http://sos.gd/) too!
 
 
-And don't forget to join the #jallegro IRC channel at Freenode!
+And don't forget to join the #allegrojs IRC channel at Freenode!
 
-### What are the jAllegro licence terms?
+### What are the allegro.js licence terms?
 
-jAllegro licence is the same old Allegro 4 gift-ware licence!
+allegro.js licence is the same old Allegro 4 gift-ware licence!
 
 ```
 Allegro is gift-ware. It was created by a number of people 
@@ -200,6 +200,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ### Changelog
+
+#### v4.0.4
+* changed name to allegro.js
+* changed file names accordingly, watch out!
+* pulled AngelIDE's key fix
+
 
 #### v4.0.3
 * increased version number!

@@ -1,13 +1,15 @@
-/// \file jallegro.js
+/// \file allegro.js
 
 ////////////////////////////////////////////
 /// @name CONFIGURATION ROUTINES
 //@{
 
 /// Installs allegro.
-/// This function must be called before anything else, even though it does nothing.
+/// This function must be called before anything else. It makes sure Date.now() exists.
 function install_allegro()
 {
+	if (!Date.now)
+		Date.now = function now() { return new Date().getTime(); };
 	log("Allegro installed!");
 }
 
@@ -98,7 +100,7 @@ var _menu = false;
 
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
-/// @param menu If true, context menu will be available on right click on jAllegro. Default is false.
+/// @param menu If true, context menu will be available on right click on canvas. Default is false.
 function install_mouse(menu)
 {
 	if (!canvas)
@@ -258,7 +260,7 @@ function install_timer()
 /// Returns number of milliseconds since 1970 started.
 function time()
 {
-	return new Date().getTime();
+	return Date.now();
 }
 
 /// Installs interrupt function.
@@ -348,6 +350,10 @@ function _progress_check()
 	for (var c=0;c<_downloadables.length;c++)
 	{
 		num_assets++;
+		if (_downloadables[c].type=="snd")
+		{
+				if (_downloadables[c].element.readyState>=_downloadables[c].element.HAVE_FUTURE_DATA) _downloadables[c].ready=true;			
+		} 
 		if (_downloadables[c].ready) num_loaded++;
 	}
 	if (_bar_proc) _bar_proc(num_assets/num_loaded);
@@ -418,7 +424,7 @@ function remove_all_ints()
 /// @name KEYBOARD ROUTINES
 //@{
 
-var KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45, KEY_F = 0x46, KEY_G = 0x47, KEY_H = 0x48, KEY_I = 0x49, KEY_J = 0x50, KEY_K = 0x51, KEY_L = 0x52, KEY_M = 0x53, KEY_N = 0x54, KEY_O = 0x55, KEY_P = 0x56, KEY_Q = 0x57, KEY_R = 0x58, KEY_S = 0x59, KEY_T = 0x50, KEY_U = 0x51, KEY_V = 0x52, KEY_W = 0x53, KEY_X = 0x54, KEY_Y = 0x55, KEY_Z = 0x56, KEY_0 = 0x30, KEY_1 = 0x31, KEY_2 = 0x32, KEY_3 = 0x33, KEY_4 = 0x34, KEY_5 = 0x35, KEY_6 = 0x36, KEY_7 = 0x37, KEY_8 = 0x38, KEY_9 = 0x39, KEY_0_PAD = 0x60, KEY_1_PAD = 0x61, KEY_2_PAD = 0x62, KEY_3_PAD = 0x63, KEY_4_PAD = 0x64, KEY_5_PAD = 0x65, KEY_6_PAD = 0x66, KEY_7_PAD = 0x67, KEY_8_PAD = 0x68, KEY_9_PAD = 0x69, KEY_F1 = 0x70, KEY_F2 = 0x71, KEY_F3 = 0x72, KEY_F4 = 0x73, KEY_F5 = 0x74, KEY_F6 = 0x75, KEY_F7 = 0x76, KEY_F8 = 0x77, KEY_F9 = 0x78, KEY_F10 = 0x79, KEY_F11 = 0x7a, KEY_F12 = 0x7b, KEY_ESC = 0x1B, KEY_TILDE = 0xc0, KEY_MINUS = 0xbd, KEY_EQUALS = 0xbb, KEY_BACKSPACE = 0x08, KEY_TAB = 0x09, KEY_OPENBRACE = 0xdb, KEY_CLOSEBRACE = 0xdd, KEY_ENTER = 0x0D, KEY_COLON = 0xba, KEY_QUOTE = 0xde, KEY_BACKSLASH = 0xdc, KEY_COMMA = 0xbc, KEY_STOP = 0xbe, KEY_SLASH = 0xBF, KEY_SPACE = 0x20, KEY_INSERT = 0x2D, KEY_DEL = 0x2E, KEY_HOME = 0x24, KEY_END = 0x23, KEY_PGUP = 0x21, KEY_PGDN = 0x22, KEY_LEFT = 0x25, KEY_RIGHT = 0x27, KEY_UP = 0x26, KEY_DOWN = 0x28, KEY_SLASH_PAD = 0x6F, KEY_ASTERISK = 0x6A, KEY_MINUS_PAD = 0x6D, KEY_PLUS_PAD = 0x6B, KEY_ENTER_PAD = 0x0D, KEY_PRTSCR = 0x2C, KEY_PAUSE = 0x13, KEY_EQUALS_PAD = 0x0C, KEY_LSHIFT = 0x10, KEY_RSHIFT = 0x10, KEY_LCONTROL = 0x11, KEY_RCONTROL = 0x11, KEY_ALT = 0x12, KEY_ALTGR = 0x12, KEY_LWIN = 0x5b, KEY_RWIN = 0x5c, KEY_MENU = 0x5d, KEY_SCRLOCK = 0x9d, KEY_NUMLOCK = 0x90, KEY_CAPSLOCK = 0x14;
+var KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45, KEY_F = 0x46, KEY_G = 0x47, KEY_H = 0x48, KEY_I = 0x49, KEY_J = 0x4A, KEY_K = 0x4B, KEY_L = 0x4C, KEY_M = 0x4D, KEY_N = 0x4E, KEY_O = 0x4F, KEY_P = 0x50, KEY_Q = 0x51, KEY_R = 0x52, KEY_S = 0x53, KEY_T = 0x54, KEY_U = 0x55, KEY_V = 0x56, KEY_W = 0x57, KEY_X = 0x58, KEY_Y = 0x59, KEY_Z = 0x5A, KEY_0 = 0x30, KEY_1 = 0x31, KEY_2 = 0x32, KEY_3 = 0x33, KEY_4 = 0x34, KEY_5 = 0x35, KEY_6 = 0x36, KEY_7 = 0x37, KEY_8 = 0x38, KEY_9 = 0x39, KEY_0_PAD = 0x60, KEY_1_PAD = 0x61, KEY_2_PAD = 0x62, KEY_3_PAD = 0x63, KEY_4_PAD = 0x64, KEY_5_PAD = 0x65, KEY_6_PAD = 0x66, KEY_7_PAD = 0x67, KEY_8_PAD = 0x68, KEY_9_PAD = 0x69, KEY_F1 = 0x70, KEY_F2 = 0x71, KEY_F3 = 0x72, KEY_F4 = 0x73, KEY_F5 = 0x74, KEY_F6 = 0x75, KEY_F7 = 0x76, KEY_F8 = 0x77, KEY_F9 = 0x78, KEY_F10 = 0x79, KEY_F11 = 0x7a, KEY_F12 = 0x7b, KEY_ESC = 0x1B, KEY_TILDE = 0xc0, KEY_MINUS = 0xbd, KEY_EQUALS = 0xbb, KEY_BACKSPACE = 0x08, KEY_TAB = 0x09, KEY_OPENBRACE = 0xdb, KEY_CLOSEBRACE = 0xdd, KEY_ENTER = 0x0D, KEY_COLON = 0xba, KEY_QUOTE = 0xde, KEY_BACKSLASH = 0xdc, KEY_COMMA = 0xbc, KEY_STOP = 0xbe, KEY_SLASH = 0xBF, KEY_SPACE = 0x20, KEY_INSERT = 0x2D, KEY_DEL = 0x2E, KEY_HOME = 0x24, KEY_END = 0x23, KEY_PGUP = 0x21, KEY_PGDN = 0x22, KEY_LEFT = 0x25, KEY_RIGHT = 0x27, KEY_UP = 0x26, KEY_DOWN = 0x28, KEY_SLASH_PAD = 0x6F, KEY_ASTERISK = 0x6A, KEY_MINUS_PAD = 0x6D, KEY_PLUS_PAD = 0x6B, KEY_ENTER_PAD = 0x0D, KEY_PRTSCR = 0x2C, KEY_PAUSE = 0x13, KEY_EQUALS_PAD = 0x0C, KEY_LSHIFT = 0x10, KEY_RSHIFT = 0x10, KEY_LCONTROL = 0x11, KEY_RCONTROL = 0x11, KEY_ALT = 0x12, KEY_ALTGR = 0x12, KEY_LWIN = 0x5b, KEY_RWIN = 0x5c, KEY_MENU = 0x5d, KEY_SCRLOCK = 0x9d, KEY_NUMLOCK = 0x90, KEY_CAPSLOCK = 0x14;
 
 /// Array of flags indicating state of each key. 
 /// Available keyboard scan codes are as follows:
@@ -469,16 +475,17 @@ function install_keyboard(enable_keys)
 	} else {
 		_enabled_keys = _default_enabled_keys;
 	}
-	for (var c=0;c<0x7f;c++) 
+	for (var c=0;c<0x80;c++) 
 	{
 		key[c] = false;
 		pressed[c] = false;
 		released[c] = false;
 	}
-	window.addEventListener('keyup',_keyup);
-	window.addEventListener('keydown',_keydown);
+	document.addEventListener('keyup',_keyup);
+	document.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
 	log("Keybaord installed!");
+	return 0;
 }
 
 /// Uninstalls keyboard
@@ -489,10 +496,11 @@ function remove_keyboard()
 		_allog("Keyboard not installed");
 		return -1;
 	}
-	window.removeEventListener('keyup',_keyup);
-	window.removeEventListener('keydown',_keydown);
+	document.removeEventListener('keyup',_keyup);
+	document.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
 	log("Keybaord removed!");
+	return 0;
 }
 
 /// key down event handler
@@ -532,7 +540,8 @@ function _keyup(e)
 /// @param canvas underlying canvas element, used to draw the bitmap onto stuff
 /// @param context canvas' rendering context, used to draw stuff onto this bitmap
 /// @param ready flags whether loading of the bitmap is complete
-function BITMAP_OBJECT(w,h,canvas,context,ready) {}
+/// @param type object type, "bmp" in this case
+function BITMAP_OBJECT(w,h,canvas,context,ready,type) {}
 
 /// Creates empty bitmap.
 /// Creates a bitmap object of given dimensions and returns it.
@@ -546,7 +555,7 @@ function create_bitmap(width,height)
 	cv.width = width;
 	cv.height = height;
 	var ctx = cv.getContext("2d");
-	return {w:width,h:height,canvas:cv,context:ctx,ready:true};
+	return {w:width,h:height,canvas:cv,context:ctx,ready:true,type:"bmp"};
 }
 
 /// Loads bitmap from file
@@ -561,7 +570,7 @@ function load_bitmap(filename)
 	var now = time();
 	var cv = document.createElement('canvas');
 	var ctx = cv.getContext("2d");
-	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false};
+	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false,type:"bmp"};
 	_downloadables.push(bmp);
 	img.onload = function(){
 		log("Bitmap " + filename + " loaded, size: " + img.width + " x " + img.height + "!");
@@ -621,7 +630,7 @@ function set_gfx_mode(canvas_id,width,height)
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
-	font = {element:null,file:"",name:"monospace"};
+	font = create_font("monospace");
 	_gfx_installed = true;
 	
 	return 0;
@@ -682,7 +691,7 @@ function _strokestyle(bitmap,colour,width)
 /// @return colour in 0xAARRGGBB format
 function makecol(r,g,b,a)
 {
-	if (!a) a=255;
+	if (a==null) a=255;
 	return (a<<24)|((r&0xff)<<16)|((g&0xff)<<8)|((b&0xff));
 }
 
@@ -695,7 +704,7 @@ function makecol(r,g,b,a)
 /// @return colour in 0xAARRGGBB format
 function makecolf(r,g,b,a)
 {
-		if (!a) a=1.0;
+	if (a==null) a=1.0;
 	return makecol(r*255,g*255,b*255,a*255);
 }
 
@@ -740,7 +749,7 @@ function geta(colour)
 /// @return red component in 0.0-1.0 range
 function getrf(colour)
 {
-	return (colour>>16)&0xff;
+	return (colour>>16)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getg()
@@ -748,7 +757,7 @@ function getrf(colour)
 /// @return green component in 0.0-1.0 range
 function getgf(colour)
 {
-	return (colour>>8)&0xff;
+	return (colour>>8)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getb()
@@ -756,7 +765,7 @@ function getgf(colour)
 /// @return blue component in 0.0-1.0 range
 function getbf(colour)
 {
-	return colour&0xff;
+	return colour&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of geta()
@@ -835,7 +844,7 @@ function line(bitmap,x1,y1,x2,y2,colour,width)
 /// @param width line width
 function vline(bitmap,x,y1,y2,colour,width)
 {
-	if (!width) width=1;
+	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x,y1,width,y2-y1);
 }
@@ -849,7 +858,7 @@ function vline(bitmap,x,y1,y2,colour,width)
 /// @param width line width
 function hline(bitmap,x1,y,x2,colour,width)
 {
-	if (!width) width=1;
+	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x1,y,x2-x1,width);
 }
@@ -1157,7 +1166,8 @@ var _num_fonts = 0;
 /// @param element <style> element containing the font-face declaration. Not available for create_font() fonts and default font object.
 /// @param file font file name, empty string for default font and create_font() typefaces.
 /// @param name font-family name
-function FONT_OBJECT(element,file,name) {}
+/// @param type object type, "fnt" in this case
+function FONT_OBJECT(element,file,name,type) {}
 
 /// Loads font from file.
 /// This actually creates a style element, puts code inside and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been loaded in js, thus load your fonts first thing, and everything should be fine.
@@ -1171,7 +1181,7 @@ function load_font(filename)
 	s.type = "text/css";
 	document.head.appendChild(s);
 	s.textContent = "@font-face { font-family: " + fontname + "; src:url('" + filename + "');}";
-	return {element:s,file:filename,name:fontname};
+	return {element:s,file:filename,name:fontname,type:"fnt"};
 }
 
 /// Creates a font objects from font-family
@@ -1180,7 +1190,7 @@ function load_font(filename)
 /// @return font object
 function create_font(family)
 {
-	return {element:null,file:"",name:family};
+	return {element:null,file:"",name:family,type:"fnt"};
 }
 
 /// Draws text on bitmap.
@@ -1268,7 +1278,8 @@ var _samples = [];
 /// @param file sample file name
 /// @param volume sample volume, this is combined with global volume
 /// @param ready loaded indicator flag
-function SAMPLE_OBJECT(element,file,volume,ready) {}
+/// @param type object type, "snd" in this case
+function SAMPLE_OBJECT(element,file,volume,ready,type) {}
 
 /// Install sound
 /// @todo: stuff here? AudioContext? compatibility first!
@@ -1301,7 +1312,7 @@ function load_sample(filename)
 {
 	var audio = document.createElement('audio');
 	audio.src = filename;
-	var sample = {element:audio,file:filename,volume:1.0,ready:false};
+	var sample = {element:audio,file:filename,volume:1.0,ready:false,type:"snd"};
 	_downloadables.push(sample);
 	_samples.push(sample);
 	log("Loading sample " + filename + "...");
@@ -1331,9 +1342,9 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
-	if (!vol && vol!=0) vol=1.0;
-	if (!freq && freq!=0) freq=1.0;
-	if (!loop) loop=false;
+	if (vol==null) vol=1.0;
+	if (freq==null) freq=1.0;
+	if (loop==null) loop=false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
 	sample.element.play();
@@ -1365,7 +1376,7 @@ function stop_sample(sample)
 /// Pauses playing
 /// Also doesn't reset position. Use play_sample() to resume.
 /// @param sample sample to be stopped
-function stop_sample(sample)
+function pause_sample(sample)
 {
 	sample.element.pause();
 }
@@ -1433,28 +1444,23 @@ function distance2(x1,y1,x2,y2)
 }
 
 /// Distance between a point  and a line segment
-/// @param x1,y1 first end of line segment
-/// @param x2,y2 second end of line segment
-/// @param x3,y3 point coordinates
-/// @return distance of point x3,y3 from line x1,y1-x2,y2
-function linedist(x1,y1,x2,y2,x3,y3)
+/// @param ex1,ey1 first end of line segment
+/// @param ex2,ey2 second end of line segment
+/// @param x,y point coordinates
+/// @return distance of point x,y from line ex1,ey1-ex2,ey2
+function linedist(ex1,ey1,ex2,ey2,x,y)
 {
-	var px = x2-x1
-	var py = y2-y1
-  var something = px*px + py*py
-	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
+	var px = ex2-ex1;
+	var py = ey2-ey1;
+	var u = ((x - ex1) * px + (y - ey1) * py) / (px*px + py*py);
 	if (u > 1)
-		u = 1
+		u = 1;
 	else if (u < 0)
-		u = 0
+		u = 0;
 
-	var x = x1 + u * px
-	var y = y1 + u * py
-  var dx = x - x3
-  var dy = y - y3
-
-  var dist = Math.sqrt(dx*dx + dy*dy)
-  return dist
+	var dx = ex1 + u * px - x;
+	var dy = ey1 + u * py - y;
+	return Math.sqrt(dx*dx + dy*dy);
 }
 
 /// Linear interpolation between two values
@@ -1565,6 +1571,10 @@ function scaleclamp(value,min,max,min2,max2)
 var _debug_enabled = false;
 var _debug_element;
 
+/// Set this to true if you want to debug to browser console.
+/// Setting this will make log() log to browser debugger console using console.log().
+var ALLEGRO_CONSOLE = false;
+
 /// Fatal error displays alert and logs to console
 function _error(string)
 {
@@ -1586,6 +1596,7 @@ function enable_debug(id)
 /// @param string text to log
 function log(string)
 {
+	if (ALLEGRO_CONSOLE && console) console.log(string);
 	if (!_debug_enabled) return;
 	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
 }

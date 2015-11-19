@@ -1,4 +1,4 @@
-/// \file jallegro.js
+/// \file allegro.js
 
 ////////////////////////////////////////////
 /// @name CONFIGURATION ROUTINES
@@ -100,7 +100,7 @@ var _menu = false;
 
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
-/// @param menu If true, context menu will be available on right click on jAllegro. Default is false.
+/// @param menu If true, context menu will be available on right click on canvas. Default is false.
 function install_mouse(menu)
 {
 	if (!canvas)

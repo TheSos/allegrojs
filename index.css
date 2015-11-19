@@ -1,0 +1,92 @@
+@keyframes scroll {
+	from { background-position: 0 0; }
+	to { background-position: 512px 512px; }
+}
+
+body {
+font-family:'Roboto', sans-serif;
+color:#666666;
+background-image:url('bg.png');
+animation: scroll 32s linear infinite;
+background-attachment:fixed;
+}
+
+#footer {
+text-align:center; 
+}
+
+#title {
+text-align:center;
+padding: 50px 0px;
+font-size:128px;
+font-weight:normal;
+color:#333;
+text-shadow:#777 1px 1px 0px,
+						#888 2px 2px 0px,
+						#999 3px 3px 0px,
+						#aaa 4px 4px 0px,
+						#bbb 5px 5px 0px,
+						#ccc 6px 6px 0px,
+						#ddd 7px 7px 0px,
+						#eee 8px 8px 0px;
+}
+
+
+#contents {
+width:880px;
+border: 1px solid #888;
+margin: 20px auto;
+background-color: #fcfcfc;
+padding:5px 0px;
+box-shadow:#ddd 0px 0px 32px;
+border-radius:12px;
+}
+
+
+#features {
+text-align:center;
+}
+
+.feat {
+width:180px;
+height:240px;
+margin:10px;
+display: inline-block;
+vertical-align:top;
+border: 1px solid #888;
+border-radius: 12px;
+box-shadow:#ddd 0px 0px 24px;
+font-size:16px;
+font-weight:bold;
+padding:4px;
+}
+
+.featitle {
+font-size:32px;
+padding-top:4px;
+font-weight:bold;
+text-align:center;
+}
+
+.featcontent {
+height:120px;
+}
+
+.code {
+font-family:monospace;
+color:#D900A3;
+font-size:10px;
+text-align:left;
+white-space:pre;
+padding: 0px 0px 0px 4px;
+}
+
+
+#footlink {
+color:#080;
+text-decoration:none;
+}
+
+#footlink:hover {
+text-decoration:underline;
+}
