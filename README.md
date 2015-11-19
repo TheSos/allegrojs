@@ -201,11 +201,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Changelog
 
+#### v4.0.5
+* finalised renaming
+* finished website
+
 #### v4.0.4
 * changed name to allegro.js
 * changed file names accordingly, watch out!
-* pulled AngelIDE's key fix
-
+* pulled requests
 
 #### v4.0.3
 * increased version number!
