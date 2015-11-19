@@ -5,9 +5,11 @@
 //@{
 
 /// Installs allegro.
-/// This function must be called before anything else, even though it does nothing.
+/// This function must be called before anything else. It makes sure Date.now() exists.
 function install_allegro()
 {
+	if (!Date.now)
+		Date.now = function now() { return new Date().getTime(); };
 	log("Allegro installed!");
 }
 
@@ -258,7 +260,7 @@ function install_timer()
 /// Returns number of milliseconds since 1970 started.
 function time()
 {
-	return new Date().getTime();
+	return Date.now();
 }
 
 /// Installs interrupt function.
@@ -483,6 +485,7 @@ function install_keyboard(enable_keys)
 	document.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
 	log("Keybaord installed!");
+	return 0;
 }
 
 /// Uninstalls keyboard
@@ -497,6 +500,7 @@ function remove_keyboard()
 	document.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
 	log("Keybaord removed!");
+	return 0;
 }
 
 /// key down event handler
@@ -687,7 +691,7 @@ function _strokestyle(bitmap,colour,width)
 /// @return colour in 0xAARRGGBB format
 function makecol(r,g,b,a)
 {
-	if (!a) a=255;
+	if (a==null) a=255;
 	return (a<<24)|((r&0xff)<<16)|((g&0xff)<<8)|((b&0xff));
 }
 
@@ -700,7 +704,7 @@ function makecol(r,g,b,a)
 /// @return colour in 0xAARRGGBB format
 function makecolf(r,g,b,a)
 {
-		if (!a) a=1.0;
+	if (a==null) a=1.0;
 	return makecol(r*255,g*255,b*255,a*255);
 }
 
@@ -745,7 +749,7 @@ function geta(colour)
 /// @return red component in 0.0-1.0 range
 function getrf(colour)
 {
-	return (colour>>16)&0xff;
+	return (colour>>16)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getg()
@@ -753,7 +757,7 @@ function getrf(colour)
 /// @return green component in 0.0-1.0 range
 function getgf(colour)
 {
-	return (colour>>8)&0xff;
+	return (colour>>8)&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of getb()
@@ -761,7 +765,7 @@ function getgf(colour)
 /// @return blue component in 0.0-1.0 range
 function getbf(colour)
 {
-	return colour&0xff;
+	return colour&0xff/255.0;
 }
 
 /// Float (0.0-1.0) version of geta()
@@ -840,7 +844,7 @@ function line(bitmap,x1,y1,x2,y2,colour,width)
 /// @param width line width
 function vline(bitmap,x,y1,y2,colour,width)
 {
-	if (!width) width=1;
+	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x,y1,width,y2-y1);
 }
@@ -854,7 +858,7 @@ function vline(bitmap,x,y1,y2,colour,width)
 /// @param width line width
 function hline(bitmap,x1,y,x2,colour,width)
 {
-	if (!width) width=1;
+	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(x1,y,x2-x1,width);
 }
@@ -1338,9 +1342,9 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
-	if (!vol && vol!=0) vol=1.0;
-	if (!freq && freq!=0) freq=1.0;
-	if (!loop) loop=false;
+	if (vol==null) vol=1.0;
+	if (freq==null) freq=1.0;
+	if (loop==null) loop=false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
 	sample.element.play();
@@ -1440,28 +1444,23 @@ function distance2(x1,y1,x2,y2)
 }
 
 /// Distance between a point  and a line segment
-/// @param x1,y1 first end of line segment
-/// @param x2,y2 second end of line segment
-/// @param x3,y3 point coordinates
-/// @return distance of point x3,y3 from line x1,y1-x2,y2
-function linedist(x1,y1,x2,y2,x3,y3)
+/// @param ex1,ey1 first end of line segment
+/// @param ex2,ey2 second end of line segment
+/// @param x,y point coordinates
+/// @return distance of point x,y from line ex1,ey1-ex2,ey2
+function linedist(ex1,ey1,ex2,ey2,x,y)
 {
-	var px = x2-x1
-	var py = y2-y1
-  var something = px*px + py*py
-	var u =  ((x3 - x1) * px + (y3 - y1) * py) / (something)
+	var px = ex2-ex1;
+	var py = ey2-ey1;
+	var u = ((x - ex1) * px + (y - ey1) * py) / (px*px + py*py);
 	if (u > 1)
-		u = 1
+		u = 1;
 	else if (u < 0)
-		u = 0
+		u = 0;
 
-	var x = x1 + u * px
-	var y = y1 + u * py
-  var dx = x - x3
-  var dy = y - y3
-
-  var dist = Math.sqrt(dx*dx + dy*dy)
-  return dist
+	var dx = ex1 + u * px - x;
+	var dy = ey1 + u * py - y;
+	return Math.sqrt(dx*dx + dy*dy);
 }
 
 /// Linear interpolation between two values
