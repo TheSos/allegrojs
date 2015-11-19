@@ -479,8 +479,8 @@ function install_keyboard(enable_keys)
 		pressed[c] = false;
 		released[c] = false;
 	}
-	window.addEventListener('keyup',_keyup);
-	window.addEventListener('keydown',_keydown);
+	document.addEventListener('keyup',_keyup);
+	document.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
 	log("Keybaord installed!");
 }
@@ -493,8 +493,8 @@ function remove_keyboard()
 		_allog("Keyboard not installed");
 		return -1;
 	}
-	window.removeEventListener('keyup',_keyup);
-	window.removeEventListener('keydown',_keydown);
+	document.removeEventListener('keyup',_keyup);
+	document.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
 	log("Keybaord removed!");
 }
