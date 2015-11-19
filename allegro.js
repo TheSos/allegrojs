@@ -484,7 +484,7 @@ function install_keyboard(enable_keys)
 	document.addEventListener('keyup',_keyup);
 	document.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
-	log("Keybaord installed!");
+	log("Keyboard installed!");
 	return 0;
 }
 
@@ -499,7 +499,7 @@ function remove_keyboard()
 	document.removeEventListener('keyup',_keyup);
 	document.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
-	log("Keybaord removed!");
+	log("Keyboard removed!");
 	return 0;
 }
 
