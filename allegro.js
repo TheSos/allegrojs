@@ -373,10 +373,10 @@ function _progress_check()
 /// @param progress loading progress in 0.0 - 1.0 range
 function loading_bar(progress)
 {
-	rectfill(canvas,5,SCREEN_H-55,SCREEN_W-10,50,makecol(0,0,0));
-	rectfill(canvas,10,SCREEN_H-50,SCREEN_W-20,40,makecol(255,255,255));
-	rectfill(canvas,15,SCREEN_H-45,SCREEN_W-30,30,makecol(0,0,0));
-	rectfill(canvas,20,SCREEN_H-40,scaleclamp(progress,0,1,0,(SCREEN_W-40)),20,makecol(255,255,255));
+	rectfill(canvas,5,SCREEN_H-55,SCREEN_W-5,SCREEN_H-5,makecol(0,0,0));
+	rectfill(canvas,10,SCREEN_H-50,SCREEN_W-10,SCREEN_H-10,makecol(255,255,255));
+	rectfill(canvas,15,SCREEN_H-45,SCREEN_W-15,SCREEN_H-15,makecol(0,0,0));
+	rectfill(canvas,20,SCREEN_H-40,scaleclamp(progress,0,1,20,(SCREEN_W-20)),SCREEN_H-20,makecol(255,255,255));
 }
 
 /// Installs a handler to check if everything has downloaded. 
@@ -836,7 +836,7 @@ function line(bitmap,x1,y1,x2,y2,colour,width)
 }
 
 /// Draws a vertical line.
-/// Draws a vertical line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
+/// Draws a vertical line from one point to another using given colour. Probably slightly faster than line() method, since this one uses fillRect() to draw the line.
 /// @param bitmap to be drawn to
 /// @param x column to draw the line to
 /// @param y1,y2 line endpoints
@@ -850,7 +850,7 @@ function vline(bitmap,x,y1,y2,colour,width)
 }
 
 /// Draws a horizontal line.
-/// Draws a horizontal line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
+/// Draws a horizontal line from one point to another using given colour. Probably slightly faster than line() method, since this one uses fillRect() to draw the line.
 /// @param bitmap to be drawn to
 /// @param y row to draw the line to
 /// @param x1,x2 line endpoints
@@ -949,7 +949,7 @@ function polygonfill(bitmap,vertices,points,colour)
 function rect(bitmap,x1,y1,x2,y2,colour,width)
 {
 	_strokestyle(bitmap,colour,width);
-	bitmap.context.strokeRect(x1,y1,x2,y2);
+	bitmap.context.strokeRect(x1,y1,x2-x1,y2-y1);
 }
 
 /// Draws a rectangle.
@@ -961,7 +961,7 @@ function rect(bitmap,x1,y1,x2,y2,colour,width)
 function rectfill(bitmap,x1,y1,x2,y2,colour)
 {
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x1,y1,x2,y2);
+	bitmap.context.fillRect(x1,y1,x2-x1,y2-y1);
 }
 
 /// Draws a circle.
