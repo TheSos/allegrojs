@@ -1,4 +1,4 @@
-/// \file jallegro.js
+/// \file allegro.js
 
 ////////////////////////////////////////////
 /// @name CONFIGURATION ROUTINES
@@ -100,7 +100,7 @@ var _menu = false;
 
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
-/// @param menu If true, context menu will be available on right click on jAllegro. Default is false.
+/// @param menu If true, context menu will be available on right click on canvas. Default is false.
 function install_mouse(menu)
 {
 	if (!canvas)
@@ -481,10 +481,10 @@ function install_keyboard(enable_keys)
 		pressed[c] = false;
 		released[c] = false;
 	}
-	window.addEventListener('keyup',_keyup);
-	window.addEventListener('keydown',_keydown);
+	document.addEventListener('keyup',_keyup);
+	document.addEventListener('keydown',_keydown);
 	_keyboard_installed = true;
-	log("Keybaord installed!");
+	log("Keyboard installed!");
 	return 0;
 }
 
@@ -496,10 +496,10 @@ function remove_keyboard()
 		_allog("Keyboard not installed");
 		return -1;
 	}
-	window.removeEventListener('keyup',_keyup);
-	window.removeEventListener('keydown',_keydown);
+	document.removeEventListener('keyup',_keyup);
+	document.removeEventListener('keydown',_keydown);
 	_keyboard_installed = false;
-	log("Keybaord removed!");
+	log("Keyboard removed!");
 	return 0;
 }
 

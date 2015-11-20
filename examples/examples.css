@@ -1,16 +1,57 @@
+@keyframes scroll {
+	from { background-position: 0 0; }
+	to { background-position: 512px 512px; }
+}
+
 body {
-font-family:serif;
+font-family:'Roboto', sans-serif;
 text-align:center;
-background-image:url('../webbg.png');
+background:#eee;
+background-image:url('../bg.png');
+background-attachment:fixed;
+margin:0;
+padding:0;
+background-position:center;
 }
 
 h1 {
 text-align:center;
-font-size:400%;
-text-shadow:#888 4px 4px 4px;
-padding:0px;
-margin:0px;
+padding: 0px 0px;
+margin:0;
+font-size:96px;
+font-weight:normal;
+color:#333;
+text-shadow:#777 1px 1px 0px,
+						#888 2px 2px 0px,
+						#999 3px 3px 0px,
+						#aaa 4px 4px 0px,
+						#bbb 5px 5px 0px,
+						#ccc 6px 6px 0px,
+						#ddd 7px 7px 0px,
+						#eee 8px 8px 0px;
 }
+
+
+h3 {
+font-family:'Roboto', sans-serif;
+text-shadow:#ccc 1px 1px 0px;
+font-size:32px;
+margin:0;
+padding:5px 0px;
+font-weight:normal;
+color:#238C44;
+}
+
+
+h2 {
+text-align:center;
+font-size:400%;
+text-shadow:#ccc 1px 1px 0px;
+padding:10px 0px;
+margin:0px;
+font-weight:normal;
+}
+
 
 #unittest {
 border: 1px solid black;
@@ -24,8 +65,9 @@ image-rendering: -webkit-optimize-contrast; /* Safari                        */
 image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
 image-rendering: pixelated;                 /* Awesome future-browsers       */
 -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
-border:2px solid black;
-box-shadow:#888 4px 4px 16px;
+border:1px solid #888;
+box-shadow:#ddd 0px 0px 32px;
+border-radius:12px;
 margin: 10px auto;
 display:block;
 }
@@ -34,11 +76,12 @@ display:block;
 text-align:left;
 width:620px;
 height:460px;
-border:2px solid black;
+border:1px solid #888;
 font: 16px monospace;
 overflow: auto;
-background-color:#ffc;
-box-shadow:#888 4px 4px 16px;
+background-color:#f8fcff;
+box-shadow:#ddd 0px 0px 32px;
+border-radius:12px;
 margin: 10px auto;
 padding:10px;
 }
@@ -53,36 +96,52 @@ font-size:200%;
 }
 
 #examples {
+width:960px;
 text-align:center;
-width:660px;
-border:2px solid black;
-font: 16px monospace;
+font-size: 12px;
 overflow: auto;
-background-color:#ffc;
-box-shadow:#888 4px 4px 16px;
+border: 1px solid #888;
 margin: 10px auto;
-padding:10px;
+background-color: #fcfcfc;
+padding:15px;
+box-shadow:#ddd 0px 0px 32px;
+border-radius:12px;
 }
 
+/* 320+ */
 .example {
 display:inline-block;
-width:320px;
+width:200px;
 color:#027;
-font-family:serif;
+font-family:sans-serif;
+border: 1px solid #888;
+margin: 5px;
+background-color: #fcfcfc;
+padding:5px;
+box-shadow:#ddd 0px 0px 32px;
+border-radius:12px;
 }
 
 .example:hover{
-color:#47c;
+color:#000;
+background:#cef;
+
+}
+
+.shot {
+border: 1px solid #888;
+width:198px;
+box-shadow:#ddd 0px 0px 16px;
 }
 
 #tests {
 text-align:center;
 width:330px;
-border:2px solid black;
+border:1px solid #888;
 font: 16px monospace;
 overflow: auto;
 background-color:#ffc;
-box-shadow:#888 4px 4px 16px;
+box-shadow:#888 0px 0px 16px;
 margin: 10px auto;
 padding:10px;
 }

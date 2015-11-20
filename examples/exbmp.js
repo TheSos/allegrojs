@@ -3,7 +3,7 @@ var logo;
 
 function main()
 {
-	// Initialises jAllegro
+	// Initialises allegro.js
 	allegro_init();
 	
 	// Installs graphics at given canvas in 640x480 resolution
