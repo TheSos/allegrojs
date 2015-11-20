@@ -1060,6 +1060,36 @@ function stretch_sprite(bmp,sprite,x,y,w,h)
 	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,x,y,w,h);
 }
 
+
+/// Draws a sprite flipped horizontally
+/// @param bmp target bitmap
+/// @param sprite sprite bitmap
+/// @param x,y coordinates of the top left corder of the image
+function draw_sprite_h_flip(bmp,sprite,x,y)
+{
+	bmp.context.save();
+	bmp.context.translate(x+sprite.canvas.width,y);
+	bmp.context.scale(-1, 1);
+	bmp.context.drawImage(sprite.canvas,0,0);
+	bmp.context.restore();
+	
+}
+
+/// Draws a sprite flipped vertically
+/// @param bmp target bitmap
+/// @param sprite sprite bitmap
+/// @param x,y coordinates of the top left corder of the image
+function draw_sprite_v_flip(bmp,sprite,x,y)
+{
+	bmp.context.save();
+	bmp.context.translate(x,y+sprite.canvas.height);
+	bmp.context.scale(1, -1);
+	bmp.context.drawImage(sprite.canvas,0,0);
+	bmp.context.restore();
+	
+}
+
+
 /// Draws a rotated sprite
 /// Draws a sprite rotating it around its centre point. Opposed to traditional allegro approach, sprite is drawn centered.
 /// @param bmp target bitmap
