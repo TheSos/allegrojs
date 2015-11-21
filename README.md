@@ -6,7 +6,13 @@
 
 ### What is allegro.js?
 
-*allegro.js* is a minimal javascript port of a really popular game programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simple game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it varies greatly in how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
+*allegro.js* is a simple structural programming library for creating browser based games using HTML5 canvas written in javascript. It aims to be a simple tool that is both easy to pick up for beginners and industry veterans alike as well as a go-to tool for game jams and cool things that run in a browser. That said, here are some cool selling points of allegro.js, to which it will hopefully live up to. It uses structural programming that was long lost among game developers, but still proves much more handy in situations that require swift and foolproof solutions and is much more understandable and readable for beginners with no prior knowledge of game programming.
+
+* Easy to pick up for beginners that never don't necessarily know video game programming or javascript at all
+* Works in all major browsers including mobile consistently and without fail using no dirty hacks
+* Great for rapid prototyping simple ideas and mechanics thanks to its structural nature
+* Best game jam solution out there thanks to browser-basedness and structural, non-OOP nature
+* Tutorial and docs getting anyone up to speed with it within one sitting
 
 ### How do you use allegro.js?
 
@@ -52,9 +58,9 @@ I hope for allegro.js to be a tool perfectly suitable for absolute beginners, wh
 ### Where can I learn allegro.js?
 
 First up, read all of this README! Then, there are several placed you can go to get documentation
+* Check out the [allegro.js tutorial](http://allegrojs.net/tutorial).
 * Study [examples](http://allegrojs.net/examples) to see how to use different functions of allegro.js
 * Check the neat and pretty [allegro.js function reference](http://allegrojs.net/docs)
-* Check out the [allegro.js tutorial](http://allegrojs.net/tutorial).
 
 ### What can allegro.js do?
 
@@ -68,6 +74,11 @@ First up, read all of this README! Then, there are several placed you can go to 
 * It can help you calculate stuff using `RAD(), DEG(), distance(), dot(), distance2(), scale(), clamp(), scaleclamp(), lerp(), abs(), sgn(), angle(), andglediff()`
 * It can log stuff to console using `enable_debug(), log() and wipe_log()`
 * It can wait for everything to load using `ready()` and display a progress bag using `loading_bar()`
+
+### Where did allegro.js come from?
+
+*allegro.js* is a minimal javascript port of a really popular game programming library called Allegro 4 from the first decade of our century. Allegro 4 is a simple game programming library that abstracts a set of functions in C programming language to the developer allowing for simple and rapid creation of video games, without the need to program entity systems, classes and so on. Allegro 5 is the current Allegro version, but it differs greatly as to how the API works, thus alienating many hardcore Allegro users. This library aims to provide a simple wrapper for a subset of canvas operations making it look like good old Allegro.
+
 
 ### What are the differences between this and original Allegro?
 
@@ -164,6 +175,22 @@ If you have any questions, suggestions, bug reports or would like to show me a g
 
 
 And don't forget to join the #allegrojs IRC channel at Freenode!
+
+### Can I help create *allegro.js*?
+
+Everyone is mostly welcome to help extend, fix and maintain allegro.js! But if you want to help creating *allegro.js*, please keep the following several things in mind. These will help me manage pull requests and allegro.js to stay clean of bloat and usable!
+
+* If you change anything, make sure to run full unit test on all major browsers before committing (Chrome, IE, Firefox, Opera, Safari, including mobile) If you don;t have access to some of these, leave a note, so that someone else can do it!
+* generate documentation using doxygen with provided Doxyfile, if you don't have access to it, leave a note and someone will do it!
+* Crunch *allegro.js* using [Closure Compiler](https://developers.google.com/closure/compiler/?hl=en) with following parameters: `--compilation_level SIMPLE_OPTIMIZATIONS --generate_exports --js allegro.js --js_output_file alleg.js` Similarly, if you don't have access to Closure or Java, leave a note!
+* *allegro.js* does not aims to be fully compatible with Allegro 4. There are heaps of things that made sense back then, under Windows 95 and DOS, but make no sense now.
+* Keep the code consistent! Here are some tips:
+ * functions use `function word_word(a,b,c,d);` scheme
+ * global variables use `var wordword;` scheme
+ * we don't use CamelCase
+ * internal globals use `var _wordword;` scheme
+ * structs are defined as Objects (`{}`) and defined as follows for proper documenting: `function BITMAP_OBJECT(w,h,canvas,context,ready,type) {}`
+
 
 ### What are the allegro.js licence terms?
 

@@ -78,7 +78,7 @@ END_OF_MAIN();
 * You should now have funny little fly flying around the screen.
 
 ### Killing the enemy
-* Just below where you loaded the fly sprite, load another with this: `splat = load_bmp('splat.png');` and make sure you declare 'splat' variable the same way you declared 'buzz', or even, in one line, using 'var buzz,splat';
+* Just below where you loaded the fly sprite, download [splat.png](http://allegrojs.net/tutorial/project/splat.png) and load it with this: `splat = load_bmp('splat.png');` and make sure you declare 'splat' variable the same way you declared 'buzz', or even, in one line, using 'var buzz,splat';
 * Just below where you load 'splat' we will create an empty bitmap. Paste this: `deaths = create_bitmap(SCREEN_W,SCREEN_H);` and make sure to declare `deaths` as well. This is an empty bitmap that we will use to draw dead flies too, so that we don't have to redraw them every frame, since that would be slow after killing 1000 of them.
 * In `draw()`, just before you draw the fly sprite, type this in: `draw_sprite(canvas,deaths,0,0);` This will draw our death map on screen before drawing the enemy, so that it doesn't get covered.
 * Go to `update()` function and paste this:
