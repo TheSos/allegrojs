@@ -1061,7 +1061,7 @@ function stretch_sprite(bmp,sprite,x,y,w,h)
 }
 
 /// Draws a rotated sprite
-/// Draws a sprite rotating it around its centre point. Opposed to traditional allegro approach, sprite is drawn centered.
+/// Draws a sprite rotating it around its centre point.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
@@ -1069,11 +1069,10 @@ function stretch_sprite(bmp,sprite,x,y,w,h)
 function rotate_sprite(bmp,sprite,x,y,angle)
 {
 	bmp.context.save();
-	bmp.context.translate(x,y);
-  bmp.context.rotate(RAD(angle));
-	bmp.context.translate(-sprite.w/2,-sprite.h/2);
-  bmp.context.drawImage(sprite.canvas,0,0);
-  bmp.context.restore();
+	bmp.context.translate(x+sprite.w/2,y+sprite.h/2);
+	bmp.context.rotate(RAD(angle));
+	bmp.context.drawImage(sprite.canvas,-sprite.w/2,-sprite.h/2);
+	bmp.context.restore();
 }
 
 /// Draws a sprite rotated around an arbitrary point
@@ -1086,15 +1085,14 @@ function rotate_sprite(bmp,sprite,x,y,angle)
 function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 {
 	bmp.context.save();
-	bmp.context.translate(x,y);
-  bmp.context.rotate(RAD(angle));
-	bmp.context.translate(-cx,-cy);
-  bmp.context.drawImage(sprite.canvas,0,0);
-  bmp.context.restore();
+	bmp.context.translate(x+sprite.w/2+cy,y+sprite.h/2+cx);
+	bmp.context.rotate(RAD(angle));
+	bmp.context.drawImage(sprite.canvas,-sprite.w/2-cx,-sprite.h/2-cy);
+	bmp.context.restore();
 }
 
 /// Draws a rotated sprite and scales it
-/// Draws a sprite rotating it around its centre point. Opposed to traditional allegro approach, sprite is drawn centred. The  sprite is also scaled.
+/// Draws a sprite rotating it around its centre point. The sprite is also scaled.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
@@ -1103,14 +1101,14 @@ function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 function rotate_scaled_sprite(bmp,sprite,x,y,angle,scale)
 {
 	bmp.context.save();
-	bmp.context.translate(x,y);
-  bmp.context.rotate(RAD(angle)); 
-	bmp.context.translate(-scale*sprite.w/2,-scale*sprite.h/2);
-  bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,x,y,sprite.w*scale,sprite.h*scale);
-  bmp.context.restore(); 
+	bmp.context.translate(x+scale*sprite.w/2,y+scale*sprite.h/2);
+	bmp.context.rotate(RAD(angle));
+	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-scale*sprite.w/2,-scale*sprite.h/2,sprite.w*scale,sprite.h*scale);
+	bmp.context.restore(); 
 }
+
 /// Draws a sprite rotated around an arbitrary point and scaled
-/// Draws a sprite rotating it around a given point. Opposed to traditional allegro approach, sprite is drawn with the pivot point at origin. The  sprite is also scaled.
+/// Draws a sprite rotating it around a given point. The sprite is also scaled.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y target coordinates of the pivot point
@@ -1120,10 +1118,9 @@ function rotate_scaled_sprite(bmp,sprite,x,y,angle,scale)
 function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 {
 	bmp.context.save(); 
-	bmp.context.translate(x,y);
-  bmp.context.rotate(RAD(angle));
-	bmp.context.translate(-scale*cx,-scale*cy);
-  bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,x,y,sprite.w*scale,sprite.h*scale);
+	bmp.context.translate(x+scale*sprite.w/2+cx,y+scale*sprite.h/2+cy);
+	bmp.context.rotate(RAD(angle));
+	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-scale*sprite.w/2-cx,-scale*sprite.h/2-cy,sprite.w*scale,sprite.h*scale);
 	bmp.context.restore(); 
 }
 
