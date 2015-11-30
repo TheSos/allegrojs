@@ -1068,10 +1068,12 @@ function stretch_sprite(bmp,sprite,x,y,w,h)
 /// @param angle angle of rotation in degrees
 function rotate_sprite(bmp,sprite,x,y,angle)
 {
+	var u = sprite.w*0.5;
+	var v = sprite.h*0.5;
 	bmp.context.save();
-	bmp.context.translate(x+sprite.w/2,y+sprite.h/2);
+	bmp.context.translate(x+u,y+v);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,-sprite.w/2,-sprite.h/2);
+	bmp.context.drawImage(sprite.canvas,-u,-v);
 	bmp.context.restore();
 }
 
@@ -1084,10 +1086,12 @@ function rotate_sprite(bmp,sprite,x,y,angle)
 /// @param angle angle of rotation in degrees
 function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 {
+	var u = sprite.w*0.5+cx;
+	var v = sprite.h*0.5+cy;
 	bmp.context.save();
-	bmp.context.translate(x+sprite.w/2+cy,y+sprite.h/2+cx);
+	bmp.context.translate(x+u,y+v);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,-sprite.w/2-cx,-sprite.h/2-cy);
+	bmp.context.drawImage(sprite.canvas,-u,-v);
 	bmp.context.restore();
 }
 
@@ -1100,10 +1104,12 @@ function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 /// @param scale 1.0 is unscaled
 function rotate_scaled_sprite(bmp,sprite,x,y,angle,scale)
 {
+	var u = scale*sprite.w*0.5;
+	var v = scale*sprite.h*0.5;
 	bmp.context.save();
-	bmp.context.translate(x+scale*sprite.w/2,y+scale*sprite.h/2);
+	bmp.context.translate(x+u,y+v);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-scale*sprite.w/2,-scale*sprite.h/2,sprite.w*scale,sprite.h*scale);
+	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-u,-v,u*2,v*2);
 	bmp.context.restore(); 
 }
 
@@ -1117,10 +1123,12 @@ function rotate_scaled_sprite(bmp,sprite,x,y,angle,scale)
 /// @param scale 1.0 is unscaled
 function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 {
+	var u = scale*sprite.w*0.5+cx;
+	var v = scale*sprite.h*0.5+cy;
 	bmp.context.save(); 
-	bmp.context.translate(x+scale*sprite.w/2+cx,y+scale*sprite.h/2+cy);
+	bmp.context.translate(x+u,y+v);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-scale*sprite.w/2-cx,-scale*sprite.h/2-cy,sprite.w*scale,sprite.h*scale);
+	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-u,-v,sprite.w*scale,sprite.h*scale);
 	bmp.context.restore(); 
 }
 
