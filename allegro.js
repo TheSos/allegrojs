@@ -846,7 +846,7 @@ function vline(bitmap,x,y1,y2,colour,width)
 {
 	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x,y1,width,y2-y1);
+	bitmap.context.fillRect(x-width*0.5,y1,width,y2-y1);
 }
 
 /// Draws a horizontal line.
@@ -860,7 +860,7 @@ function hline(bitmap,x1,y,x2,colour,width)
 {
 	if (width==null) width=1;
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x1,y,x2-x1,width);
+	bitmap.context.fillRect(x1,y-width*0.5,x2-x1,width);
 }
 
 /// Draws a triangle.
