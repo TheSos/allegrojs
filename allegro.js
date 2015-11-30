@@ -805,8 +805,7 @@ function putpixel(bitmap,x,y,colour)
 /// @param bitmap bitmap to be cleared
 function clear_bitmap(bitmap)
 {
-	_fillstyle(bitmap,0);
-	bitmap.context.fillRect(0,0,bitmap.w,bitmap.h);
+	bitmap.context.clearRect(0,0,bitmap.w, bitmap.h);
 }
 
 /// Clears bitmap to specified colour.
@@ -815,6 +814,7 @@ function clear_bitmap(bitmap)
 /// @param colour colour in 0xAARRGGBB format
 function clear_to_color(bitmap,colour)
 {
+	bitmap.context.clearRect(0,0,bitmap.w, bitmap.h);
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(0,0,bitmap.w,bitmap.h);
 }
@@ -940,28 +940,28 @@ function polygonfill(bitmap,vertices,points,colour)
 }
 
 /// Draws a rectangle.
-/// Draws a rectangle from one point to another using given colour. The rectangle is not filled.
+/// Draws a rectangle from one point to another using given colour. The rectangle is not filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
 /// @param bitmap to be drawn to
 /// @param x1,y1 start point coordinates
-/// @param x2,y2 end point coordinates
+/// @param w,h width and height
 /// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function rect(bitmap,x1,y1,x2,y2,colour,width)
+function rect(bitmap,x1,y1,w,h,colour,width)
 {
 	_strokestyle(bitmap,colour,width);
-	bitmap.context.strokeRect(x1,y1,x2,y2);
+	bitmap.context.strokeRect(x1,y1,w,h);
 }
 
 /// Draws a rectangle.
-/// Draws a rectangle from one point to another using given colour. The rectangle is filled.
+/// Draws a rectangle from one point to another using given colour. The rectangle is filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
 /// @param bitmap to be drawn to
 /// @param x1,y1 start point coordinates
-/// @param x2,y2 end point coordinates
+/// @param w,h width and height
 /// @param colour colour in 0xAARRGGBB format
-function rectfill(bitmap,x1,y1,x2,y2,colour)
+function rectfill(bitmap,x1,y1,w,h,colour)
 {
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x1,y1,x2,y2);
+	bitmap.context.fillRect(x1,y1,w,h);
 }
 
 /// Draws a circle.
