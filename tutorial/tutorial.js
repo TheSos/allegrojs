@@ -5,9 +5,9 @@ var x = 100,y = 100;
 function draw()
 {
 	//textout(canvas,font,"Hello World!",x,y,24,makecol(0,0,0));
-	draw_sprite(canvas,deaths,0,0);
-	draw_sprite(canvas,buzz,x-32,y-32);
-	draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x-16,mouse_y-16);
+	simple_blit(deaths,canvas,0,0);
+	draw_sprite(canvas,buzz,x,y);
+	draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x,mouse_y);
 }
 
 function update()

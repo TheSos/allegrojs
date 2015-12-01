@@ -18,7 +18,7 @@ var score = 0;
 function draw()
 {
 	// draw background
-	draw_sprite(canvas,bg,0,0);
+	simple_blit(bg,canvas,0,0);
 	
 	// draw player
 	draw_sprite(canvas,man,player_x,player_y);
@@ -27,7 +27,7 @@ function draw()
 	draw_sprite(canvas,apple,apple_x,apple_y);
 	
 	// print out current score
-	textout(canvas,font,"Score: " + score,10,20,24,makecol(255,255,255));
+	textout(canvas,font,"Score: " + score,10,30,24,makecol(255,255,255),makecol(0,0,0),1);
 }
 
 // update gaem logic

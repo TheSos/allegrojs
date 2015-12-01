@@ -30,8 +30,8 @@ function draw()
 		draw_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H);
 	}  else if (stage==4)
 	{
-		title = "stretch_sprite";
-		stretch_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
+		title = "scaled_sprite";
+		scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==5)
 	{
 		title = "rotate_sprite";
@@ -43,11 +43,11 @@ function draw()
 	}  else if (stage==7)
 	{
 		title = "rotate_scaled_sprite";
-		rotate_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,rand()%3+.1);
+		rotate_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==8)
 	{
 		title = "pivot_scaled_sprite";
-		pivot_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360,rand()%3+.1);
+		pivot_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==9)
 	{
 		title = "textout";
@@ -225,8 +225,8 @@ function draw()
 		remove_all_ints();
 		stage++;
 	}  
-	textout_centre(canvas,font,title,SCREEN_W/2,64,64,makecol(255,0,0));
-	textout(canvas,font,subtitle,10,SCREEN_H-10,24,makecol(255,0,0));
+	textout_centre(canvas,font,title,SCREEN_W/2,64,64,makecol(255,255,255),makecol(0,0,0),2);
+	textout(canvas,font,subtitle,10,SCREEN_H-10,24,makecol(255,255,255),makecol(0,0,0),1);
 	delay++;
 	if (key[KEY_SPACE] && delay>10)
 	{

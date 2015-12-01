@@ -67,7 +67,7 @@ END_OF_MAIN();
 * Add a variable to hold the bitmap object. Put `var buzz;` above `var x=100,y=100;` in the code;
 * To load the image. put `buzz=load_bmp('buzz.png');` in `main()` function before `ready()`
 * Comment out the `textout()` call from `draw()` by putting `//` in front of it.
-* Add `draw_sprite(canvas,buzz,x-32,y-32);` call to `draw()` This one will render the fly centred at `x,y` coordinates.
+* Add `draw_sprite(canvas,buzz,x,y);` call to `draw()` This one will render the fly centred at `x,y` coordinates.
 * Now let's add some simple, random movement. Add the following two lines to `update()`:
 ```
 	x += rand()%5-2;
@@ -80,7 +80,7 @@ END_OF_MAIN();
 ### Killing the enemy
 * Just below where you loaded the fly sprite, download [splat.png](http://allegrojs.net/tutorial/project/splat.png) and load it with this: `splat = load_bmp('splat.png');` and make sure you declare 'splat' variable the same way you declared 'buzz', or even, in one line, using 'var buzz,splat';
 * Just below where you load 'splat' we will create an empty bitmap. Paste this: `deaths = create_bitmap(SCREEN_W,SCREEN_H);` and make sure to declare `deaths` as well. This is an empty bitmap that we will use to draw dead flies too, so that we don't have to redraw them every frame, since that would be slow after killing 1000 of them.
-* In `draw()`, just before you draw the fly sprite, type this in: `draw_sprite(canvas,deaths,0,0);` This will draw our death map on screen before drawing the enemy, so that it doesn't get covered.
+* In `draw()`, just before you draw the fly sprite, type this in: `simple_blit(deaths,canvas,0,0);` This will draw our death map on screen before drawing the enemy, so that it doesn't get covered.
 * Go to `update()` function and paste this:
 ```javascript
 	if (mouse_pressed)
@@ -100,7 +100,7 @@ END_OF_MAIN();
 
 * Now let's add a fly splatter to the mix. Download [weapon.png](http://allegrojs.net/tutorial/project/weapon.png) and put it in your game project. Then add `weapon  = load_bmp('weapon.png');` to `main()` and declare `weapon` as a global variable, just like other bitmap objects.
 * Since we don't need system mouse cursor any more, you can add `hide_mouse();` to `main()` after you load all the files.
-* Let's render the splatter at mouse coordinates by adding `draw_sprite(canvas,weapon,mouse_x-16,mouse_y-16);` to `draw()`
+* Let's render the splatter at mouse coordinates by adding `draw_sprite(canvas,weapon,mouse_x,mouse_y);` to `draw()`
 * Now save and see if it works!
 
 ### Sounds of agony
@@ -133,7 +133,7 @@ function update()
 
 ### Simple animation
 * Download [weapon2.png](http://allegrojs.net/tutorial/project/weapon2.png) into the project folder
-* In `draw()` alter the splatter-rendering function to make it look like this `draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x-16,mouse_y-16);` This inline contraption is called _ternary operator_ and it means that if mouse_b is not zero, `weapon2` will be rendered, otherwise it will be `weapon`. So if we hold down the mouse button, we get to see a different sprite.
+* In `draw()` alter the splatter-rendering function to make it look like this `draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x,mouse_y);` This inline contraption is called _ternary operator_ and it means that if mouse_b is not zero, `weapon2` will be rendered, otherwise it will be `weapon`. So if we hold down the mouse button, we get to see a different sprite.
 * Declare `weapon2` on top of the code and add `weapon2  = load_bmp('weapon2.png');` to `main()`
 * Save the file and enjoy!
 
@@ -141,7 +141,7 @@ function update()
 * To make it look way better, let's add a background image. 
 * Download [window.png](http://allegrojs.net/tutorial/project/window.png) and put it in your project file.
 * Look for a line that says `deaths = create_bitmap(SCREEN_W,SCREEN_H);` and replace it with `deaths = load_bmp("project/window.png");`
-* Save and refresh, and voilà! Instead of an empty splat screen, we now have a window loaded by default to which we are blitting images of dead insect.
+* Save and refresh, and voila! Instead of an empty splat screen, we now have a window loaded by default to which we are blitting images of dead insect.
 
 ## Finished product
 After you are done, your code should look like this:
@@ -153,9 +153,9 @@ var x = 100,y = 100;
 function draw()
 {
 	//textout(canvas,font,"Hello World!",x,y,24,makecol(0,0,0));
-	draw_sprite(canvas,deaths,0,0);
-	draw_sprite(canvas,buzz,x-32,y-32);
-	draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x-16,mouse_y-16);
+	simple_blit(deaths,canvas,0,0);
+	draw_sprite(canvas,buzz,x,y);
+	draw_sprite(canvas,(mouse_b ? weapon2 : weapon),mouse_x,mouse_y);
 }
 
 function update()

@@ -182,7 +182,7 @@ function _mousemenu(e)
 function _mouseup(e)
 {
 	mouse_b = mouse_b&~(1<<(e.which-1));
-	mouse_pressed = mouse_pressed|(1<<(e.which-1));
+	mouse_released = mouse_released|(1<<(e.which-1));
 	e.preventDefault();
 }
 
@@ -190,7 +190,7 @@ function _mouseup(e)
 function _mousedown(e)
 {
 	mouse_b = mouse_b|(1<<(e.which-1));
-	mouse_released = mouse_released|(1<<(e.which-1));
+	mouse_pressed = mouse_pressed|(1<<(e.which-1));
 	e.preventDefault();
 }
 
@@ -630,7 +630,7 @@ function set_gfx_mode(canvas_id,width,height)
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
-	font = create_font("monospace");
+	font = load_base64_font(_cartoon_woff);
 	_gfx_installed = true;
 	
 	return 0;
@@ -691,7 +691,7 @@ function _strokestyle(bitmap,colour,width)
 /// @return colour in 0xAARRGGBB format
 function makecol(r,g,b,a)
 {
-	if (a==null) a=255;
+	a = typeof a !== 'undefined' ?  a : 255;
 	return (a<<24)|((r&0xff)<<16)|((g&0xff)<<8)|((b&0xff));
 }
 
@@ -704,7 +704,7 @@ function makecol(r,g,b,a)
 /// @return colour in 0xAARRGGBB format
 function makecolf(r,g,b,a)
 {
-	if (a==null) a=1.0;
+	a = typeof a !== 'undefined' ?  a : 1.0;
 	return makecol(r*255,g*255,b*255,a*255);
 }
 
@@ -841,12 +841,12 @@ function line(bitmap,x1,y1,x2,y2,colour,width)
 /// @param x column to draw the line to
 /// @param y1,y2 line endpoints
 /// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/// @param width line width (defaults to 1)
 function vline(bitmap,x,y1,y2,colour,width)
 {
-	if (width==null) width=1;
+	width = typeof width !== 'undefined' ?  width : 1;
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x-width*0.5,y1,width,y2-y1);
+	bitmap.context.fillRect(x-width/2,y1,width,y2-y1);
 }
 
 /// Draws a horizontal line.
@@ -855,12 +855,12 @@ function vline(bitmap,x,y1,y2,colour,width)
 /// @param y row to draw the line to
 /// @param x1,x2 line endpoints
 /// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/// @param width line width (defaults to 1)
 function hline(bitmap,x1,y,x2,colour,width)
 {
-	if (width==null) width=1;
+	width = typeof width !== 'undefined' ?  width : 1;
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x1,y-width*0.5,x2-x1,width);
+	bitmap.context.fillRect(x1,y-width/2,x2-x1,width);
 }
 
 /// Draws a triangle.
@@ -1040,45 +1040,54 @@ function arcfill(bitmap,x,y,ang1,ang2,r,colour)
 //@{
 
 /// Draws a sprite
-/// This is probably the fastest method to get images on screen. 
+/// This is probably the fastest method to get images on screen. The image will be centered. Opposed to traditional allegro approach, sprite is drawn centered.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
-/// @param x,y coordinates of the top left corder of the image
+/// @param x,y coordinates of the top left corder of the image center
 function draw_sprite(bmp,sprite,x,y)
 {
-	bmp.context.drawImage(sprite.canvas,x,y);
+	bmp.context.drawImage(sprite.canvas,x-sprite.w/2,y-sprite.h/2);
 }
 
 /// Draws a stretched sprite
-/// Draws a sprite stretching it to given width and height
+/// Draws a sprite stretching it to given width and height. The sprite will be centered. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the top left corder of the image
-/// @param w,h size the sprite will be stretched to
-function stretch_sprite(bmp,sprite,x,y,w,h)
+/// @param sx horizontal scale , 1.0 is unscaled
+/// @param sy vertical scale (defaults to sx)
+function scaled_sprite(bmp,sprite,x,y,sx,sy)
 {
-	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,x,y,w,h);
+	sy = typeof sy !== 'undefined' ?  sy : sx;
+	var u = sx*sprite.w/2;
+	var v = sy*sprite.h/2;
+	bmp.context.save();
+	bmp.context.translate(x-u,y-v);
+	bmp.context.scale(sx,sy);
+	bmp.context.drawImage(sprite.canvas,0,0);
+	bmp.context.restore(); 
 }
 
 /// Draws a rotated sprite
-/// Draws a sprite rotating it around its centre point.
+/// Draws a sprite rotating it around its centre point. The sprite will be centred and rotated around its centre.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
 /// @param angle angle of rotation in degrees
 function rotate_sprite(bmp,sprite,x,y,angle)
 {
-	var u = sprite.w*0.5;
-	var v = sprite.h*0.5;
+	var u = sprite.w/2;
+	var v = sprite.h/2;
 	bmp.context.save();
-	bmp.context.translate(x+u,y+v);
+	bmp.context.translate(x,y);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,-u,-v);
+	bmp.context.translate(-u,-v);
+	bmp.context.drawImage(sprite.canvas,0,0);
 	bmp.context.restore();
 }
 
 /// Draws a sprite rotated around an arbitrary point
-/// Draws a sprite rotating it around a given point. Opposed to traditional allegro approach, sprite is drawn with the pivot point at origin.
+/// Draws a sprite rotating it around a given point. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y target coordinates of the pivot point
@@ -1086,49 +1095,56 @@ function rotate_sprite(bmp,sprite,x,y,angle)
 /// @param angle angle of rotation in degrees
 function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 {
-	var u = sprite.w*0.5+cx;
-	var v = sprite.h*0.5+cy;
 	bmp.context.save();
-	bmp.context.translate(x+u,y+v);
+	bmp.context.translate(x,y);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,-u,-v);
+	bmp.context.translate(-cx,-cy);
+	bmp.context.drawImage(sprite.canvas,0,0);
 	bmp.context.restore();
 }
 
 /// Draws a rotated sprite and scales it
-/// Draws a sprite rotating it around its centre point. The sprite is also scaled.
+/// Draws a sprite rotating it around its centre point. The sprite is also scaled. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center. The sprite will be centred and rotated around its centre.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
 /// @param angle angle of rotation in degrees
-/// @param scale 1.0 is unscaled
-function rotate_scaled_sprite(bmp,sprite,x,y,angle,scale)
+/// @param sx horizontal scale, 1.0 is unscaled
+/// @param sy vertical scale (defaults to sx)
+function rotate_scaled_sprite(bmp,sprite,x,y,angle,sx,sy)
 {
-	var u = scale*sprite.w*0.5;
-	var v = scale*sprite.h*0.5;
+	sy = typeof sy !== 'undefined' ?  sy : sx;
+	var u = sx*sprite.w/2;
+	var v = sy*sprite.h/2;
 	bmp.context.save();
-	bmp.context.translate(x+u,y+v);
+	bmp.context.translate(x,y);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-u,-v,u*2,v*2);
+	bmp.context.translate(-u,-v);
+	bmp.context.scale(sx,sy);
+	bmp.context.drawImage(sprite.canvas,0,0);
 	bmp.context.restore(); 
 }
 
 /// Draws a sprite rotated around an arbitrary point and scaled
-/// Draws a sprite rotating it around a given point. The sprite is also scaled.
+/// Draws a sprite rotating it around a given point. The sprite is also scaled. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image  before scaling. You can omit sy value for uniform scaling. You can use negative scale for flipping.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y target coordinates of the pivot point
 /// @param cx,cy pivot point coordinates
 /// @param angle angle of rotation in degrees
-/// @param scale 1.0 is unscaled
-function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
+/// @param sx horizontal scale , 1.0 is unscaled
+/// @param sy vertical scale (defaults to sx)
+function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,sx,sy)
 {
-	var u = scale*sprite.w*0.5+cx;
-	var v = scale*sprite.h*0.5+cy;
+	sy = typeof sy !== 'undefined' ?  sy : sx;
+	var u = sx*cx;
+	var v = sy*cy;
 	bmp.context.save(); 
-	bmp.context.translate(x+u,y+v);
+	bmp.context.translate(x,y);
 	bmp.context.rotate(RAD(angle));
-	bmp.context.drawImage(sprite.canvas,0,0,sprite.w,sprite.h,-u,-v,sprite.w*scale,sprite.h*scale);
+	bmp.context.translate(-u,-v);
+	bmp.context.scale(sx,sy);
+	bmp.context.drawImage(sprite.canvas,0,0);
 	bmp.context.restore(); 
 }
 
@@ -1144,6 +1160,18 @@ function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,scale)
 function blit(source,dest,sx,sy,dx,dy,w,h)
 {
 	 dest.context.drawImage(source.canvas,sx,sy,w,h,dx,dy,w,h);
+}
+
+/// Simple Blit
+/// Simplified version of blit, works pretty much like draw_sprite but draws from the corner
+/// @param source source bitmap
+/// @param dest destination bitmap
+/// @param x,y top-left bitmap corner coordinates in target bitmap
+/// @todo make rotated versions of this
+/// @todo tell everyone that blitting to itself is slower than the other thing (requires copy?)
+function simple_blit(source,dest,x,y)
+{
+	 dest.context.drawImage(source.canvas,x,y);
 }
 
 /// Scaled blit
@@ -1164,6 +1192,8 @@ function stretch_blit(source,dest,sx,sy,sw,sh,dx,dy,dw,dh)
 /// @name TEXT OUTPUT
 //@{
 
+var _cartoon_woff="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";
+
 var _num_fonts = 0;
 
 /// Font object, this is not a function.
@@ -1173,6 +1203,21 @@ var _num_fonts = 0;
 /// @param name font-family name
 /// @param type object type, "fnt" in this case
 function FONT_OBJECT(element,file,name,type) {}
+
+/// Loads font from file.
+/// This actually creates a style element, puts code inside and appends it to class. I heard it works all the time most of the time. AS ready() won't wait for fonts to load, this will allow you to have a font straight away with base64 data. Data should be WOFF converted to base64 without line breaks.
+/// @param data base64 string of a WOFF file
+/// @return font object
+function load_base64_font(data)
+{
+	var s = document.createElement('style');
+	var fontname = "font" + (_num_fonts++);
+	s.id = fontname;
+	s.type = "text/css";
+	document.head.appendChild(s);
+	s.textContent = "@font-face { font-family: " + fontname + "; src:url('data:application/font-woff;base64," + data + "') format('woff');}";
+	return {element:s,file:"",name:fontname,type:"fnt"};
+}
 
 /// Loads font from file.
 /// This actually creates a style element, puts code inside and appends it to class. I heard it works all the time most of the time. Note that this function won't make ready() wait, as it's not possible to consistently tell if a font has been loaded in js, thus load your fonts first thing, and everything should be fine.
@@ -1347,9 +1392,9 @@ function destroy_sample(filename)
 /// @param loop loop or not to loop
 function play_sample(sample,vol,freq,loop)
 {
-	if (vol==null) vol=1.0;
-	if (freq==null) freq=1.0;
-	if (loop==null) loop=false;
+	vol = typeof vol !== 'undefined' ?  vol : 1.0;
+	freq = typeof freq !== 'undefined' ?  vol : 1.0;
+	loop = typeof loop !== 'undefined' ?  loop : false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
 	sample.element.play();
