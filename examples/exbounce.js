@@ -1,5 +1,5 @@
 // bitmap oobjects
-var logo,ball;
+var clouds,ball;
 
 // sample object
 var bounce;
@@ -16,8 +16,8 @@ var vx=speed,vy=speed;
 // drawing function
 function draw()
 {
-	// draw allegro logo background
-	stretch_blit(logo,canvas,0,0,logo.w,logo.h,0,0,SCREEN_W,SCREEN_H);
+	// draw allegro clouds background
+	stretch_blit(clouds,canvas,0,0,clouds.w,clouds.h,0,0,SCREEN_W,SCREEN_H);
 	
 	// draws the ball centered
 	draw_sprite(canvas,ball,cx,cy);
@@ -55,15 +55,17 @@ function main()
 	// enable debugging to console element
 	enable_debug("debug");
 	
-	// init all subsystems, put allegro in canvas with id="canvas_id"
+	// put allegro in canvas with id="canvas_id"
 	// make the dimesnions 640x480
-	allegro_init_all("canvas_id", 640, 480);
+	set_gfx_mode("canvas_id", 640, 480);
+	
+	install_sound();
 	
 	// load ball image
 	ball = load_bmp("data/planet.png");
 	
 	// load background image
-	logo = load_bmp("data/allegro.png");
+	clouds = load_bmp("data/clouds.png");
 	
 	// load the bounce sound
 	bounce = load_sample("data/bounce.mp3");

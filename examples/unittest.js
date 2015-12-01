@@ -1,4 +1,4 @@
-var mysha;
+var clouds,ball;
 var beep;
 
 var stage=-1;
@@ -19,35 +19,35 @@ function draw()
 	} else if (stage==1)
 	{
 		title = "blit";
-		blit(mysha,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w+1,rand()%mysha.h+1);
+		blit(ball,canvas,0,0,rand()%SCREEN_W,rand()%SCREEN_H,rand()%ball.w+1,rand()%ball.h+1);
 	} else if (stage==2)
 	{
 		title = "stretch_blit";
-		stretch_blit(mysha,canvas,0,0,rand()%mysha.w+1,rand()%mysha.h+1,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
+		stretch_blit(ball,canvas,0,0,rand()%ball.w+1,rand()%ball.h+1,rand()%SCREEN_W,rand()%SCREEN_H,rand()%SCREEN_W+1,rand()%SCREEN_H+1);
 	} else if (stage==3)
 	{
 		title = "draw_sprite";
-		draw_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H);
+		draw_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H);
 	}  else if (stage==4)
 	{
 		title = "scaled_sprite";
-		scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,frand()*2+.1,frand()*2+.1);
+		scaled_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==5)
 	{
 		title = "rotate_sprite";
-		rotate_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360);
+		rotate_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360);
 	}  else if (stage==6)
 	{
 		title = "pivot_sprite";
-		pivot_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360);
+		pivot_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H,rand()%ball.w,rand()%ball.h,rand()%360);
 	}  else if (stage==7)
 	{
 		title = "rotate_scaled_sprite";
-		rotate_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,frand()*2+.1,frand()*2+.1);
+		rotate_scaled_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H,rand()%360,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==8)
 	{
 		title = "pivot_scaled_sprite";
-		pivot_scaled_sprite(canvas,mysha,rand()%SCREEN_W,rand()%SCREEN_H,rand()%mysha.w,rand()%mysha.h,rand()%360,frand()*2+.1,frand()*2+.1);
+		pivot_scaled_sprite(canvas,ball,rand()%SCREEN_W,rand()%SCREEN_H,rand()%ball.w,rand()%ball.h,rand()%360,frand()*2+.1,frand()*2+.1);
 	}  else if (stage==9)
 	{
 		title = "textout";
@@ -225,12 +225,12 @@ function draw()
 		remove_all_ints();
 		stage++;
 	}  
-	textout_centre(canvas,font,title,SCREEN_W/2,64,64,makecol(255,255,255),makecol(0,0,0),2);
+	textout_centre(canvas,font,title,SCREEN_W/2,80,64,makecol(255,255,255),makecol(0,0,0),2);
 	textout(canvas,font,subtitle,10,SCREEN_H-10,24,makecol(255,255,255),makecol(0,0,0),1);
 	delay++;
 	if (key[KEY_SPACE] && delay>10)
 	{
-		stretch_blit(mysha,canvas,0,0,mysha.w,mysha.h,0,0,SCREEN_W,SCREEN_H);
+		stretch_blit(clouds,canvas,0,0,clouds.w,clouds.h,0,0,SCREEN_W,SCREEN_H);
 		stage++;
 		delay=0;
 	}
@@ -240,11 +240,12 @@ function main()
 {
 	enable_debug('debug');
 	allegro_init_all("unittest", 640, 480);
-	mysha = load_bmp("data/mysha.png");
+	clouds = load_bmp("data/clouds.png");
+	ball = load_bmp("data/planet.png");
 	beep = load_sample("data/dtmf.mp3");
 
 	ready(function(){
-		stretch_blit(mysha,canvas,0,0,mysha.w,mysha.h,0,0,SCREEN_W,SCREEN_H);
+		stretch_blit(clouds,canvas,0,0,clouds.w,clouds.h,0,0,SCREEN_W,SCREEN_H);
 		loop(function()
 		{
 			draw();		
