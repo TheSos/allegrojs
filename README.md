@@ -228,6 +228,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Changelog
 
+#### v4.0.6
+* Fixed mouse_pressed and _released being flipped!
+* added load_base64_font()
+* changed default font from 'monospace' to a custom drawn cartoon font (looks good with outlines!)
+* fixed checks for null parameters into undefined type check
+* changed .5s to /2s to reduce fractions (that doesn't work, need to floor, or not?)
+* fixed *_sprite methods into centered rendering <- READ THIS ONE
+* fixed examples and tutorials accordingly
+
 #### v4.0.5
 * finalised renaming
 * finished website
