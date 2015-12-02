@@ -288,7 +288,7 @@ function install_int_ex(procedure,speed)
 {
 	var timer_id = window.setInterval(procedure,speed);
 	_installed_timers.push({timer:procedure,id:timer_id});
-	log("Added insterrupt #" + timer_id + " at " + speed + "msec isntervals!");
+	log("Added interrupt #" + timer_id + " at " + speed + "msec intervals!");
 }
 
 /// registered loop procedure
