@@ -25,6 +25,7 @@ function allegro_init()
 /// @param w screen width in pixels
 /// @param h screen height in pixels
 /// @param menu set this to true to enable context menu
+/// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the only ones on the list. 
 function allegro_init_all(id,w,h,menu,enable_keys)
 {
 	install_allegro();
@@ -38,7 +39,7 @@ function allegro_init_all(id,w,h,menu,enable_keys)
 /// Calls main()
 function END_OF_MAIN()
 {
-		window.addEventListener("load", main);
+	window.addEventListener("load", main);
 }
 
 //@}
@@ -101,6 +102,7 @@ var _menu = false;
 /// Installs mouse handlers.
 /// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
 /// @param menu If true, context menu will be available on right click on canvas. Default is false.
+/// @return -1 on error, 0 on success
 function install_mouse(menu)
 {
 	if (!canvas)
@@ -130,6 +132,7 @@ function install_mouse(menu)
 }
 
 /// Removes mouse handlers.
+/// @return -1 on error, 0 on success
 function remove_mouse()
 {
 	if (!_mouse_installed)
@@ -148,6 +151,7 @@ function remove_mouse()
 }
 
 /// Enables showing system mouse cursor over canvas
+/// @return -1 on error, 0 on success
 function show_mouse()
 {
 	if (!_mouse_installed)
@@ -257,8 +261,8 @@ function install_timer()
 }
 
 /// Unix time stamp!
-/// Returns number of milliseconds since 1970 started.
-function time()
+/// @return number of milliseconds since 1970 started. 
+ function time()
 {
 	return Date.now();
 }
@@ -266,10 +270,10 @@ function time()
 /// Installs interrupt function.
 /// Installs a user timer handler, with the speed given as the number of milliseconds between ticks. This is the same thing as install_int_ex(proc, MSEC_TO_TIMER(speed)). Calling again this routine with the same timer handler as parameter allows you to adjust its speed.
 /// @param procedure function to be called
-/// @param speed execution interval in msec
+/// @param msec execution interval in milliseconds 
 function install_int(procedure,msec)
 {
-	return install_int_ex(procedure,MSEC_TO_TIMER(msec));
+	install_int_ex(procedure,MSEC_TO_TIMER(msec));
 }
 
 /// Installs interrupt function.
@@ -413,7 +417,7 @@ function remove_all_ints()
 {
 	for(var c=0;c<_installed_timers.length;c++)
 	{
-			window.clearInterval(_installed_timers[c].id);
+		window.clearInterval(_installed_timers[c].id);
 	}
 	_installed_timers = [];
 	log("Removed all interrupts!");
@@ -462,6 +466,7 @@ var _enabled_keys = [];
 /// Installs keyboard handlers
 /// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppressed
 /// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the only ones on the list.
+/// @return -1 on error, 0 on success 
 function install_keyboard(enable_keys)
 {
 	if (_keyboard_installed)
@@ -942,26 +947,26 @@ function polygonfill(bitmap,vertices,points,colour)
 /// Draws a rectangle.
 /// Draws a rectangle from one point to another using given colour. The rectangle is not filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
 /// @param bitmap to be drawn to
-/// @param x1,y1 start point coordinates
+/// @param x,y start point coordinates
 /// @param w,h width and height
 /// @param colour colour in 0xAARRGGBB format
 /// @param width line width
-function rect(bitmap,x1,y1,w,h,colour,width)
+function rect(bitmap,x,y,w,h,colour,width)
 {
 	_strokestyle(bitmap,colour,width);
-	bitmap.context.strokeRect(x1,y1,w,h);
+	bitmap.context.strokeRect(x,y,w,h);
 }
 
 /// Draws a rectangle.
 /// Draws a rectangle from one point to another using given colour. The rectangle is filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
 /// @param bitmap to be drawn to
-/// @param x1,y1 start point coordinates
+/// @param x,y start point coordinates
 /// @param w,h width and height
 /// @param colour colour in 0xAARRGGBB format
-function rectfill(bitmap,x1,y1,w,h,colour)
+function rectfill(bitmap,x,y,w,h,colour)
 {
 	_fillstyle(bitmap,colour);
-	bitmap.context.fillRect(x1,y1,w,h);
+	bitmap.context.fillRect(x,y,w,h);
 }
 
 /// Draws a circle.
@@ -993,7 +998,7 @@ function circlefill(bitmap,x,y,radius,colour)
 	bitmap.context.fill();
 }
 
-/// Draws a arc.
+/// Draws an arc.
 /// Draws a circle at specified centre point and radius. The arc is not filled
 /// @param bitmap to be drawn to
 /// @param x,y centre point coordinates
@@ -1014,7 +1019,7 @@ function arc(bitmap,x,y,ang1,ang2,r,colour,width)
 	bitmap.context.stroke();
 }
 
-/// Draws a arc.
+/// Draws an arc.
 /// Draws a circle at specified centre point and radius. The arc is filled
 /// @param bitmap to be drawn to
 /// @param x,y centre point coordinates
@@ -1040,7 +1045,7 @@ function arcfill(bitmap,x,y,ang1,ang2,r,colour)
 //@{
 
 /// Draws a sprite
-/// This is probably the fastest method to get images on screen. The image will be centered. Opposed to traditional allegro approach, sprite is drawn centered.
+/// This is probably the fastest method to get images on screen. Opposed to traditional allegro approach, sprite is drawn centered.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the top left corder of the image center
@@ -1049,12 +1054,12 @@ function draw_sprite(bmp,sprite,x,y)
 	bmp.context.drawImage(sprite.canvas,x-sprite.w/2,y-sprite.h/2);
 }
 
-/// Draws a stretched sprite
-/// Draws a sprite stretching it to given width and height. The sprite will be centered. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center.
+/// Draws a scaled sprite
+/// Draws a sprite scaled, scaled by the given factor(s). The sprite will be centered. You can omit the sy value for uniform scaling. You can use negative scale for flipping. Scaling is around the center.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the top left corder of the image
-/// @param sx horizontal scale , 1.0 is unscaled
+/// @param sx horizontal scale, 1.0 is unscaled
 /// @param sy vertical scale (defaults to sx)
 function scaled_sprite(bmp,sprite,x,y,sx,sy)
 {
@@ -1069,7 +1074,7 @@ function scaled_sprite(bmp,sprite,x,y,sx,sy)
 }
 
 /// Draws a rotated sprite
-/// Draws a sprite rotating it around its centre point. The sprite will be centred and rotated around its centre.
+/// Draws a sprite rotating it around its centre point. The sprite will be centred.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
@@ -1104,7 +1109,7 @@ function pivot_sprite(bmp,sprite,x,y,cx,cy,angle)
 }
 
 /// Draws a rotated sprite and scales it
-/// Draws a sprite rotating it around its centre point. The sprite is also scaled. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center. The sprite will be centred and rotated around its centre.
+/// Draws a sprite rotating it around its centre point. The sprite is also scaled. You can omit sy value for uniform scaling. You can use negative scale for flipping. Scaling is around the center. The sprite will be centred.
 /// @param bmp target bitmap
 /// @param sprite sprite bitmap
 /// @param x,y coordinates of the centre of the image
@@ -1132,7 +1137,7 @@ function rotate_scaled_sprite(bmp,sprite,x,y,angle,sx,sy)
 /// @param x,y target coordinates of the pivot point
 /// @param cx,cy pivot point coordinates
 /// @param angle angle of rotation in degrees
-/// @param sx horizontal scale , 1.0 is unscaled
+/// @param sx horizontal scale, 1.0 is unscaled
 /// @param sy vertical scale (defaults to sx)
 function pivot_scaled_sprite(bmp,sprite,x,y,cx,cy,angle,sx,sy)
 {
@@ -1197,7 +1202,7 @@ var _cartoon_woff="d09GRk9UVE8AABfIAAsAAAAAHLAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAABDR
 var _num_fonts = 0;
 
 /// Font object, this is not a function.
-/// This is not a function but a reference entry for font object returned by load_font() and create_cont(). 
+/// This is not a function but a reference entry for font object returned by load_font() and create_font(). 
 /// @param element <style> element containing the font-face declaration. Not available for create_font() fonts and default font object.
 /// @param file font file name, empty string for default font and create_font() typefaces.
 /// @param name font-family name
@@ -1248,7 +1253,7 @@ function create_font(family)
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
-/// @param x,w position of the text
+/// @param x,y position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param colour text colour
 /// @param outline outline colour, or omit for no outline
@@ -1271,7 +1276,7 @@ function textout(bitmap,f,s,x,y,size,colour,outline,width)
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
-/// @param x,w position of the text
+/// @param x,y position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param colour text colour
 /// @param outline outline colour, or omit for no outline
@@ -1294,7 +1299,7 @@ function textout_centre(bitmap,f,s,x,y,size,colour,outline,width)
 /// @param bitmap target bitmap
 /// @param f font object
 /// @param s text string
-/// @param x,w position of the text
+/// @param x,y position of the text
 /// @param size font size in pixels, this not always reflects the actual glyph dimensions
 /// @param colour text colour
 /// @param outline outline colour, or omit for no outline
@@ -1387,9 +1392,9 @@ function destroy_sample(filename)
 /// Plays given sample.
 /// Plays a sample object using given values. Note how pan is left out, as it doesn't seem to have a js counterpart. Freq will probably not work everywhere too!
 /// @param sample sample to be played
-/// @param vol playback volume
-/// @param freq speed, 1.0 is normal
-/// @param loop loop or not to loop
+/// @param vol playback volume, if omitted it's 1.0
+/// @param freq speed, 1.0 is normal and used when omitted
+/// @param loop loop or not to loop, false when omitted
 function play_sample(sample,vol,freq,loop)
 {
 	vol = typeof vol !== 'undefined' ?  vol : 1.0;
@@ -1452,9 +1457,9 @@ function rand32()
 	return rand()|(rand()<<16);
 }
 
-/// Returns a random number from 0.0 to 1.0
+/// Returns a random number from 0.0 to 1.0 (exclusive)
 /// This one is float. Use multiply (*) operator to get higher values. i.e. frand()*10 will return a value from 0.0 to 10.0
-/// @return a random floating point value from 0.0 to 1.0
+/// @return a random floating point value from 0.0 to 1.0 (exclusive)
 function frand()
 {
 	return Math.random();
@@ -1475,7 +1480,7 @@ function length(x,y)
 }
 
 /// Calculates distance between two points
-/// @param x1,x2 first point
+/// @param x1,y1 first point
 /// @param x2,y2 second point
 /// @return distance between the points
 function distance(x1,y1,x2,y2)
@@ -1487,13 +1492,13 @@ function distance(x1,y1,x2,y2)
 /// This version is just a tad faster
 /// @param x1,x2 first point
 /// @param x2,y2 second point
-/// @return distance between the points
+/// @return squared distance between the points
 function distance2(x1,y1,x2,y2)
 {
 	return (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1);
 }
 
-/// Distance between a point  and a line segment
+/// Distance between a point and a line segment
 /// @param ex1,ey1 first end of line segment
 /// @param ex2,ey2 second end of line segment
 /// @param x,y point coordinates
@@ -1555,7 +1560,7 @@ function angle(x1,y1,x2,y2)
 }
 
 /// Returns a difference between angles
-/// @param a,b, angles
+/// @param a,b angles
 /// @return angle difference, in -180 to 180 range
 function anglediff(a,b)
 {
@@ -1569,7 +1574,7 @@ function anglediff(a,b)
 /// Clamps a value
 /// Min doesn't really have to be smaller than max
 /// @param value value to be clamped
-/// @param min,max values to clam between
+/// @param min,max values to clamp between
 /// @return clamped value
 function clamp(value,min,max)
 {
@@ -1587,20 +1592,20 @@ function clamp(value,min,max)
 
 /// Scales a value from one range to another
 /// @param value value to be scaled
-/// @param min,max bounds to scale from
+/// @param min1,max1 bounds to scale from
 /// @param min2,max2 bounds to scale to
 /// @return scaled value
-function scale(value,min,max,min2,max2)
+function scale(value,min1,max1,min2,max2)
 {
 	return min2 + ((value - min) / (max - min)) * (max2 - min2);
 }
 
 /// Scales value from one range to another and clamps it down
 /// @param value value to be scaled
-/// @param min,max bounds to scale from
+/// @param min1,max1 bounds to scale from
 /// @param min2,max2 bounds to scale and clamp to
 /// @return scaled and clamped value
-function scaleclamp(value,min,max,min2,max2)
+function scaleclamp(value,min1,max1,min2,max2)
 {
 	value = min2 + ((value - min) / (max - min)) * (max2 - min2);
 	if (max2 > min2)
