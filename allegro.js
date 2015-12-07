@@ -209,6 +209,150 @@ function _mousewheel(e)
 	e.preventDefault();
 }
 
+
+//@}
+////////////////////////////////////////////
+/// @name TOUCH ROUTINES
+//@{
+
+/// Touch object, This is not a function.
+/// This is not a function, it's the structure of touch object found in touch[] array and inside touch_pressed touch_released. You can retain the touch obect picked up from touch_pressed in your code, but remember to let go of the dead ones.
+/// @param x,y current touch position
+/// @param mx,my delta position (amount of pixels moved)
+/// @param px,py previous touch position
+/// @param sx,sy starting touch position
+/// @param id touch id
+/// @param age how many loops is the touch in
+/// @param dead true when touch is released
+function TOUCH_OBJECT(x,y,mx,my,px,py,sx,sy,id,age,dead) {}
+
+/// is touch installed
+var _touch_installed = false;
+
+/// Array of TOUCH_OBJECTS holding the currently held touches
+var touch = [];
+
+/// Array of TOUCH_OBJECTS holding the just started touches
+var touch_pressed = [];
+
+/// Array of TOUCH_OBJECTS holding the just finished touches
+var touch_released = [];
+
+
+/// Installs touch support
+/// Installs handlers for touch events. After calling this, touch* arrays will get populated with multitouch data maximum touch points depend on the device. Four is usually a safe option.
+function install_touch()
+{
+	if (!canvas)
+	{
+		_error("You must call set_gfx_mode before install_touch");
+		return -1;
+	}
+	if (_touch_installed)
+	{
+		_allog("Touch already installed");
+		return -1;
+	}
+  canvas.canvas.addEventListener("touchstart", _touchstart);
+  canvas.canvas.addEventListener("touchend", _touchend);
+  canvas.canvas.addEventListener("touchcancel", _touchend);
+  canvas.canvas.addEventListener("touchmove", _touchmove);
+	_touch_installed = true;
+	log("Touch installed!");
+}
+
+/// Removes touch support
+/// Uninstalls handlers for touch events.
+function remove_touch()
+{
+	if (!canvas)
+	{
+		_error("You must call set_gfx_mode before install_touch");
+		return -1;
+	}
+	if (!_touch_installed)
+	{
+		_allog("Touch not installed");
+		return -1;
+	}
+	canvas.canvas.removeEventListener("touchstart", _touchstart);
+  canvas.canvas.removeEventListener("touchend", _touchend);
+  canvas.canvas.removeEventListener("touchcancel", _touchend);
+  canvas.canvas.removeEventListener("touchmove", _touchmove);
+	_touch_installed = false;
+	log("Touch removed!");
+}
+
+function _get_touch(id)
+{
+	for(var c=0;c<touch.length;c++)
+	{
+		if (touch[c].id==id) return touch[c];
+	}
+	return null;
+}
+
+function _touchstart(e)
+{
+	var rect = e.target.getBoundingClientRect();
+	for (var c=0;c<e.changedTouches.length;c++)
+	{
+		var point = e.changedTouches.item(c);
+		var t = {
+			sx:point.clientX-rect.left,
+			sx:point.clientY-rect.top,
+			mx:0,
+			my:0,
+			px:point.clientX-rect.left,
+			py:point.clientY-rect.top,
+			x:point.clientX-rect.left,
+			y:point.clientY-rect.top,
+			id:point.identifier ,
+			dead:false,
+			age:0
+		};
+		touch.push(t);
+		touch_pressed.push(t);
+	}
+	e.preventDefault();
+}
+
+function _touchend(e)
+{
+	for (var c=0;c<e.changedTouches.length;c++)
+	{
+		var point = e.changedTouches.item(c);
+		var t = _get_touch(point.identifier );
+		if (t)
+		{
+			touch.splice(touch.indexOf(t),1);
+			touch_released.push(t);
+			t.dead=true;
+		}
+	}
+	e.preventDefault();
+}
+
+function _touchmove(e)
+{
+	var rect = e.target.getBoundingClientRect();
+	for (var c=0;c<e.changedTouches.length;c++)
+	{
+		var point = e.changedTouches.item(c);
+		var t = _get_touch(point.identifier );
+		if (t)
+		{
+			var x = point.clientX-rect.left;
+			var y = point.clientY-rect.top;
+			t.mx+=t.x-x;
+			t.my+=t.y-y;
+			t.x=x;
+			t.y=y;
+		}
+	}
+	e.preventDefault();
+}
+
 //@}
 ////////////////////////////////////////////
 /// @name TIMER ROUTINES
@@ -318,6 +462,19 @@ function _uberloop()
 		_last_mouse_x = mouse_x;
 		_last_mouse_y = mouse_y;
 		_last_mouse_z = mouse_z;
+	}
+	if (_touch_installed)
+	{
+		touch_released = [];
+		touch_pressed = [];
+		for(var c=0;c<touch.length;c++)
+		{
+			touch[c].mx=0;
+			touch[c].my=0;
+			touch[c].px=touch[c].x;
+			touch[c].py=touch[c].y;
+			touch[c].age++;
+		}
 	}
 }
 
@@ -527,9 +684,6 @@ function _keyup(e)
 // SENSOR ROUTINES
 
 ////////////////////////////////////////////
-// TOUCH ROUTINES
-
-////////////////////////////////////////////
 /// @name BITMAP OBJECTS
 //@{
 
@@ -590,6 +744,49 @@ function load_bmp(filename)
 	return load_bitmap(filename);
 }
 
+/// Loads sprite sheet
+/// Loads image file containing animation frames, slices it up and returns array of frame bitmaps.
+/// @param filename URL of image
+/// @param w,h frame dimensions
+/// @return bitmap object, or -1 on error
+function load_sheet(filename,w,h)
+{
+	log("Loading spritesheet " + filename + "...");
+	var img = new Image();
+	img.src = filename;
+	var now = time();
+	var cv = document.createElement('canvas');
+	var ctx = cv.getContext("2d");
+	var bmp = {canvas:cv,context:ctx,w:-1,h:-1,ready:false,type:"bmp"};
+	var sheet = [];
+	_downloadables.push(bmp);
+	img.onload = function(){
+		log("Sheet " + filename + " loaded, size: " + img.width + " x " + img.height + "!");
+		
+		bmp.canvas.width = img.width;
+		bmp.canvas.height = img.height;
+		bmp.context.drawImage(img,0,0);
+		bmp.w = img.width;
+		bmp.h = img.height;
+		bmp.ready=true;
+		var nx=Math.floor(bmp.w/w),ny=Math.floor(bmp.h/h);
+		
+		for(var y=0;y<ny;y++)
+		{
+			for (var x=0;x<nx;x++)
+			{
+				var frame = create_bitmap(w,h);
+				blit(bmp,frame,x*w,y*h,0,0,w,h);
+				sheet.push(frame);
+			}
+		}
+		log("Created " + frame.length + " frames, each is " + w + "x" + h + "!");
+	};
+	return sheet;
+}
+
+
+
 //@}
 ////////////////////////////////////////////
 /// @name GRAPHICS MODES
@@ -613,26 +810,40 @@ var font;
 /// Enables graphics.
 /// This function should be before calling any other graphics routines. It selects the canvas element for rendering and sets the resolution. It also loads the default font.
 /// @param canvas_id id attribute of canvas to be used for drawing.
-/// @param width canvas width in pixels
-/// @param height canvas height in pixels
+/// @param width canvas width in pixels, 0 for don't care (will use actual canvas size)
+/// @param height canvas height in pixels, 0 for don't care (will use actual canvas size)
+/// @param smooth disable/enable pixel smoothing, deaults to true
 /// @return 0 on success or -1 on error
-function set_gfx_mode(canvas_id,width,height)
+function set_gfx_mode(canvas_id,width,height,smooth)
 {
+	smooth = typeof smooth !== 'undefined' ?  smooth : true;
 	var cv = document.getElementById(canvas_id);
 	if (!cv)
 	{
 		_error("Can't find canvas with id " + canvas_id);
 		return -1;
 	}
+	
+	var rect = cv.getBoundingClientRect();
+	if (!width) width=rect.width;
+	if (!height) height=rect.height;
+	
 	cv.width = width;
 	cv.height = height;
+	
 	var ctx = cv.getContext("2d");
+	
+	// turn off image aliasing
+	ctx.mozImageSmoothingEnabled = smooth;
+	ctx.webkitImageSmoothingEnabled = smooth;
+	ctx.imageSmoothingEnabled = smooth;
+	
 	SCREEN_W = width;
 	SCREEN_H = height;
 	canvas = {w:width,h:height,canvas:cv,context:ctx,ready:true};
 	font = load_base64_font(_cartoon_woff);
 	_gfx_installed = true;
-	
+	log("Graphics mode set to " + width + " x " + height);
 	return 0;
 }
 
@@ -1632,12 +1843,20 @@ function _error(string)
 	alert(string);
 }
 
+function _onerror(e) 
+{
+	var fa = e.filename.split("/");
+	fa.reverse();
+  log("["+ fa[0]+":"+e.lineno+":"+e.colno+"] " + e.message);
+};
+
 /// Enables debugging to a console.
 /// 'console' can be any html element that can accept text, preferably a <div>
 /// @param id id of the element to be the console
 function enable_debug(id)
 {
 	_debug_element = document.getElementById(id);
+	window.addEventListener("error",_onerror);
 	if (_debug_element) _debug_enabled = true;
 }
 
