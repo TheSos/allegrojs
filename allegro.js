@@ -1025,7 +1025,6 @@ function clear_bitmap(bitmap)
 /// @param colour colour in 0xAARRGGBB format
 function clear_to_color(bitmap,colour)
 {
-	bitmap.context.clearRect(0,0,bitmap.w, bitmap.h);
 	_fillstyle(bitmap,colour);
 	bitmap.context.fillRect(0,0,bitmap.w,bitmap.h);
 }
