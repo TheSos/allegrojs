@@ -1245,6 +1245,43 @@ function arcfill(bitmap,x,y,ang1,ang2,r,colour)
 	bitmap.context.fill();
 }
 
+/// Draws an ellipse.
+/// Draws an ellipse at specified centre point and radius. The ellipse is not filled
+/// @param bitmap to be drawn to
+/// @param x,y centre point coordinates
+/// @param rx,ry ellipse radius in x and y
+/// @param colour colour in 0xAARRGGBB format
+/// @param width line width
+function ellipse(bitmap,x,y,rx,ry,colour,width)
+{
+	_strokestyle(bitmap,colour,width);
+	bitmap.context.save();
+	bitmap.context.translate(x,y);
+	bitmap.context.scale(rx,ry);
+	bitmap.context.beginPath();
+	bitmap.context.arc(0,0,1,0,PI2);
+	bitmap.context.restore();
+	bitmap.context.stroke();
+}
+
+/// Draws an ellipse.
+/// Draws an ellipse at specified centre point and radius. The ellipse is filled
+/// @param bitmap to be drawn to
+/// @param x,y centre point coordinates
+/// @param rx,ry ellipse radius in x and y
+/// @param colour colour in 0xAARRGGBB format
+function ellipsefill(bitmap,x,y,rx,ry,colour)
+{
+	_fillstyle(bitmap,colour);
+	bitmap.context.save();
+	bitmap.context.translate(x,y);
+	bitmap.context.scale(rx,ry);
+	bitmap.context.beginPath();
+	bitmap.context.arc(0,0,1,0,PI2);
+	bitmap.context.restore();
+	bitmap.context.fill();
+}
+
 //@}
 ////////////////////////////////////////////
 /// @name BLITTING AND SPRITES
