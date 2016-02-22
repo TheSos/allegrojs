@@ -1682,7 +1682,7 @@ function abs(a) {return (a<0)?(-a):(a);}
 /// @return length of the vector
 function length(x,y)
 {
-	return Math.sqrt(x*x-y*y);
+	return Math.sqrt(x*x+y*y);
 }
 
 /// Calculates distance between two points
