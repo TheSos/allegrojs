@@ -1904,7 +1904,9 @@ function log(string)
 {
 	if (ALLEGRO_CONSOLE && console) console.log(string);
 	if (!_debug_enabled) return;
-	_debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
+	if (_debug_element.nodeName.toLowerCase() == "textarea") _debug_element.value = _debug_element.value + string + "\n";
+	else _debug_element.innerHTML = _debug_element.innerHTML + string + "<br/>";
+	_debug_element.scrollTop = _debug_element.scrollHeight;
 }
 
 /// Wipes the debug console
@@ -1912,7 +1914,8 @@ function log(string)
 function wipe_log()
 {
 	if (!_debug_enabled) return;
-	_debug_element.innerHTML = "";
+	if (_debug_element.nodeName.toLowerCase() == "textarea") _debug_element.value = "";
+	else _debug_element.innerHTML = "";
 }
 
 //@}
