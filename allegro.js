@@ -1316,6 +1316,36 @@ function scaled_sprite(bmp,sprite,x,y,sx,sy)
 	bmp.context.restore(); 
 }
 
+
+/// Draws a sprite flipped horizontally
+/// @param bmp target bitmap
+/// @param sprite sprite bitmap
+/// @param x,y coordinates of the top left corder of the image
+function draw_sprite_h_flip(bmp,sprite,x,y)
+{
+	bmp.context.save();
+	bmp.context.translate(x+sprite.canvas.width,y);
+	bmp.context.scale(-1, 1);
+	bmp.context.drawImage(sprite.canvas,0,0);
+	bmp.context.restore();
+	
+}
+
+/// Draws a sprite flipped vertically
+/// @param bmp target bitmap
+/// @param sprite sprite bitmap
+/// @param x,y coordinates of the top left corder of the image
+function draw_sprite_v_flip(bmp,sprite,x,y)
+{
+	bmp.context.save();
+	bmp.context.translate(x,y+sprite.canvas.height);
+	bmp.context.scale(1, -1);
+	bmp.context.drawImage(sprite.canvas,0,0);
+	bmp.context.restore();
+	
+}
+
+
 /// Draws a rotated sprite
 /// Draws a sprite rotating it around its centre point. The sprite will be centred and rotated around its centre.
 /// @param bmp target bitmap
