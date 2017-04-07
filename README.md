@@ -64,7 +64,7 @@ First up, read all of this README! Then, there are several placed you can go to 
 
 ### What can allegro.js do?
 
-* It load and draw images, using `load_bitmap()`, `draw_sprite()`, `stretch_sprite()`, `rotate_sprite()`, `pivot_sprite()`, `rotate_scaled_sprite()`, `pivot_scaled_sprite()`, `blit()`, `stretch_blit()`
+* It can load and draw images, using `load_bitmap()`, `draw_sprite()`, `stretch_sprite()`, `rotate_sprite()`, `pivot_sprite()`, `rotate_scaled_sprite()`, `pivot_scaled_sprite()`, `blit()`, `stretch_blit()`
 * It can load and play sounds, using `load_sample()` and `play_sample()`
 * it can draw primitives, using `getpixel(), putpixel(), rect(), rectfill(), line(), vline(), hline(), triangle(), trianglefill(), polygon(), polygonfill()`
 * It can load fonts and display text, using `load_font(), textout(), textout_centre(), textout_right()`
