@@ -519,7 +519,7 @@ function _progress_check()
 		} 
 		if (_downloadables[c].ready) num_loaded++;
 	}
-	if (_bar_proc) _bar_proc(num_assets/num_loaded);
+	if (_bar_proc) _bar_proc(num_loaded/num_assets);
 	if (num_loaded<num_assets)
 	{
 		window.setTimeout(_progress_check,100);
