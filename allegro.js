@@ -300,7 +300,7 @@ function _touchstart(e)
 		var point = e.changedTouches.item(c);
 		var t = {
 			sx:point.clientX-rect.left,
-			sx:point.clientY-rect.top,
+			sy:point.clientY-rect.top,
 			mx:0,
 			my:0,
 			px:point.clientX-rect.left,
