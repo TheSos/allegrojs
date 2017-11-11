@@ -68,6 +68,10 @@ font-size:150%;
 font-family:sans-serif;
 }
 
+.memtitle {
+display: none;
+}
+
 .memitem {
 width:800px;
 border: 1px solid #888;
