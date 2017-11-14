@@ -446,7 +446,7 @@ function _uberloop()
 		mouse_my = mouse_y - _last_mouse_y;
 		mouse_mz = mouse_z - _last_mouse_z;
 	}
-	var delta = time() - _lasttime;
+	var delta = performance.now() - _lasttime;
 	_lasttime += delta;
 	_loopproc(delta);
 	if (_keyboard_installed)
@@ -489,7 +489,7 @@ function _uberloop()
 /// @param speed speed in the same format as install_int_ex()
 function loop(procedure,speed)
 {
-	_lasttime = time();
+	_lasttime = performance.now();
 	_loopproc = procedure;
 	var timer_id = window.setInterval(_uberloop,speed);
 	log("Game loop initialised!");
