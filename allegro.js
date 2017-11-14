@@ -483,15 +483,28 @@ function _uberloop()
 	}
 }
 
+function _frame()
+{
+	_uberloop();
+	window.requestAnimationFrame(_frame);
+}
+
 /// Game loop interrupt
 /// Loop is the same as interrupt, except, it cannot be stopped once it's started. It's meant for game loop. remove_int() and remove_all_ints() have no effect on this. Since JS can't have blocking (continuously executing) code and realise on events and timers, you cannot have your game loop inside a while or for argument. Instead, you should use this to create your game loop to be called at given interval. There should only be one loop() function! Note that mouse mickeys (mouse_mx, etc.), and pressed indicators (pressed[] and mouse_pressed) will only work inside loop()
 /// @param procedure function to be looped, preferably inline, but let's not talk coding styles here. Takes optional "delta" parameter with time (ms) that passed since the last invocation.
-/// @param speed speed in the same format as install_int_ex()
+/// @param speed speed in the same format as install_int_ex(), or 0 to synchronize with refresh rate
 function loop(procedure,speed)
 {
 	_lasttime = performance.now();
 	_loopproc = procedure;
-	var timer_id = window.setInterval(_uberloop,speed);
+	if (speed)
+	{
+		var timer_id = window.setInterval(_uberloop,speed);
+	}
+	else
+	{
+		window.requestAnimationFrame(_frame);
+	}
 	log("Game loop initialised!");
 	//_installed_timers.push({timer:procedure,id:timer_id});
 }
