@@ -1641,7 +1641,7 @@ function destroy_sample(filename)
 function play_sample(sample,vol,freq,loop)
 {
 	vol = typeof vol !== 'undefined' ?  vol : 1.0;
-	freq = typeof freq !== 'undefined' ?  vol : 1.0;
+	freq = typeof freq !== 'undefined' ?  freq : 1.0;
 	loop = typeof loop !== 'undefined' ?  loop : false;
 	adjust_sample(sample,vol,freq,loop)
 	sample.element.currentTime = 0;
