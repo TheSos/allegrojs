@@ -300,7 +300,7 @@ function _touchstart(e)
 		var point = e.changedTouches.item(c);
 		var t = {
 			sx:point.clientX-rect.left,
-			sx:point.clientY-rect.top,
+			sy:point.clientY-rect.top,
 			mx:0,
 			my:0,
 			px:point.clientX-rect.left,
@@ -457,7 +457,7 @@ function _uberloop()
 		mouse_pressed = 0;
 		mouse_released = 0;
 		mouse_mx = 0;
-		mosue_my = 0;
+		mouse_my = 0;
 		mouse_mz = 0;
 		_last_mouse_x = mouse_x;
 		_last_mouse_y = mouse_y;
@@ -555,7 +555,7 @@ function remove_int(procedure)
 {
 	for(var c=0;c<_installed_timers.length;c++)
 	{
-		if (_installed_timers[c].timer == _installed_timers)
+		if (_installed_timers[c].timer == procedure)
 		{
 			log("Removing interrupt " + _installed_timers[c].id + "!");
 			window.clearInterval(_installed_timers[c].id);
@@ -780,7 +780,7 @@ function load_sheet(filename,w,h)
 				sheet.push(frame);
 			}
 		}
-		log("Created " + frame.length + " frames, each is " + w + "x" + h + "!");
+		log("Created " + sheet.length + " frames, each is " + w + "x" + h + "!");
 	};
 	return sheet;
 }
