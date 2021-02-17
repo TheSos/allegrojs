@@ -2,3 +2,4 @@ examples/
 build/
 api/
 webpack.*
+emscripten/

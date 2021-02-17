@@ -1,14 +1,15 @@
-////////////////////////////////////////////
-/// @name BITMAP | undefined OBJECTS
-//@{
-
 import { _downloadables } from "./core.js";
 import { log } from "./debug.js";
 import { BITMAP, PACKFILE, RGB } from "./types.js";
 
-/// 1.10.1
-/// Screen bitmap
-/// This is the bitmap object representing the main drawing canvas. Drawing anything on the screen bitmap displays it.
+/**
+ * Global screen poiner
+ *
+ * @remarks
+ * Stores the canvas bitmap object for drawing to screen
+ *
+ * ALLEGRO 4.2 `1.10.1`
+ */
 export const screen: BITMAP = {
   w: 0,
   h: 0,
@@ -18,11 +19,18 @@ export const screen: BITMAP = {
   type: "bmp",
 };
 
-/// 1.10.4 Creates empty bitmap.
-/// Creates a bitmap object of given dimensions and returns it.
-/// @param width bitmap width
-/// @param height bitmap height
-/// @return bitmap object
+/**
+ * Creates empty bitmap
+ *
+ * @remarks
+ * Creates a bitmap object of given dimensions and returns it.
+ *
+ * @param width - - bitmap width
+ * @param height - - bitmap height
+ * @returns bitmap object
+ *
+ * ALLEGRO 4.2 `1.10.4`
+ */
 export function create_bitmap(width: number, height: number): BITMAP {
   log("Creating bitmap at " + width + " x " + height + "!");
   const cv = document.createElement("canvas");
@@ -44,11 +52,19 @@ export function create_bitmap(width: number, height: number): BITMAP {
   };
 }
 
-/// 1.10.5 Creates empty bitmap.
-/// Creates a bitmap object of given dimensions and returns it.
-/// @param width bitmap width
-/// @param height bitmap height
-/// @return bitmap object
+/**
+ * Creates empty bitmap
+ *
+ * @remarks
+ * Creates a bitmap object of given dimensions and color depth and returns it.
+ * Note: We only support 32 bit color depth, color_depth does nothing
+ *
+ * @param width - bitmap width
+ * @param height - bitmap height
+ * @returns bitmap object
+ *
+ * ALLEGRO 4.2 `1.10.5`
+ */
 export function create_bitmap_ex(
   color_depth: number,
   width: number,
@@ -58,7 +74,23 @@ export function create_bitmap_ex(
   return create_bitmap(width, height);
 }
 
-/// 1.10.6
+/**
+ * Creates a sub bitmap
+ *
+ * @remarks
+ * Creates a sub bitmap object from an existing bitmap.
+ *
+ * @param parent - BITMAP object to create sub bitmap from
+ * @param x - leftmost bound to create bitmap from
+ * @param y - topmost bound to create bitmap from
+ * @param width - bitmap width
+ * @param height - bitmap height
+ * @returns bitmap object
+ *
+ * ALLEGRO 4.2 `1.10.6`
+ *
+ * @alpha
+ */
 export function create_sub_bitmap(
   parent: BITMAP | undefined,
   x: number,
@@ -72,39 +104,114 @@ export function create_sub_bitmap(
   return create_bitmap(width, height);
 }
 
-/// 1.10.7
+/**
+ * Creates empty video bitmap
+ *
+ * @remarks
+ * Creates a bitmap object of given dimensions and returns it.
+ * Since all bitmaps are video bitmaps, this just maps to create_bitmap
+ *
+ * @param width - bitmap width
+ * @param height - bitmap height
+ * @returns bitmap object
+ *
+ * ALLEGRO 4.2 `1.10.7`
+ */
 export function create_video_bitmap(width: number, height: number): BITMAP {
   return create_bitmap(width, height);
 }
 
-/// 1.10.8
+/**
+ * Creates empty system bitmap
+ *
+ * @remarks
+ * Creates a bitmap object of given dimensions and returns it.
+ * This just maps to create_bitmap since.
+ *
+ * @param width - bitmap width
+ * @param height - bitmap height
+ * @returns bitmap object
+ *
+ * ALLEGRO 4.2 `1.10.8`
+ */
 export function create_system_bitmap(width: number, height: number): BITMAP {
   return create_bitmap(width, height);
 }
 
-/// 1.10.9
-export function destroy_bitmap(bitmap: BITMAP | undefined) {
+/**
+ * Destroys a bitmap
+ *
+ * @remarks
+ * Since JS has a garbage collector this currently does nothing.
+ * Probably should delete bitmap.
+ *
+ * @param bitmap - BITMAP to delete
+ *
+ * ALLEGRO 4.2 `1.10.9`
+ */
+export function destroy_bitmap(bitmap: BITMAP | undefined): void {
   void bitmap;
 }
 
-/// 1.10.10
+/**
+ * Lock a bitmap
+ *
+ * @remarks
+ * This is a NOOP since locking bitmaps is not neccisary
+ *
+ * @param bitmap - BITMAP to lock
+ *
+ * ALLEGRO 4.2 `1.10.10`
+ */
 export function lock_bitmap(bitmap: BITMAP | undefined) {
   void bitmap;
 }
 
-/// 1.10.11
+/**
+ * Get bitmap color depth
+ *
+ * @remarks
+ * This just returns 32 since we only support 32 bit color depth
+ *
+ * @param bitmap - BITMAP to check color depth of
+ *
+ * ALLEGRO 4.2 `1.10.11`
+ */
 export function bitmap_color_depth(bmp: BITMAP | undefined) {
   void bmp;
   return 32;
 }
 
-/// 1.10.12
+/**
+ * Get bitmap mask depth
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to check mask color of
+ *
+ * ALLEGRO 4.2 `1.10.12`
+ *
+ * @alpha
+ */
 export function bitmap_mask_color(bmp: BITMAP | undefined) {
   void bmp;
   return 0;
 }
 
-/// 1.10.13
+/**
+ * Checks if bitmaps are the same
+ *
+ * @remarks
+ * Simply returns bitmap equality. Should also find out if they are sub bitmaps...
+ *
+ * @param bmp1 - first BITMAP
+ * @param bmp2 - second BITMAP
+ *
+ * ALLEGRO 4.2 `1.10.13`
+ *
+ * @alpha
+ */
 export function is_same_bitmap(
   bmp1: BITMAP | undefined,
   bmp2: BITMAP | undefined
@@ -112,69 +219,192 @@ export function is_same_bitmap(
   return bmp1 === bmp2;
 }
 
-/// 1.10.14
+/**
+ * Check if bitmap is planar
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check planar-ness
+ *
+ * ALLEGRO 4.2 `1.10.14`
+ *
+ * @alpha
+ */
 export function is_planar_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.15
+/**
+ * Check if bitmap is linear
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check linear-ness
+ *
+ * ALLEGRO 4.2 `1.10.15`
+ *
+ * @alpha
+ */
 export function is_linear_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.16
+/**
+ * Check if bitmap is memory bitmap
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check if memory
+ *
+ * ALLEGRO 4.2 `1.10.16`
+ *
+ * @alpha
+ */
 export function is_memory_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.17
+/**
+ * Check if bitmap is screen bitmap
+ *
+ * @remarks
+ * Simply compares bitmap with global screen bitmap. Does not check if it is a sub bitmap.
+ *
+ * @param bmp - BITMAP to check if screen
+ *
+ * ALLEGRO 4.2 `1.10.17`
+ *
+ * @alpha
+ */
 export function is_screen_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return false;
+  return bmp === screen;
 }
 
-/// 1.10.18
+/**
+ * Check if bitmap is video bitmap
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check if video bitmap
+ *
+ * ALLEGRO 4.2 `1.10.18`
+ *
+ * @alpha
+ */
 export function is_video_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.19
+/**
+ * Check if bitmap is system bitmap
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check if system bitmap
+ *
+ * ALLEGRO 4.2 `1.10.19`
+ *
+ * @alpha
+ */
 export function is_system_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.20
+/**
+ * Check if bitmap is sub bitmap
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - BITMAP to check if sub bitmap
+ *
+ * ALLEGRO 4.2 `1.10.20`
+ *
+ * @alpha
+ */
 export function is_sub_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return false;
 }
 
-/// 1.10.21 Its a noop
+/**
+ * Acquire video bitmap
+ *
+ * @remarks
+ * NOOP since this is not needed in browser
+ *
+ * @param bmp - BITMAP to acquire
+ *
+ * ALLEGRO 4.2 `1.10.21`
+ *
+ */
 export function acquire_bitmap(bmp: BITMAP | undefined) {
   void bmp;
 }
 
-/// 1.10.22 Its a noop
+/**
+ * Release video bitmap
+ *
+ * @remarks
+ * NOOP since this is not needed in browser
+ *
+ * @param bmp - BITMAP to release
+ *
+ * ALLEGRO 4.2 `1.10.22`
+ *
+ */
 export function release_bitmap(bmp: BITMAP | undefined) {
   void bmp;
 }
 
-/// 1.10.23
+/**
+ * Acquire screen
+ *
+ * @remarks
+ * Calls acquire_bitmap on global screen object
+ *
+ * ALLEGRO 4.2 `1.10.23`
+ */
 export function acquire_screen() {
   acquire_bitmap(screen);
 }
 
-/// 1.10.24
+/**
+ * Release screen
+ *
+ * @remarks
+ * Calls release_bitmap on global screen object
+ *
+ * ALLEGRO 4.2 `1.10.24`
+ */
 export function release_screen() {
   release_bitmap(screen);
 }
 
-/// 1.10.25
+/**
+ * Set clip rect
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to set clip on
+ * @param x1 - left bound
+ * @param y1 - top bound
+ * @param x2 - right bound
+ * @param y2 - bottom bound
+ *
+ * ALLEGRO 4.2 `1.10.25`
+ */
 export function set_clip_rect(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -189,7 +419,20 @@ export function set_clip_rect(
   void y2;
 }
 
-/// 1.10.26
+/**
+ * Get clip rect
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to get clipping
+ * @param x1 - left bound
+ * @param y1 - top bound
+ * @param x2 - right bound
+ * @param y2 - bottom bound
+ *
+ * ALLEGRO 4.2 `1.10.26`
+ */
 export function get_clip_rect(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -204,7 +447,20 @@ export function get_clip_rect(
   void y2;
 }
 
-/// 1.10.27
+/**
+ * Add clip rect
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to add clipping
+ * @param x1 - left bound
+ * @param y1 - top bound
+ * @param x2 - right bound
+ * @param y2 - bottom bound
+ *
+ * ALLEGRO 4.2 `1.10.27`
+ */
 export function add_clip_rect(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -219,10 +475,36 @@ export function add_clip_rect(
   void y2;
 }
 
-/// 1.10.28
+/**
+ * Set clip state
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to modify clip state
+ * @param state - clip state
+ *
+ * ALLEGRO 4.2 `1.10.28`
+ */
 export function set_clip_state(bitmap: BITMAP | undefined, state: number) {
   void bitmap;
   void state;
+}
+
+/**
+ * Get clip state
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - BITMAP to check clip state of
+ * @returns clip state of bitmap
+ *
+ * ALLEGRO 4.2 `1.10.29`
+ */
+export function get_clip_state(bitmap: BITMAP | undefined) {
+  void bitmap;
+  return 0;
 }
 
 /// 1.10.30
@@ -241,7 +523,7 @@ export function is_inside_bitmap(
 
 /// 1.11.1 Loads bitmap from file
 /// Loads image from file asynchronously. This means that the execution won't stall for the image, and it's data won't be accessible right off the start. You can check for bitmap object's 'ready' member to see if it has loaded, but you probably should avoid stalling execution for that, as JS doesn't really like that.
-/// @param filename URL of image
+/// @param filename - URL of image
 /// @return bitmap object, or -1 on error
 export function load_bitmap(filename: string, pal?: RGB): BITMAP {
   void pal;

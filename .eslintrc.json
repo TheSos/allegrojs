@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
   "extends": [
     "eslint:all",
     "plugin:@typescript-eslint/all",
@@ -52,6 +52,8 @@
     "@typescript-eslint/no-implicit-any-catch": 0,
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/restrict-plus-operands": 0,
-    "@typescript-eslint/no-shadow": 0
+    "@typescript-eslint/no-shadow": 0,
+
+    "tsdoc/syntax": 1
   }
 }

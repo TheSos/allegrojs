@@ -84,8 +84,8 @@ export function destroy_sample(filename: string) {
 /// @param loop loop or not to loop
 export function play_sample(
   sample: SAMPLE,
-  vol = 1.0,
-  freq = 1.0,
+  vol = 255,
+  freq = 1000,
   loop = false
 ) {
   adjust_sample(sample, vol, freq, loop);
@@ -106,9 +106,9 @@ export function adjust_sample(
   loop: boolean
 ) {
   sample.volume = vol;
-  sample.element.volume = sample.volume * _volume;
+  sample.element.volume = sample.volume / 255;
   sample.element.loop = loop;
-  sample.element.playbackRate = freq;
+  sample.element.playbackRate = freq / 1000;
 }
 
 /// Stops playing
