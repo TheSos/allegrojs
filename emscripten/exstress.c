@@ -3,15 +3,17 @@
 
 #include "allegro.h"
 
-
+float frand() {
+  return (float)rand() / ((float)RAND_MAX);
+}
 
 int main(void) {
   int MAX_NUM = 10000;
   int num = 0;
-  int x [MAX_NUM];
-  int y [MAX_NUM];
-  int vx [MAX_NUM];
-  int vy [MAX_NUM];
+  int x[MAX_NUM];
+  int y[MAX_NUM];
+  int vx[MAX_NUM];
+  int vy[MAX_NUM];
   int last_time = 0;
   BITMAP* bmp = NULL;
 
@@ -26,7 +28,7 @@ int main(void) {
 
   allegro_ready();
 
-  while (!key()[KEY_ESC]) {
+  while (!key[KEY_ESC]) {
     clear_to_color(screen, makecol(255, 255, 255));
 
     for (int c = 0; c < num; c++) {
@@ -47,24 +49,16 @@ int main(void) {
       y[c] += vy[c];
     }
 
-    if (num < MAX_NUM){
-      x[num] =rand() % SCREEN_W;
-      y[num] =rand() % SCREEN_H;
-      vx[num] =frand() * 2 - 1;
-      vy[num] =frand() * 2 - 1;
+    if (num < MAX_NUM) {
+      x[num] = rand() % SCREEN_W;
+      y[num] = rand() % SCREEN_H;
+      vx[num] = frand() * 2 - 1;
+      vy[num] = frand() * 2 - 1;
       num++;
     }
     int msec = time(0) - last_time - 1;
-    textprintf_ex(
-      screen,
-      font,
-      20,
-      30,
-      makecol(255, 255, 255),
-      makecol(0, 0, 0),
-      "Sprites: %i",
-      num
-    );
+    textprintf_ex(screen, font, 20, 30, makecol(255, 255, 255),
+                  makecol(0, 0, 0), "Sprites: %i", num);
     last_time = time(0);
     rest(16);
   }

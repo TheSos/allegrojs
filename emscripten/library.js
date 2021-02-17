@@ -557,23 +557,6 @@ var AllegroJS = {
   pause_sample: function (sample) {
     pause_sample(ALLEG.samples[sample]);
   },
-
-  // rand renamed to rand16 because of name clashing in C source
-  rand16: rand,
-  rand32: rand32,
-  frand: frand,
-  distance: distance,
-  distance2: distance2,
-  linedist: linedist,
-  lerp: lerp,
-  dot: dot,
-  sgn: sgn,
-  angle: angle,
-  anglediff: anglediff,
-  clamp: clamp,
-  scale: scale,
-  scaleclamp: scaleclamp,
-
   enable_debug: function (debug_id) {
     enable_debug(UTF8ToString(debug_id));
   },
