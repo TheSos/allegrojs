@@ -13,6 +13,7 @@ import {
   getg,
   getr,
   GFX_AUTODETECT_WINDOWED,
+  init_allegro_ts,
   install_keyboard,
   key,
   KEY_ESC,
@@ -29,7 +30,7 @@ import {
   set_color_depth,
   set_gfx_mode,
   set_window_title,
-} from "../src/allegro.js";
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -146,7 +147,7 @@ function init() {
 
   // Screen
   set_color_depth(32);
-  set_gfx_mode("canvas_id", GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
 
   // Window title
   set_window_title("Koch Curve");
@@ -208,4 +209,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

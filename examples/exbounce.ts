@@ -1,7 +1,7 @@
 import {
   set_gfx_mode,
   load_bmp,
-  ready,
+  allegro_ready,
   screen,
   END_OF_MAIN,
   stretch_blit,
@@ -22,7 +22,8 @@ import {
   key,
   install_keyboard,
   DIGI_AUTODETECT,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 // bitmap oobjects
 let clouds!: BITMAP;
@@ -105,7 +106,7 @@ async function main() {
 
   // put allegro in canvas with id="canvas_id"
   // make the dimesnions 640x480
-  set_gfx_mode("canvas_id", 1, 640, 480, 0, 0);
+  set_gfx_mode(1, 640, 480, 0, 0);
 
   install_sound(DIGI_AUTODETECT, DIGI_AUTODETECT, null);
 
@@ -121,7 +122,7 @@ async function main() {
   bounce = load_sample("data/bounce.mp3");
 
   // make sure everything has loaded
-  await ready();
+  await allegro_ready();
 
   // repeat this game loop
   while (!key[KEY_ESC]) {
@@ -142,4 +143,7 @@ async function main() {
   return 0;
 }
 // make sure that main() gets called as soon as the wesbite has loaded
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

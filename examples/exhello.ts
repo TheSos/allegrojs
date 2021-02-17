@@ -13,7 +13,8 @@ import {
   enable_debug,
   install_keyboard,
   readkey,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -24,7 +25,7 @@ async function main() {
   install_keyboard();
 
   // Selecting canvas element adn setting it up for display at 640x480
-  set_gfx_mode("canvas_id", GFX_AUTODETECT, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
 
   // Clears the screen to white
   clear_to_color(screen, makecol(255, 255, 255));
@@ -44,4 +45,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

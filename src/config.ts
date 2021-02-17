@@ -2,14 +2,9 @@
 /// @name CONFIGURATION ROUTINES
 //@{
 
-import { makecol } from "./color.js";
 import { _uberloop } from "./core.js";
 import { log } from "./debug.js";
-import { textprintf_centre_ex } from "./font.js";
-import { font, SCREEN_H, SCREEN_W } from "./graphics.js";
-import { clear_to_color } from "./primitives.js";
-import { vsprintf } from "./libs/sprintf.js";
-import { screen } from "./bitmap.js";
+import { vsprintf } from "./sprintf.js";
 
 /// 1.1.1 Installs allegro.
 /// This function must be called before anything else.
@@ -39,26 +34,8 @@ export function allegro_exit() {
 }
 
 /// 1.1.4 Macro to be placed after the end of main()
-/// Calls main()
-export function END_OF_MAIN(main: () => Promise<number>) {
-  window.addEventListener("load", () => {
-    void boot(main);
-  });
-}
-
-async function boot(main: () => Promise<number>) {
-  const code = await main();
-  clear_to_color(screen, makecol(100, 100, 100));
-  textprintf_centre_ex(
-    screen,
-    font,
-    SCREEN_W / 2,
-    SCREEN_H / 2,
-    makecol(255, 255, 255),
-    -1,
-    "Program ended with code %i",
-    code
-  );
+export function END_OF_MAIN() {
+  /// Noop
 }
 
 /// 1.1.5

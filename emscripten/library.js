@@ -19,11 +19,7 @@ var AllegroJS = {
     screen: null,
     // C ARRAY POINTERS
     key: null,
-    pressed: null,
-    released: null,
     touch: null,
-    touch_pressed: null,
-    touch_released: null,
 
     // PRIVATE FUNCTIONS
     // Writes `array`(array of integers) to memory at address `buffer`
@@ -43,39 +39,25 @@ var AllegroJS = {
     // Creates C arrays storing key statuses
     post_install_keyboard: function () {
       ALLEG.key = _malloc(4 * key.length);
-      ALLEG.pressed = _malloc(4 * pressed.length);
-      ALLEG.released = _malloc(4 * released.length);
     },
     // Creates C arrays storing touch structures
     post_install_touch: function () {
       // limitation: maximum 32 touch object
       ALLEG.touch = _malloc(4 * 11 * 32);
-      ALLEG.touch_pressed = _malloc(4 * 11 * 32);
-      ALLEG.touch_released = _malloc(4 * 11 * 32);
     },
     // Deletes C arrays storing key statuses
     post_remove_keyboard: function () {
       _free(ALLEG.key);
-      _free(ALLEG.pressed);
-      _free(ALLEG.released);
       ALLEG.key = null;
-      ALLEG.pressed = null;
-      ALLEG.released = null;
     },
     // Deletes C arrays storing touch structures
     post_remove_touch: function () {
       _free(ALLEG.touch);
-      _free(ALLEG.touch_pressed);
-      _free(ALLEG.touch_released);
       ALLEG.touch = null;
-      ALLEG.touch_pressed = null;
-      ALLEG.touch_released = null;
     },
     // Writes JS key arrays to C memory
     copy_key_statuses: function () {
       ALLEG.writeArray32ToMemory(key, ALLEG.key);
-      ALLEG.writeArray32ToMemory(pressed, ALLEG.pressed);
-      ALLEG.writeArray32ToMemory(released, ALLEG.released);
     },
     // Writes JS touch arrays to C memory
     copy_touch_structs: function () {
@@ -95,8 +77,6 @@ var AllegroJS = {
         }
       };
       write_touch_array(touch, ALLEG.touch);
-      write_touch_array(touch_pressed, ALLEG.touch_pressed);
-      write_touch_array(touch_released, ALLEG.touch_released);
     },
     // Creates `screen` and `font` C globals
     post_set_gfx_mode: function () {
@@ -134,12 +114,6 @@ var AllegroJS = {
   mouse_b: function () {
     return mouse_b;
   },
-  mouse_pressed: function () {
-    return mouse_pressed;
-  },
-  mouse_released: function () {
-    return mouse_released;
-  },
   mouse_x: function () {
     return mouse_x;
   },
@@ -162,22 +136,8 @@ var AllegroJS = {
     setValue(len, touch.length, "i32");
     return ALLEG.touch;
   },
-  touch_pressed: function (len) {
-    setValue(len, touch_pressed.length, "i32");
-    return ALLEG.touch_pressed;
-  },
-  touch_released: function (len) {
-    setValue(len, touch_released.length, "i32");
-    return ALLEG.touch_released;
-  },
   key: function () {
     return ALLEG.key;
-  },
-  pressed: function () {
-    return ALLEG.pressed;
-  },
-  released: function () {
-    return ALLEG.released;
   },
   screen: function () {
     return ALLEG.screen;
@@ -198,6 +158,11 @@ var AllegroJS = {
   // FUNCTIONS
   install_allegro: install_allegro,
   allegro_init: allegro_init,
+  init_allegro_ts: function (canvas_id) {
+    var cid_s = UTF8ToString(canvas_id);
+    init_allegro_ts(cid_s);
+    ALLEG.post_set_gfx_mode();
+  },
   install_mouse: install_mouse,
   remove_mouse: remove_mouse,
   show_mouse: show_mouse,
@@ -215,17 +180,17 @@ var AllegroJS = {
   install_timer: install_timer,
   install_int: function (p, msec) {
     var procedure = function () {
-      var stack = Runtime.stackSave();
-      Runtime.dynCall("v", p, null);
-      Runtime.stackRestore(stack);
+      var stack = stackSave();
+      dynCall("v", p, null);
+      stackRestore(stack);
     };
     install_int(procedure, msec);
   },
   install_int_ex: function (p, speed) {
     var procedure = function () {
-      var stack = Runtime.stackSave();
-      Runtime.dynCall("v", p, null);
-      Runtime.stackRestore(stack);
+      var stack = stackSave();
+      dynCall("v", p, null);
+      stackRestore(stack);
     };
     install_int_ex(procedure, speed);
   },
@@ -237,39 +202,25 @@ var AllegroJS = {
       if (_touch_installed) {
         ALLEG.copy_touch_structs();
       }
-      var stack = Runtime.stackSave();
-      Runtime.dynCall("v", p, null);
-      Runtime.stackRestore(stack);
+      var stack = stackSave();
+      dynCall("v", p, null);
+      stackRestore(stack);
     }, speed);
   },
   loading_bar: loading_bar,
-  allegro_ready: function (p, b) {
-    var procedure = function () {
-      // repack bitmaps because they were loaded asynchronously
+  allegro_ready: function () {
+    Asyncify.handleAsync(async () => {
+      await allegro_ready();
       ALLEG.repack_bitmaps();
-      var stack = Runtime.stackSave();
-      Runtime.dynCall("v", p, null);
-      Runtime.stackRestore(stack);
-    };
-    if (b) {
-      var bar = function (f) {
-        var stack = Runtime.stackSave();
-        Runtime.dynCall("vf", b, [allocate([f], "float", ALLOC_STACK)]);
-        Runtime.stackRestore(stack);
-      };
-      allegro_ready(procedure, bar);
-    } else {
-      allegro_ready(procedure, null);
-    }
+    });
   },
   remove_int: function (p) {
     // FIXME: how is this supposed to work!?
   },
-  install_keyboard: function (enable_keys, len) {
+  install_keyboard: function () {
     // We have to reset `key` here because emscripten use the key variable in src/shell.js
     key = [];
-    var enable_key_jsa = ALLEG.ReadArray32FromMemory(enable_keys, len);
-    install_keyboard(enable_key_jsa);
+    install_keyboard();
     ALLEG.post_install_keyboard();
   },
   remove_keyboard: function () {
@@ -294,21 +245,8 @@ var AllegroJS = {
       ALLEG.bitmaps.push(load_bmp(filename_s)) - 1
     );
   },
-  load_sheet: function (filename, w, h, len) {
-    var filename_s = UTF8ToString(filename);
-    var frames = load_sheet(filename_s, w, h);
-    setValue(len, frames.length, "i32");
-    var res = _malloc(4 * frames.length);
-    for (var it = 0; it < frames.length; it++) {
-      var handle = ALLEG.bitmaps.push(frames[it]);
-      setValue(res + 4 * it, ALLEG.alloc_pack_bitmap(handle), "*");
-    }
-    return res;
-  },
-
-  set_gfx_mode: function (canvas_id, card, w, h, v_w, v_h) {
-    var cid_s = UTF8ToString(canvas_id);
-    set_gfx_mode(cid_s, card, w, h, v_w, v_h);
+  set_gfx_mode: function (card, w, h, v_w, v_h) {
+    set_gfx_mode(card, w, h, v_w, v_h);
     ALLEG.post_set_gfx_mode();
   },
 
@@ -548,49 +486,55 @@ var AllegroJS = {
     var family_s = UTF8ToString(family);
     return ALLEG.fonts.push(create_font(family_s)) - 1;
   },
-  textout: function (b, f, s, x, y, size, col, outline, width) {
+  textout_ex: function (bitmap, f, s, x, y, color, bg) {
     var str = UTF8ToString(s);
-    textout(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(b)],
+    textout_ex(
+      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
       ALLEG.fonts[f],
       str,
       x,
       y,
-      size,
-      col,
-      outline,
-      width
+      color,
+      bg
     );
   },
-  textout_centre: function (b, f, s, x, y, size, col, outline, width) {
+  textout_centre_ex: function (bitmap, f, s, x, y, color, bg) {
     var str = UTF8ToString(s);
-    textout_centre(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(b)],
+    textout_centre_ex(
+      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
       ALLEG.fonts[f],
       str,
       x,
       y,
-      size,
-      col,
-      outline,
-      width
+      color,
+      bg
     );
   },
-  textout_right: function (b, f, s, x, y, size, col, outline, width) {
+  textout_right_ex: function (bitmap, f, s, x, y, color, bg) {
     var str = UTF8ToString(s);
-    textout_right(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(b)],
+    textout_right_ex(
+      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
       ALLEG.fonts[f],
       str,
       x,
       y,
-      size,
-      col,
-      outline,
-      width
+      color,
+      bg
     );
   },
-
+  textprintf_ex: function (bitmap, f, x, y, colour, bg, s, ...args) {
+    var str = UTF8ToString(s);
+    textprintf_ex(
+      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.fonts[f],
+      x,
+      y,
+      colour,
+      bg,
+      str,
+      ...args
+    );
+  },
   install_sound: install_sound,
   set_volume: set_volume,
   get_volume: get_volume,
@@ -638,6 +582,11 @@ var AllegroJS = {
     log(UTF8ToString(s));
   },
   wipe_log: wipe_log,
+  rest: function (time) {
+    Asyncify.handleAsync(async () => {
+      await rest(time);
+    });
+  },
 };
 
 autoAddDeps(AllegroJS, "$ALLEG");

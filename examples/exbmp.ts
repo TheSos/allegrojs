@@ -8,10 +8,11 @@ import {
   SCREEN_W,
   END_OF_MAIN,
   enable_debug,
-  ready,
+  allegro_ready,
   readkey,
   install_keyboard,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -22,14 +23,14 @@ async function main() {
   install_keyboard();
 
   // Installs graphics at given canvas in 640x480 resolution
-  set_gfx_mode("canvas_id", 0, 640, 480, 0, 0);
+  set_gfx_mode(0, 640, 480, 0, 0);
 
   // Loads an image into the bitmap object
   const logo = load_bmp("data/allegro.png");
 
   // the following function will get called as soon
   // as the image finishes loading
-  await ready();
+  await allegro_ready();
 
   // renders the loaded image on the screen
   stretch_blit(logo, screen, 0, 0, logo.w, logo.h, 0, 0, SCREEN_W, SCREEN_H);
@@ -38,4 +39,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

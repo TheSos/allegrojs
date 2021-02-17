@@ -1,7 +1,7 @@
 import {
   set_gfx_mode,
   load_bmp,
-  ready,
+  allegro_ready,
   screen,
   END_OF_MAIN,
   SCREEN_W,
@@ -15,7 +15,6 @@ import {
   rand,
   frand,
   textout_ex,
-  MSEC_TO_TIMER,
   font,
   rest,
   KEY_ESC,
@@ -23,7 +22,8 @@ import {
   allegro_init,
   install_keyboard,
   GFX_AUTODETECT,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 let num = 0;
 const x: any[] = [];
@@ -37,10 +37,10 @@ async function main() {
   allegro_init();
   install_keyboard();
   enable_debug("debug");
-  set_gfx_mode("stress", GFX_AUTODETECT, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
   bmp = load_bmp("data/planet.png");
 
-  await ready();
+  await allegro_ready();
 
   while (!key[KEY_ESC]) {
     clear_to_color(screen, makecol(255, 255, 255));
@@ -89,4 +89,7 @@ async function main() {
   }
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("stress", main);

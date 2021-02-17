@@ -41,7 +41,8 @@ import {
   enable_debug,
   readkey,
   keypressed,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -77,9 +78,9 @@ async function main() {
   install_keyboard();
   install_timer();
 
-  if (set_gfx_mode("canvas_id", GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
-    if (set_gfx_mode("canvas_id", GFX_SAFE, 320, 200, 0, 0) != 0) {
-      set_gfx_mode("canvas_id", GFX_TEXT, 0, 0, 0, 0);
+  if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
+    if (set_gfx_mode(GFX_SAFE, 320, 200, 0, 0) != 0) {
+      set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
       allegro_message("Unable to set any graphic mode\n%s\n", allegro_error);
       return 1;
     }
@@ -174,4 +175,7 @@ async function main() {
   return 0;
 }
 
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

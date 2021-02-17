@@ -23,14 +23,14 @@ import {
   GFX_AUTODETECT,
   GFX_SAFE,
   BITMAP,
-  PALETTE,
   allegro_error,
-  ready,
+  allegro_ready,
   enable_debug,
   readkey,
   set_palette,
   RGB,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -43,9 +43,9 @@ async function main() {
 
   install_keyboard();
 
-  if (set_gfx_mode("canvas_id", GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
-    if (set_gfx_mode("canvas_id", GFX_SAFE, 320, 200, 0, 0) != 0) {
-      set_gfx_mode("canvas_id", GFX_TEXT, 0, 0, 0, 0);
+  if (set_gfx_mode(GFX_AUTODETECT, 320, 200, 0, 0) != 0) {
+    if (set_gfx_mode(GFX_SAFE, 320, 200, 0, 0) != 0) {
+      set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
       allegro_message("Unable to set any graphic mode\n%s\n", allegro_error);
       return 1;
     }
@@ -54,12 +54,12 @@ async function main() {
   /* read in the bitmap file */
   the_image = load_bitmap(argv[1] as string, the_palette);
   if (!the_image) {
-    set_gfx_mode("canvas_id", GFX_TEXT, 0, 0, 0, 0);
+    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
     allegro_message("Error reading bitmap file '%s'\n", argv[1] as string);
     return 1;
   }
 
-  await ready();
+  await allegro_ready();
 
   /* select the bitmap palette */
   set_palette(the_palette);
@@ -84,4 +84,7 @@ async function main() {
   return 0;
 }
 
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

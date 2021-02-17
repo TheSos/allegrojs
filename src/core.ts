@@ -1,17 +1,18 @@
 /// @name CORE ROUTINES
 //@{
 
-import { log } from "./debug.js";
-import { SCREEN_H, SCREEN_W } from "./graphics.js";
+import { log, _error } from "./debug.js";
+import { font, SCREEN_H, SCREEN_W } from "./graphics.js";
 import { _keyboard_loop } from "./keyboard.js";
 import { scaleclamp } from "./math.js";
 import { _mouse_loop, _mouse_loop_reset } from "./mouse.js";
-import { clear_bitmap, rectfill } from "./primitives.js";
+import { clear_bitmap, clear_to_color, rectfill } from "./primitives.js";
 import { _touch_loop } from "./touch.js";
 import { makecol } from "./color.js";
 import { BITMAP, CONFIG, SAMPLE, MIDI } from "./types.js";
 import { screen } from "./bitmap.js";
 import { rest } from "./timer.js";
+import { textprintf_centre_ex } from "./font.js";
 
 /// All downloadable objects
 export const _downloadables: (BITMAP | CONFIG | MIDI | SAMPLE)[] = [];
@@ -28,7 +29,7 @@ export function _uberloop() {
 let _loader_init_time = 0;
 
 /// Holds the download complete handler function
-let _bar_proc = loading_bar;
+const _bar_proc = loading_bar;
 
 /// checks if everything has downloaded in intervals
 export async function _progress_check() {
@@ -87,15 +88,61 @@ export function loading_bar(progress: number) {
   );
 }
 
+/// Setup browser specific allegro functions
+export function init_allegro_ts(
+  canvas_id: string,
+  main?: () => Promise<number>
+) {
+  // Get canvas from document
+  const cv = document.getElementById(canvas_id) as
+    | HTMLCanvasElement
+    | undefined;
+  if (!cv) {
+    _error("Can't find canvas with id " + canvas_id);
+    return;
+  }
+
+  // Get context from document
+  const ctx = cv.getContext("2d");
+  if (!ctx) {
+    throw new Error("Context not defined");
+  }
+
+  // Init screen with basic canvas
+  screen.canvas = cv;
+  screen.context = ctx;
+
+  // Boot on load
+  if (main) {
+    window.addEventListener("load", () => {
+      void boot(main);
+    });
+  }
+}
+
+// Start it up
+async function boot(main: () => Promise<number>) {
+  const code = await main();
+  clear_to_color(screen, makecol(100, 100, 100));
+  textprintf_centre_ex(
+    screen,
+    font,
+    SCREEN_W / 2,
+    SCREEN_H / 2,
+    makecol(255, 255, 255),
+    -1,
+    "Program ended with code %i",
+    code
+  );
+}
+
 /// Installs a handler to check if everything has downloaded.
 /// You should always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this hander will only get executed after everything has loaded making sure you can access bitmap properties and data and play samples right away.  Note that load_font() does not affect ready(), so you should always load your fonts first.
 /// @param procedure function to be called when everything has loaded.
 /// @param bar loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
-export async function allegro_ready(bar?: () => void) {
+export async function allegro_ready() {
   _loader_init_time = Date.now();
   log("Loader initialised!");
-  if (bar) _bar_proc = bar;
-  else _bar_proc = loading_bar;
   return _progress_check();
 }
 

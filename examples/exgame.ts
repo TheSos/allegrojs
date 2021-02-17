@@ -1,6 +1,6 @@
 import {
   load_bmp,
-  ready,
+  allegro_ready,
   screen,
   END_OF_MAIN,
   SCREEN_W,
@@ -33,7 +33,8 @@ import {
   KEY_ESC,
   DIGI_AUTODETECT,
   MIDI_AUTODETECT,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 //bitmap objects
 let man!: BITMAP;
@@ -107,7 +108,7 @@ async function main() {
   enable_debug("debug");
 
   allegro_init();
-  set_gfx_mode("canvas_id", GFX_AUTODETECT, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
   install_mouse();
   install_keyboard();
   install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, null);
@@ -117,7 +118,7 @@ async function main() {
   bg = load_bmp("data/grass.jpg");
   munch = load_sample("data/munch.mp3");
 
-  await ready();
+  await allegro_ready();
 
   while (!key[KEY_ESC]) {
     update();
@@ -127,4 +128,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

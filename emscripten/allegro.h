@@ -10,15 +10,16 @@
 extern "C" {
 #endif
 
+typedef void (*procedure)(void);
+
 /* CONFIGURATION ROUTINES */
+extern void init_allegro_ts(const char *canvas_id);
 extern void install_allegro(void);
 extern void allegro_init(void);
 #define END_OF_MAIN()
 
 /* MOUSE ROUTINES */
 extern int mouse_b(void);
-extern int mouse_pressed(void);
-extern int mouse_released(void);
 extern int mouse_x(void);
 extern int mouse_y(void);
 extern int mouse_z(void);
@@ -36,8 +37,6 @@ typedef struct {
 	int x, y, mx, my, px, py, sx, sy, id, age, dead;
 } TOUCH_OBJECT;
 extern TOUCH_OBJECT* touch(int *len);
-extern TOUCH_OBJECT* touch_pressed(int *len);
-extern TOUCH_OBJECT* touch_released(int *len);
 extern void install_touch(void);
 extern void remove_touch(void);
 
@@ -46,7 +45,6 @@ extern void remove_touch(void);
 #define MSEC_TO_TIMER(msec) ( msec )
 #define  BPS_TO_TIMER(bps)  (    1000./(float)bps )
 #define  BPM_TO_TIMER(bpm)  ( 60*1000./(float)bpm )
-typedef void (*procedure)(void);
 typedef void (*bar)(float progress);
 extern void install_timer(void);
 extern long altime(void);
@@ -54,7 +52,7 @@ extern void install_int(procedure p, long msec);
 extern void install_int_ex(procedure p, long speed);
 extern void loop(procedure p, long speed);
 extern void loading_bar(float progress);
-extern void allegro_ready(procedure p, bar b);
+extern void allegro_ready();
 extern void remove_int(procedure p);
 extern void remove_all_ints(void);
 
@@ -79,9 +77,7 @@ const char KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45,
            KEY_ALT = 0x12, KEY_ALTGR = 0x12, KEY_LWIN = 0x5b, KEY_RWIN = 0x5c, KEY_MENU = 0x5d, KEY_SCRLOCK = 0x9d,
            KEY_NUMLOCK = 0x90, KEY_CAPSLOCK = 0x14;
 extern int* key(void);
-extern int* pressed(void);
-extern int* released(void);
-extern int install_keyboard(const int *enable_keys, int enable_keys_len);
+extern int install_keyboard();
 extern int remove_keyboard(void);
 
 /* BITMAP ROUTINES */
@@ -97,7 +93,22 @@ extern BITMAP* load_bmp(const char *filename);
 extern BITMAP* screen(void);
 extern int SCREEN_W(void);
 extern int SCREEN_H(void);
-extern int set_gfx_mode(const char *canvas_id, int card, int w, int h, int v_w, int v_h);
+extern int set_gfx_mode(int card, int w, int h, int v_w, int v_h);
+#define screen screen()
+#define SCREEN_W SCREEN_W()
+#define SCREEN_H SCREEN_H()
+
+#define SWITCH_NONE 0
+#define SWITCH_PAUSE 1
+#define SWITCH_AMNESIA 2
+#define SWITCH_BACKGROUND 3
+#define SWITCH_BACKAMNESIA 4
+
+#define GFX_TEXT -1
+#define GFX_AUTODETECT 0
+#define GFX_AUTODETECT_FULLSCREEN 1
+#define GFX_AUTODETECT_WINDOWED 2
+#define GFX_SAFE 3
 
 /* DRAWING PRIMITIVES */
 #define   PI = 3.14159265
@@ -107,16 +118,11 @@ extern int set_gfx_mode(const char *canvas_id, int card, int w, int h, int v_w, 
 #define PI_4 = 0.7853981625
 #define RAD(d) ( -d*PI/180.0 )
 #define DEG(r) ( -r*180.0/PI )
-extern int makecol(char r, char g, char b, char a);
-extern int makecolf(float r, float g, float b, float a);
+extern int makecol(int r, int g, int b);
 extern char getr(int colour);
 extern char getg(int colour);
 extern char getb(int colour);
 extern char geta(int colour);
-extern float getrf(int colour);
-extern float getgf(int colour);
-extern float getbf(int colour);
-extern float getaf(int colour);
 extern int getpixel(BITMAP *bitmap, int x, int y);
 extern void putpixel(BITMAP *bitmap, int x, int y, int colour);
 extern void clear_bitmap(BITMAP *bitmap);
@@ -152,9 +158,12 @@ extern FONT_OBJECT* font(void);
 extern FONT_OBJECT* load_base64_font(char *data);
 extern FONT_OBJECT* load_font(char *filename);
 extern FONT_OBJECT* create_font(char *family);
-extern void textout(BITMAP *bitmap, FONT_OBJECT *font, const char *string, int x, int y, int size, int colour, int outline, int width);
-extern void textout_centre(BITMAP *bitmap, FONT_OBJECT *font, const char *string, int x, int y, int size, int colour, int outline, int width);
-extern void textout_right(BITMAP *bitmap, FONT_OBJECT *font, const char *string, int x, int y, int size, int colour, int outline, int width);
+extern void textout_ex(BITMAP *bitmap, FONT_OBJECT *f, const char *s, int x, int y, int colour, int bg);
+extern void textout_centre_ex(BITMAP *bitmap, FONT_OBJECT *f, const char *s, int x, int y, int colour, int bg);
+extern void textout_right_ex(BITMAP *bitmap, FONT_OBJECT *f, const char *s, int x, int y, int colour, int bg);
+extern void textprintf_ex(BITMAP *bitmap, FONT_OBJECT *f, int x, int y, int colour, int bg, const char *s, ...);
+
+#define font font()
 
 /* SOUND ROUTINES */
 typedef int SAMPLE_OBJECT;
@@ -191,6 +200,7 @@ extern int ALLEGRO_CONSOLE;
 extern void enable_debug(const char *id);
 extern void logmsg(const char *string);
 extern void wipe_log(void);
+extern void rest(float time);
 
 #ifdef __cplusplus
 }

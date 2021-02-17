@@ -46,13 +46,14 @@ import {
   gfx_capabilities,
   GFX_HW_VRAM_BLIT,
   enable_debug,
-  ready,
+  allegro_ready,
   GFX_AUTODETECT,
   GFX_TEXT,
   allegro_error,
   rest,
   set_palette,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 enable_debug("debug");
 
@@ -104,10 +105,8 @@ async function main() {
   install_timer();
 
   /* see comments in exflip.c */
-  if (
-    set_gfx_mode("canvas_id", GFX_AUTODETECT, 1024, 768, 0, 2 * 768 + 200) != 0
-  ) {
-    set_gfx_mode("", GFX_TEXT, 0, 0, 0, 0);
+  if (set_gfx_mode(GFX_AUTODETECT, 1024, 768, 0, 2 * 768 + 200) != 0) {
+    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
     allegro_message("Error setting graphics mode\n%s\n", allegro_error);
     return 1;
   }
@@ -115,12 +114,12 @@ async function main() {
   /* read in the source graphic */
   image = load_bitmap(buf, pal);
   if (!image) {
-    set_gfx_mode("", GFX_TEXT, 0, 0, 0, 0);
+    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
     allegro_message("Error reading %s!\n", buf);
     return 1;
   }
 
-  await ready();
+  await allegro_ready();
 
   set_palette(pal);
 
@@ -139,7 +138,7 @@ async function main() {
   vimage = create_video_bitmap(image.w, image.h);
 
   if (!page[0] || !page[1] || !vimage) {
-    set_gfx_mode("", GFX_TEXT, 0, 0, 0, 0);
+    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
     allegro_message(
       "Not enough video memory (need two 1024x768 pages and a 320x200 image)\n"
     );
@@ -262,4 +261,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

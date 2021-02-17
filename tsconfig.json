@@ -14,10 +14,9 @@
     "downlevelIteration": true,
     "lib": ["ESNext", "DOM"],
     "outDir": "build",
-    "esModuleInterop": true,
     "incremental": true,
-    "allowJs": true,
-    "removeComments": true
+    "removeComments": true,
+    "declaration": true
   },
   "include": ["src/"]
 }

@@ -71,7 +71,6 @@ export function destroy_gfx_mode_list(mode_list: number[]) {
 /// @param smooth disable/enable pixel smoothing, deaults to true
 /// @return 0 on success or -1 on error
 export function set_gfx_mode(
-  canvas_id: string,
   card: number,
   w: number,
   h: number,
@@ -83,35 +82,18 @@ export function set_gfx_mode(
   void v_h;
   void card;
 
-  // Get context
-  const cv = document.getElementById(canvas_id) as
-    | HTMLCanvasElement
-    | undefined;
-
-  if (!cv) {
-    _error("Can't find canvas with id " + canvas_id);
-    return -1;
-  }
-
-  cv.width = w;
-  cv.height = h;
-
-  const ctx = cv.getContext("2d");
-  if (!ctx) {
-    throw new Error("Context not defined");
-  }
-
   // Turn off image aliasing
-  ctx.imageSmoothingEnabled = false;
+  screen.context.imageSmoothingEnabled = false;
 
+  // Set screen size constants
   SCREEN_W = w;
   SCREEN_H = h;
 
   // Setup canvas
+  screen.canvas.width = w;
+  screen.canvas.height = h;
   screen.w = w;
   screen.h = h;
-  screen.canvas = cv;
-  screen.context = ctx;
   screen.ready = true;
   clear_to_color(screen, makecol(0, 0, 0));
 

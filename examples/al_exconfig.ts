@@ -35,7 +35,6 @@ import {
   set_config_file,
   set_gfx_mode,
   stretch_blit,
-  textout_centre_ex,
   textprintf_centre_ex,
   GFX_AUTODETECT_FULLSCREEN,
   GFX_AUTODETECT_WINDOWED,
@@ -43,11 +42,11 @@ import {
   ustricmp,
   ustrdup,
   set_palette,
-  ready,
+  allegro_ready,
   readkey,
   textout_ex,
-  PALETTE,
-} from "../src/allegro.js";
+  init_allegro_ts,
+} from "../build/allegro.js";
 
 async function main() {
   let w: number;
@@ -81,7 +80,7 @@ async function main() {
   push_config_state();
   set_config_file("data/exconfig.ini");
 
-  await ready();
+  await allegro_ready();
 
   /* the gfx mode is stored like this:
    *    640  480 16
@@ -158,7 +157,7 @@ async function main() {
 
   /* set the graphics mode */
   set_color_depth(bpp);
-  if (set_gfx_mode("canvas_id", windowed, w, h, 0, 0) != 0) {
+  if (set_gfx_mode(windowed, w, h, 0, 0) != 0) {
     allegro_message("Unable to set mode %ix%i with %ibpp\n", w, h, bpp);
   }
 
@@ -168,7 +167,7 @@ async function main() {
   /* load the image */
   background = load_bitmap(filename, pal);
 
-  await ready();
+  await allegro_ready();
 
   if (background.ready) {
     set_palette(pal);
@@ -227,4 +226,7 @@ async function main() {
 
   return 0;
 }
-END_OF_MAIN(main);
+END_OF_MAIN();
+
+// Start
+init_allegro_ts("canvas_id", main);

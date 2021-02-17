@@ -9,10 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "outDir": "./build",
-    "allowJs": true,
-    "incremental": true
+    "lib": ["ESNext", "DOM"]
   },
-  "include": ["./*.ts", "../src"]
+  "include": ["./*.ts"]
 }
