@@ -1,1 +1,0 @@
-# [Click here for neatly formatted API reference](http://allegrojs.net/api)

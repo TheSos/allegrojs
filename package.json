@@ -1,0 +1,31 @@
+{
+  "name": "allegrojs",
+  "version": "1.0.0",
+  "description": "Allegro JS in TS",
+  "main": "index.js",
+  "repository": "https://github.com/alegemaate/allegrojs",
+  "author": "Allan Legemaate <alegemaate@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc --p tsconfig.json",
+    "build-webpack": "webpack",
+    "build-examples": "tsc --p examples/tsconfig.json",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "prettier": "^2.2.1",
+    "ts-loader": "^8.0.17",
+    "typescript": "^4.1.5",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "timidity": "^1.3.0"
+  }
+}

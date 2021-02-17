@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "module": "es6",
+    "moduleResolution": "node",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true,
+    "lib": ["ESNext", "DOM"],
+    "outDir": "build",
+    "esModuleInterop": true,
+    "incremental": true,
+    "allowJs": true,
+    "removeComments": true
+  },
+  "include": ["src/"]
+}
