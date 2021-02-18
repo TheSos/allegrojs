@@ -38,14 +38,16 @@ jobs:
           cp -r docs/* public
           cp -r examples public/examples
           cp -r build public/build
+          cd public
+          ls
 
       - name: Add no jekyll
         run: touch public/.nojekyll
 
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@4.0.0
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: docs
-          folder: public
-          single-commit: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: docs
+          FOLDER: public
+          SINGLE_COMMIT: true
