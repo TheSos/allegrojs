@@ -12,11 +12,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
 
       - name: Restore node modules from cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.cache/yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
