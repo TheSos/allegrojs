@@ -121,7 +121,12 @@ async function main() {
         );
         break;
       case 5:
-        polygon(screen, 3, [0, 0, 10, 10, 40, 0], makecol(255, 0, 0));
+        polygon(
+          screen,
+          6,
+          [50, 50, 100, 100, 100, 150, 50, 200, 5, 150, mouse_x, mouse_y],
+          makecol(255, 0, 0)
+        );
         textout_ex(
           screen,
           font,
@@ -205,7 +210,7 @@ async function main() {
         );
         break;
       case 12:
-        arc(screen, mouse_x, mouse_y, 10, 5, 10, makecol(255, 0, 0));
+        arc(screen, mouse_x, mouse_y, -21, 43, 50, makecol(255, 0, 0));
         textout_ex(
           screen,
           font,
@@ -217,7 +222,11 @@ async function main() {
         );
         break;
       case 13:
-        spline(screen, [1, 3, 6, 8, 4, 3, 4, 2], makecol(255, 0, 0));
+        spline(
+          screen,
+          [1, 3, 60, 80, 70, 90, mouse_x, mouse_y],
+          makecol(255, 0, 0)
+        );
         textout_ex(
           screen,
           font,
@@ -233,7 +242,7 @@ async function main() {
     }
 
     if (keypressed()) {
-      mode = (mode + 1) % 13;
+      mode = (mode + 1) % 14;
       clear_keybuf();
     }
 

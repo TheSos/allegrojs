@@ -26,6 +26,17 @@ import {
   SWITCH_PAUSE,
   GFX_AUTODETECT_WINDOWED,
   allegro_init,
+  rotate_sprite,
+  retrace_count,
+  install_timer,
+  KEY_Q,
+  KEY_W,
+  rotate_scaled_sprite,
+  KEY_E,
+  rotate_sprite_v_flip,
+  KEY_R,
+  draw_sprite_v_flip,
+  KEY_T,
 } from "../build/allegro.js";
 
 // bitmap oobjects
@@ -63,7 +74,19 @@ function draw() {
   );
 
   // draws the ball centered
-  draw_sprite(screen, ball, cx, cy);
+  if (key[KEY_Q]) {
+    rotate_sprite(screen, ball, cx, cy, retrace_count % 360);
+  } else if (key[KEY_W]) {
+    rotate_scaled_sprite(screen, ball, cx, cy, retrace_count % 360, 10, 10);
+  } else if (key[KEY_E]) {
+    rotate_sprite_v_flip(screen, ball, cx, cy, retrace_count % 360);
+  } else if (key[KEY_R]) {
+    draw_sprite_v_flip(screen, ball, cx, cy);
+  } else if (key[KEY_T]) {
+    rotate_scaled_sprite(screen, ball, cx, cy, 0, 10, 8);
+  } else {
+    draw_sprite(screen, ball, cx, cy);
+  }
 }
 
 // update game logic
@@ -117,6 +140,8 @@ async function main() {
   install_sound(DIGI_AUTODETECT, DIGI_AUTODETECT, null);
 
   install_keyboard();
+
+  install_timer();
 
   // load ball image
   ball = load_bmp("data/planet.png");

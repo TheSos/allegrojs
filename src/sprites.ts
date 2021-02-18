@@ -88,6 +88,8 @@ export function stretch_blit(
  * Not implemented
  *
  * @allegro 1.15.3
+ * 
+ * @alpha
  */
 export function masked_blit(
   sprite: BITMAP | undefined,
@@ -116,6 +118,8 @@ export function masked_blit(
  * Not implemented
  *
  * @allegro 1.15.4
+ * 
+ * @alpha
  */
 export function masked_stretch_blit(
   sprite: BITMAP | undefined,
@@ -170,7 +174,7 @@ export function draw_sprite(
  * Draws a stretched sprite
  *
  * @remarks
- * This is probably the fastest method to get images on screen.
+ * Stretch sprite
  *
  * @param bmp - target bitmap
  * @param sprite - sprite bitmap
@@ -205,7 +209,7 @@ export function stretch_sprite(
  * Draw sprite vertical flip
  *
  * @remarks
- * Not implemented
+ * Flip a sprite vertically
  *
  * @param bmp - target bitmap
  * @param sprite - sprite bitmap
@@ -220,7 +224,75 @@ export function draw_sprite_v_flip(
   x: number,
   y: number
 ) {
-  draw_sprite(bmp, sprite, x, y);
+  if (!bmp || !sprite) {
+    return;
+  }
+  bmp.context.save();
+  bmp.context.translate(x, y);
+  bmp.context.scale(-1, 1);
+  bmp.context.translate(-x - sprite.w, -y);
+  bmp.context.drawImage(sprite.canvas, x, y);
+  bmp.context.restore();
+}
+
+/**
+ * Draw sprite horizontal flip
+ *
+ * @remarks
+ * Flip a sprite horizontal
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ *
+ * @allegro 1.15.7
+ */
+export function draw_sprite_h_flip(
+  bmp: BITMAP | undefined,
+  sprite: BITMAP | undefined,
+  x: number,
+  y: number
+) {
+  if (!bmp || !sprite) {
+    return;
+  }
+  bmp.context.save();
+  bmp.context.translate(x, y);
+  bmp.context.scale(1, -1);
+  bmp.context.translate(-x, -y - sprite.h);
+  bmp.context.drawImage(sprite.canvas, x, y);
+  bmp.context.restore();
+}
+
+/**
+ * Draw sprite horizontal and vertical flip
+ *
+ * @remarks
+ * Flip a sprite horizontal and vertical
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ *
+ * @allegro 1.15.7
+ */
+export function draw_sprite_vh_flip(
+  bmp: BITMAP | undefined,
+  sprite: BITMAP | undefined,
+  x: number,
+  y: number
+) {
+  if (!bmp || !sprite) {
+    return;
+  }
+  bmp.context.save();
+  bmp.context.translate(x, y);
+  bmp.context.scale(1-, -1);
+  bmp.context.translate(-x- sprite.w, -y - sprite.h);
+  bmp.context.drawImage(sprite.canvas, x, y);
+  bmp.context.restore();
 }
 
 /**
@@ -235,6 +307,8 @@ export function draw_sprite_v_flip(
  * @param y - y position
  *
  * @allegro 1.15.8
+ * 
+ * @alpha
  */
 export function draw_trans_sprite(
   bmp: BITMAP | undefined,
@@ -258,6 +332,8 @@ export function draw_trans_sprite(
  * @param color - color tint
  *
  * @allegro 1.15.9
+ * 
+ * @alpha
  */
 export function draw_lit_sprite(
   bmp: BITMAP | undefined,
@@ -286,6 +362,8 @@ export function draw_lit_sprite(
  * @param c4 - color 4
  *
  * @allegro 1.15.10
+ * 
+ * @alpha
  */
 export function draw_gouraud_sprite(
   bmp: BITMAP | undefined,
@@ -311,6 +389,8 @@ export function draw_gouraud_sprite(
  * Not implemented
  *
  * @allegro 1.15.11
+ * 
+ * @alpha
  */
 export function draw_character_ex(
   bmp: BITMAP | undefined,
@@ -353,10 +433,10 @@ export function rotate_sprite(
   const u = sprite.w / 2;
   const v = sprite.h / 2;
   bmp.context.save();
-  bmp.context.translate(x, y);
+  bmp.context.translate(x + u, y + v);
   bmp.context.rotate(RAD(angle));
-  bmp.context.translate(-u, -v);
-  bmp.context.drawImage(sprite.canvas, 0, 0);
+  bmp.context.translate(-x - u, -y - v);
+  bmp.context.drawImage(sprite.canvas, x, y);
   bmp.context.restore();
 }
 
@@ -364,7 +444,7 @@ export function rotate_sprite(
  * Rotate sprite with vertical flip
  *
  * @remarks
- * Not implemented
+ * Rotates sprite around its origin and flips it
  *
  * @param bmp - target bitmap
  * @param sprite - sprite bitmap
@@ -381,11 +461,20 @@ export function rotate_sprite_v_flip(
   y: number,
   angle: number
 ) {
-  void bmp;
-  void sprite;
-  void x;
-  void y;
-  void angle;
+  if (!bmp || !sprite) {
+    return;
+  }
+  const u = sprite.w / 2;
+  const v = sprite.h / 2;
+  bmp.context.save();
+  bmp.context.translate(x + u, y + v);
+  bmp.context.rotate(RAD(angle));
+  bmp.context.translate(-x - u, -y - v);
+  bmp.context.translate(x, y);
+  bmp.context.scale(-1, 1);
+  bmp.context.translate(-x - sprite.w, -y);
+  bmp.context.drawImage(sprite.canvas, x, y);
+  bmp.context.restore();
 }
 
 /**
@@ -416,14 +505,14 @@ export function rotate_scaled_sprite(
   if (!bmp || !sprite) {
     return;
   }
-  const u = (sx * sprite.w) / 2;
-  const v = (sy * sprite.h) / 2;
+  const u = sprite.w / 2;
+  const v = sprite.h / 2;
   bmp.context.save();
-  bmp.context.translate(x, y);
+  bmp.context.translate(x + u, y + v);
   bmp.context.rotate(RAD(angle));
-  bmp.context.translate(-u, -v);
   bmp.context.scale(sx, sy);
-  bmp.context.drawImage(sprite.canvas, 0, 0);
+  bmp.context.translate(-x - u, -y - v);
+  bmp.context.drawImage(sprite.canvas, x, y);
   bmp.context.restore();
 }
 
@@ -431,7 +520,7 @@ export function rotate_scaled_sprite(
  * Rotate scaled sprite with vertical flip
  *
  * @remarks
- * Not implemented
+ * Rotates a scaled sprite and vertically flips it
  *
  * @param bmp - target bitmap
  * @param sprite - sprite bitmap
@@ -442,7 +531,7 @@ export function rotate_scaled_sprite(
  *
  * @allegro 1.15.15
  */
-export function rotate_sprite_sprite_v_flip(
+export function rotate_scaled_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
   x: number,
@@ -450,12 +539,21 @@ export function rotate_sprite_sprite_v_flip(
   angle: number,
   scale: number
 ) {
-  void bmp;
-  void sprite;
-  void x;
-  void y;
-  void angle;
-  void scale;
+  if (!bmp || !sprite) {
+    return;
+  }
+  const u = sprite.w / 2;
+  const v = sprite.h / 2;
+  bmp.context.save();
+  bmp.context.translate(x + u, y + v);
+  bmp.context.rotate(RAD(angle));
+  bmp.context.scale(scale, scale);
+  bmp.context.translate(-x - u, -y - v);
+  bmp.context.translate(x, y);
+  bmp.context.scale(-1, 1);
+  bmp.context.translate(-x - sprite.w, -y);
+  bmp.context.drawImage(sprite.canvas, x, y);
+  bmp.context.restore();
 }
 
 /**
@@ -520,13 +618,18 @@ export function pivot_sprite_v_flip(
   cy: number,
   angle: number
 ) {
-  void bmp;
-  void sprite;
-  void x;
-  void y;
-  void cx;
-  void cy;
-  void angle;
+  if (!bmp || !sprite) {
+    return;
+  }
+  bmp.context.save();
+  bmp.context.translate(x, y);
+  bmp.context.rotate(RAD(angle));
+  bmp.context.translate(-cx, -cy);
+  bmp.context.translate(x, y);
+  bmp.context.scale(-1, 1);
+  bmp.context.translate(-x - sprite.w, -y);
+  bmp.context.drawImage(sprite.canvas, 0, 0);
+  bmp.context.restore();
 }
 
 /**
@@ -599,12 +702,19 @@ export function pivot_scaled_sprite_v_flip(
   angle: number,
   scale: number
 ) {
-  void bmp;
-  void sprite;
-  void x;
-  void y;
-  void cx;
-  void cy;
-  void angle;
-  void scale;
+  if (!bmp || !sprite) {
+    return;
+  }
+  const u = scale * cx;
+  const v = scale * cy;
+  bmp.context.save();
+  bmp.context.translate(x, y);
+  bmp.context.rotate(RAD(angle));
+  bmp.context.translate(-u, -v);
+  bmp.context.scale(scale, scale);
+  bmp.context.translate(x, y);
+  bmp.context.scale(-1, 1);
+  bmp.context.translate(-x - sprite.w, -y);
+  bmp.context.drawImage(sprite.canvas, 0, 0);
+  bmp.context.restore();
 }

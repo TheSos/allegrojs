@@ -835,9 +835,9 @@ export function arc(
   _strokestyle(bitmap, colour);
   bitmap.context.beginPath();
   if (ang1 > ang2) {
-    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2));
+    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2), true);
   } else {
-    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2));
+    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2), true);
   }
   bitmap.context.stroke();
 }
@@ -873,24 +873,45 @@ export function calc_spline(
  * Draw bezier spline
  *
  * @remarks
- * Not implemented
+ * This may not be the correct calculation.
+ * Will have to compare vs allegro 4
  *
  * @param bmp - Bitmap to draw to
  * @param points - Points on spline (must be 8)
  * @param color - Color of spline
  *
  * @allegro 1.14.25
- *
- * @alpha
  */
 export function spline(
   bmp: BITMAP | undefined,
   points: number[],
   color: number
 ) {
-  void bmp;
-  void points;
-  void color;
+  if (!bmp || points.length !== 8) {
+    return;
+  }
+
+  console.log("here");
+
+  _strokestyle(bmp, color);
+  bmp.context.beginPath();
+
+  // Move through points
+  for (let i = 0; i < points.length - 1; i += 2) {
+    const x_mid = ((points[i] ?? 0) + (points[i + 2] ?? 0)) / 2;
+    const y_mid = ((points[i + 1] ?? 0) + (points[i + 3] ?? 0)) / 2;
+    const cp_x1 = (x_mid + (points[i] ?? 0)) / 2;
+    const cp_x2 = (x_mid + (points[i + 2] ?? 0)) / 2;
+    bmp.context.quadraticCurveTo(cp_x1, points[i + 1] ?? 0, x_mid, y_mid);
+    bmp.context.quadraticCurveTo(
+      cp_x2,
+      points[i + 3] ?? 0,
+      points[i + 2] ?? 0,
+      points[i + 3] ?? 0
+    );
+  }
+
+  bmp.context.stroke();
 }
 
 /**
