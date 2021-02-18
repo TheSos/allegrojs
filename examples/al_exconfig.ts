@@ -46,6 +46,7 @@ import {
   readkey,
   textout_ex,
   init_allegro_ts,
+  enable_debug,
 } from "../build/allegro.js";
 
 async function main() {
@@ -230,3 +231,4 @@ END_OF_MAIN();
 
 // Start
 init_allegro_ts("canvas_id", main);
+enable_debug("debug");

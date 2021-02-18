@@ -4,7 +4,7 @@
 
 ---
 
-## [GitHub](https://github.com/alegemaate/allegrots)
+## [GitHub](https://github.com/alegemaate/allegrots) - [API](https://alegemaate.com/allegrots/)
 
 ### What is allegro.ts?
 
@@ -29,3 +29,25 @@ Build Emscripten examples
 ### Generate docs
 
 `yarn docs`
+
+### Examples
+
+#### Classics
+
+- [exaccel](https://alegemaate.com/allegrots/examples/al_exaccel)
+- [exbitmap](https://alegemaate.com/allegrots/examples/al_exbitmap)
+- [exbuf](https://alegemaate.com/allegrots/examples/al_exbuf)
+- [exconfig](https://alegemaate.com/allegrots/examples/al_exconfig)
+- [exmidi](https://alegemaate.com/allegrots/examples/al_exmidi)
+- [exmouse](https://alegemaate.com/allegrots/examples/al_exmouse)
+- [exsample](https://alegemaate.com/allegrots/examples/al_exsample)
+- [extimer](https://alegemaate.com/allegrots/examples/al_extimer)
+
+#### Other
+
+- [Simple Bitmap](https://alegemaate.com/allegrots/examples/exbmp)
+- [Bouncing Ball](https://alegemaate.com/allegrots/examples/exbounce)
+- [Simple Game](https://alegemaate.com/allegrots/examples/exgame)
+- [Hello World!](https://alegemaate.com/allegrots/examples/exhello)
+- [Python Turtle](https://alegemaate.com/allegrots/examples/exturtle)
+- [Stress Test](https://alegemaate.com/allegrots/examples/stress)

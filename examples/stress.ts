@@ -11,10 +11,11 @@ import {
   clear_to_color,
   draw_sprite,
   BITMAP,
+  create_bitmap,
   abs,
   rand,
   frand,
-  textout_ex,
+  blit,
   font,
   rest,
   KEY_ESC,
@@ -22,6 +23,7 @@ import {
   allegro_init,
   install_keyboard,
   GFX_AUTODETECT,
+  textprintf_ex,
   init_allegro_ts,
 } from "../build/allegro.js";
 
@@ -31,22 +33,24 @@ const y: any[] = [];
 const vx: any[] = [];
 const vy: any[] = [];
 let last_time = 0;
+let buffer!: BITMAP;
 let bmp!: BITMAP;
 
 async function main() {
+  enable_debug("debug");
   allegro_init();
   install_keyboard();
-  enable_debug("debug");
   set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
   bmp = load_bmp("data/planet.png");
+  buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
   await allegro_ready();
 
   while (!key[KEY_ESC]) {
-    clear_to_color(screen, makecol(255, 255, 255));
+    clear_to_color(buffer, makecol(255, 255, 255));
 
     for (var c = 0; c < num; c++) {
-      draw_sprite(screen, bmp, x[c], y[c]);
+      draw_sprite(buffer, bmp, x[c], y[c]);
       if (x[c] + vx[c] > SCREEN_W) {
         vx[c] = -abs(vx[c]);
       }
@@ -69,24 +73,24 @@ async function main() {
     vy.push(frand() * 2 - 1);
     num++;
     var msec = Date.now() - last_time - 1;
-    textout_ex(
-      screen,
+    textprintf_ex(
+      buffer,
       font,
-      "Sprites: " +
-        num +
-        " took " +
-        msec +
-        " msec ( " +
-        (1000 / msec).toFixed() +
-        " fps)",
       20,
-      30,
+      20,
+      makecol(0, 0, 0),
       makecol(255, 255, 255),
-      makecol(0, 0, 0)
+      "Sprites: %i took %f msec (%i fps)",
+      num,
+      msec,
+      msec,
+      (1000 / msec).toFixed()
     );
+    blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     last_time = Date.now();
     await rest(16);
   }
+
   return 0;
 }
 END_OF_MAIN();
