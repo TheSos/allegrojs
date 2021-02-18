@@ -1,9 +1,16 @@
+/// Internal color depth set to 32
 const _color_depth = 32;
 
 /**
- *
+ * Create packed color format from rgb in 8bit
  *
  * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
@@ -11,26 +18,81 @@ export function makecol8(r: number, g: number, b: number) {
   return makecol32(r, g, b);
 }
 
+/**
+ * Create packed color format from rgb in 15 bit
+ *
+ * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
+ *
+ * @allegro 1.13.1
+ */
 export function makecol15(r: number, g: number, b: number) {
   return makecol32(r, g, b);
 }
 
+/**
+ * Create packed color format from rgb in 16 bit
+ *
+ * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
+ *
+ * @allegro 1.13.1
+ */
 export function makecol16(r: number, g: number, b: number) {
   return makecol32(r, g, b);
 }
 
+/**
+ * Create packed color format from rgb in 24 bit
+ *
+ * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
+ *
+ * @allegro 1.13.1
+ */
 export function makecol24(r: number, g: number, b: number) {
   return makecol32(r, g, b);
 }
 
+/**
+ * Create packed color format from rgb in 32 bit
+ *
+ * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
+ *
+ * @allegro 1.13.1
+ */
 export function makecol32(r: number, g: number, b: number) {
   return (r << 0) | (g << 8) | (b << 16);
 }
 
 /**
+ * Make packed color with alpha from rgba
  *
- *
- * @remarks
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @param a alpha component in 0-255 range
  *
  * @allegro 1.13.2
  */
@@ -39,26 +101,27 @@ export function makeacol32(r: number, g: number, b: number, a: number) {
 }
 
 /**
- * Creates a 0xAARRGGBB from values
+ * Create packed color format from rgb
  *
  * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @return colour in 0xAARRGGBB format
  *
  * @allegro 1.13.3
  */
-/// Overdrive is not permitted, so values over 255 (0xff) will get clipped.
-/// @param r red component in 0-255 range
-/// @param g green component in 0-255 range
-/// @param b blue  component in 0-255 range
-/// @param a alpha component in 0-255 range, defaults to 255 (fully opaque)
-/// @return colour in 0xAARRGGBB format
 export function makecol(r: number, g: number, b: number): number {
   return makecol_depth(_color_depth, r, g, b);
 }
 
 /**
- *
+ * Makecol at depth
  *
  * @remarks
+ * Select correct makecol for set color depth
  *
  * @allegro 1.13.4
  */
@@ -84,6 +147,14 @@ export function makecol_depth(
   }
 }
 
+/**
+ * Makecol at depth with alpha
+ *
+ * @remarks
+ * Select correct makecol for set color depth
+ *
+ * @allegro 1.13.4
+ */
 export function makeacol_depth(
   color_depth: number,
   r: number,
@@ -108,28 +179,32 @@ export function makeacol_depth(
 }
 
 /**
- *
+ * Create packed color format from rgba
  *
  * @remarks
+ * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
+ *
+ * @param r red component in 0-255 range
+ * @param g green component in 0-255 range
+ * @param b blue  component in 0-255 range
+ * @param a alpha component in 0-255 range
+ * @return colour in 0xAARRGGBB format
  *
  * @allegro 1.13.5
  */
-/// Overdrive is not permitted, so values over 255 (0xff) will get clipped.
-/// @param r red component in 0-255 range
-/// @param g green component in 0-255 range
-/// @param b blue  component in 0-255 range
-/// @param a alpha component in 0-255 range
-/// @return colour in 0xAARRGGBB format
 export function makeacol(r: number, g: number, b: number, a: number): number {
   return makeacol_depth(_color_depth, r, g, b, a);
 }
 
 /**
- *
+ * Make dithered colour
  *
  * @remarks
+ * Currently does not dither
  *
  * @allegro 1.13.6
+ *
+ * @alpha
  */
 export function makecol15_dither(
   r: number,
@@ -144,71 +219,136 @@ export function makecol15_dither(
 }
 
 /**
- *
- *
- * @remarks
+ * Get red 8 bit
  *
  * @allegro 1.13.7
  */
-// Red
 export function getr8(c: number) {
   return getr32(c);
 }
 
+/**
+ * Get red 15 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getr15(c: number) {
   return getr32(c);
 }
 
+/**
+ * Get red 16 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getr16(c: number) {
   return getr32(c);
 }
 
+/**
+ * Get red 24 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getr24(c: number) {
   return getr32(c);
 }
 
+/**
+ * Get red 32 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getr32(c: number) {
   return (c >> 0) & 0xff;
 }
 
-// Green
+/**
+ * Get green 8 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getg8(c: number) {
   return getg32(c);
 }
 
+/**
+ * Get green 15 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getg15(c: number) {
   return getg32(c);
 }
 
+/**
+ * Get green 16 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getg16(c: number) {
   return getg32(c);
 }
 
+/**
+ * Get green 24 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getg24(c: number) {
   return getg32(c);
 }
 
+/**
+ * Get green 32 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getg32(c: number) {
   return (c >> 8) & 0xff;
 }
 
-// Blue
+/**
+ * Get blue 8 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getb8(c: number) {
   return getb32(c);
 }
 
+/**
+ * Get blue 15 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getb15(c: number) {
   return getb32(c);
 }
 
+/**
+ * Get blue 16 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getb16(c: number) {
   return getb32(c);
 }
 
+/**
+ * Get blue 24 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getb24(c: number) {
   return getb32(c);
 }
 
+/**
+ * Get blue 32 bit
+ *
+ * @allegro 1.13.7
+ */
 export function getb32(c: number) {
   return (c >> 16) & 0xff;
 }
@@ -229,43 +369,59 @@ export function geta32(c: number) {
  *
  * @remarks
  *
+ * @param colour colour in 0xAARRGGBB format
+ * @return red component in 0-255 range
+ *
  * @allegro 1.13.9
  */
-/// This one does clip.
-/// @param colour colour in 0xAARRGGBB format
-/// @return red component in 0-255 range
 export function getr(c: number) {
   return getr_depth(_color_depth, c);
 }
 
-/// Gets red bits from 0xRRGGBB
-/// This one too.
-/// @param colour colour in 0xAARRGGBB format
-/// @return green component in 0-255 range
+/**
+ * Gets green bits from 0xRRGGBB
+ *
+ * @remarks
+ *
+ * @param colour colour in 0xAARRGGBB format
+ * @return green component in 0-255 range
+ *
+ * @allegro 1.13.9
+ */
 export function getg(c: number) {
   return getg_depth(_color_depth, c);
 }
 
-/// Gets red bits from 0xRRGGBB
-/// This one clips as well.
-/// @param colour colour in 0xAARRGGBB format
-/// @return blue component in 0-255 range
+/**
+ * Gets blue bits from 0xRRGGBB
+ *
+ * @remarks
+ *
+ * @param colour colour in 0xAARRGGBB format
+ * @return blue component in 0-255 range
+ *
+ * @allegro 1.13.9
+ */
 export function getb(c: number) {
   return getb_depth(_color_depth, c);
 }
 
-/// Gets alpha bits from 0xAARRGGBB
-/// This one doesn't.
-/// @param colour colour in 0xAARRGGBB format
-/// @return alpha component in 0-255 range
+/**
+ * Gets alpha bits from 0xRRGGBB
+ *
+ * @remarks
+ *
+ * @param colour colour in 0xAARRGGBB format
+ * @return alpha component in 0-255 range
+ *
+ * @allegro 1.13.9
+ */
 export function geta(c: number) {
   return geta_depth(_color_depth, c);
 }
 
 /**
- *
- *
- * @remarks
+ * Get red pixel at depth
  *
  * @allegro 1.13.10
  */
@@ -286,6 +442,11 @@ export function getr_depth(color_depth: number, c: number) {
   }
 }
 
+/**
+ * Get green pixel at depth
+ *
+ * @allegro 1.13.10
+ */
 export function getg_depth(color_depth: number, c: number) {
   switch (color_depth) {
     case 8:
@@ -303,6 +464,11 @@ export function getg_depth(color_depth: number, c: number) {
   }
 }
 
+/**
+ * Get blue pixel at depth
+ *
+ * @allegro 1.13.10
+ */
 export function getb_depth(color_depth: number, c: number) {
   switch (color_depth) {
     case 8:
