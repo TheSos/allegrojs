@@ -2,6 +2,21 @@ import { _allog, log } from "./debug.js";
 import { rest } from "./timer.js";
 
 /**
+ * Keyboard driverr
+ *
+ * @remarks
+ * The driver we use for timer routines.
+ * Only exists for compatibility.
+ *
+ */
+export const keyboard_driver = {
+  id: 0,
+  name: "Browser Keyboard",
+  desc: " Browser Keyboard",
+  ascii_name: "Browser Keyboard",
+};
+
+/**
  * Installs keyboard handlers
  *
  * @remarks
@@ -119,16 +134,14 @@ export const key: boolean[] = [];
 export const key_buffer: number[] = [];
 
 /**
- * No idea
+ * Packed status of special keys
  *
  * @remarks
- * Not implemented
+ * This is set in the key listener
  *
  * @allegro 1.7.7
- *
- * @alpha
  */
-export const key_shifts = 0;
+export let key_shifts = 0;
 
 /**
  * Check if any key has been pressed
@@ -474,7 +487,24 @@ export const KEY_0 = 0x30,
   KEY_W = 0x57,
   KEY_X = 0x58,
   KEY_Y = 0x59,
-  KEY_Z = 0x5a;
+  KEY_Z = 0x5a,
+  KEY_MAX = 0x5b;
+
+export const KB_SHIFT_FLAG = 0x0001,
+  KB_CTRL_FLAG = 0x0002,
+  KB_ALT_FLAG = 0x0004,
+  KB_LWIN_FLAG = 0x0008,
+  KB_RWIN_FLAG = 0x0010,
+  KB_MENU_FLAG = 0x0020,
+  KB_COMMAND_FLAG = 0x0040,
+  KB_SCROLOCK_FLAG = 0x0100,
+  KB_NUMLOCK_FLAG = 0x0200,
+  KB_CAPSLOCK_FLAG = 0x0400,
+  KB_INALTSEQ_FLAG = 0x0800,
+  KB_ACCENT1_FLAG = 0x1000,
+  KB_ACCENT2_FLAG = 0x2000,
+  KB_ACCENT3_FLAG = 0x4000,
+  KB_ACCENT4_FLAG = 0x8000;
 
 /**
  * Is keyboard installed
@@ -558,6 +588,37 @@ function _keydown(e: KeyboardEvent) {
 function _keydown_handler(keyCode: number) {
   key[keyCode] = true;
   key_buffer.push(keyCode << 8);
+  switch (keyCode) {
+    case KEY_LSHIFT:
+    case KEY_RSHIFT:
+      key_shifts |= KB_SHIFT_FLAG;
+      break;
+    case KEY_LCONTROL:
+    case KEY_RCONTROL:
+      key_shifts |= KB_CTRL_FLAG;
+      break;
+    case KEY_ALT:
+      key_shifts |= KB_ALT_FLAG;
+      break;
+    case KEY_LWIN:
+      key_shifts |= KB_LWIN_FLAG;
+      break;
+    case KEY_RWIN:
+      key_shifts |= KB_RWIN_FLAG;
+      break;
+    case KEY_MENU:
+      key_shifts |= KB_MENU_FLAG;
+      break;
+    case KEY_SCRLOCK:
+      key_shifts |= KB_SCROLOCK_FLAG;
+      break;
+    case KEY_NUMLOCK:
+      key_shifts |= KB_NUMLOCK_FLAG;
+      break;
+    case KEY_CAPSLOCK:
+      key_shifts |= KB_CAPSLOCK_FLAG;
+      break;
+  }
 }
 
 /**
@@ -583,4 +644,35 @@ function _keyup(e: KeyboardEvent) {
  */
 function _keyup_handler(keyCode: number) {
   key[keyCode] = false;
+  switch (keyCode) {
+    case KEY_LSHIFT:
+    case KEY_RSHIFT:
+      key_shifts ^= KB_SHIFT_FLAG;
+      break;
+    case KEY_LCONTROL:
+    case KEY_RCONTROL:
+      key_shifts ^= KB_CTRL_FLAG;
+      break;
+    case KEY_ALT:
+      key_shifts ^= KB_ALT_FLAG;
+      break;
+    case KEY_LWIN:
+      key_shifts ^= KB_LWIN_FLAG;
+      break;
+    case KEY_RWIN:
+      key_shifts ^= KB_RWIN_FLAG;
+      break;
+    case KEY_MENU:
+      key_shifts ^= KB_MENU_FLAG;
+      break;
+    case KEY_SCRLOCK:
+      key_shifts ^= KB_SCROLOCK_FLAG;
+      break;
+    case KEY_NUMLOCK:
+      key_shifts ^= KB_NUMLOCK_FLAG;
+      break;
+    case KEY_CAPSLOCK:
+      key_shifts ^= KB_CAPSLOCK_FLAG;
+      break;
+  }
 }

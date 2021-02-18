@@ -172,7 +172,7 @@ export function LOCK_VARIABLE(variable_name: number | string) {
  *
  * @allegro 1.6.6
  */
-export function LOCK_FUNCTION(function_name: () => void) {
+export function LOCK_FUNCTION(function_name: (...args: any) => void) {
   void function_name;
 }
 
@@ -186,7 +186,7 @@ export function LOCK_FUNCTION(function_name: () => void) {
  *
  * @allegro 1.6.7
  */
-export function END_OF_FUNCTION(function_name: () => void) {
+export function END_OF_FUNCTION(function_name: (...args: any) => void) {
   void function_name;
 }
 
