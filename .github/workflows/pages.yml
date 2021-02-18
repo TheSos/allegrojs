@@ -48,5 +48,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs
-          folder: docs
+          folder: public
           single-commit: true
