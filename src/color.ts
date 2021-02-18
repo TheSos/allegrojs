@@ -1,6 +1,12 @@
 const _color_depth = 32;
 
-/// 1.13.1
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.1
+ */
 export function makecol8(r: number, g: number, b: number) {
   return makecol32(r, g, b);
 }
@@ -21,12 +27,24 @@ export function makecol32(r: number, g: number, b: number) {
   return (r << 0) | (g << 8) | (b << 16);
 }
 
-/// 1.13.2
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.2
+ */
 export function makeacol32(r: number, g: number, b: number, a: number) {
   return (r << 0) | (g << 8) | (b << 16) | (a << 24);
 }
 
-/// 1.13.3 Creates a 0xAARRGGBB from values
+/**
+ * Creates a 0xAARRGGBB from values
+ *
+ * @remarks
+ *
+ * @allegro 1.13.3
+ */
 /// Overdrive is not permitted, so values over 255 (0xff) will get clipped.
 /// @param r red component in 0-255 range
 /// @param g green component in 0-255 range
@@ -37,7 +55,13 @@ export function makecol(r: number, g: number, b: number): number {
   return makecol_depth(_color_depth, r, g, b);
 }
 
-/// 1.13.4
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.4
+ */
 export function makecol_depth(
   color_depth: number,
   r: number,
@@ -83,7 +107,13 @@ export function makeacol_depth(
   }
 }
 
-/// 1.13.5
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.5
+ */
 /// Overdrive is not permitted, so values over 255 (0xff) will get clipped.
 /// @param r red component in 0-255 range
 /// @param g green component in 0-255 range
@@ -94,7 +124,13 @@ export function makeacol(r: number, g: number, b: number, a: number): number {
   return makeacol_depth(_color_depth, r, g, b, a);
 }
 
-/// 1.13.6
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.6
+ */
 export function makecol15_dither(
   r: number,
   g: number,
@@ -107,7 +143,13 @@ export function makecol15_dither(
   return makecol32(r, g, b);
 }
 
-/// 1.13.7
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.7
+ */
 // Red
 export function getr8(c: number) {
   return getr32(c);
@@ -171,12 +213,24 @@ export function getb32(c: number) {
   return (c >> 16) & 0xff;
 }
 
-/// 1.13.8
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.8
+ */
 export function geta32(c: number) {
   return (c >> 24) & 0xff;
 }
 
-/// 1.13.9 Gets red bits from 0xRRGGBB
+/**
+ * Gets red bits from 0xRRGGBB
+ *
+ * @remarks
+ *
+ * @allegro 1.13.9
+ */
 /// This one does clip.
 /// @param colour colour in 0xAARRGGBB format
 /// @return red component in 0-255 range
@@ -208,7 +262,13 @@ export function geta(c: number) {
   return geta_depth(_color_depth, c);
 }
 
-/// 1.13.10
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.13.10
+ */
 export function getr_depth(color_depth: number, c: number) {
   switch (color_depth) {
     case 8:
@@ -264,3 +324,13 @@ export function geta_depth(color_depth: number, c: number) {
   if (color_depth === 32) return geta32(c);
   return 0;
 }
+
+/**
+ * Palette color
+ *
+ * @remarks
+ * Does nothing, added for completeness
+ *
+ * @allegro 1.13.10
+ */
+export const palette_color: number[] = [0, 1, 2, 3, 4, 5, 6, 7];

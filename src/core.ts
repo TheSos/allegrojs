@@ -1,6 +1,3 @@
-/// @name CORE ROUTINES
-//@{
-
 import { log, _error } from "./debug.js";
 import { font, SCREEN_H, SCREEN_W } from "./graphics.js";
 import { _keyboard_loop } from "./keyboard.js";
@@ -73,17 +70,24 @@ export function loading_bar(progress: number) {
     screen,
     10,
     SCREEN_H - 50,
-    SCREEN_W - 20,
-    40,
+    SCREEN_W - 10,
+    SCREEN_H - 10,
     makecol(255, 255, 255)
   );
-  rectfill(screen, 15, SCREEN_H - 45, SCREEN_W - 30, 30, makecol(0, 0, 0));
+  rectfill(
+    screen,
+    15,
+    SCREEN_H - 45,
+    SCREEN_W - 15,
+    SCREEN_H - 15,
+    makecol(0, 0, 0)
+  );
   rectfill(
     screen,
     20,
     SCREEN_H - 40,
-    scaleclamp(progress, 0, 1, 0, SCREEN_W - 40),
-    20,
+    scaleclamp(progress, 0, 1, 20, SCREEN_W - 20),
+    SCREEN_H - 20,
     makecol(255, 255, 255)
   );
 }
@@ -145,5 +149,3 @@ export async function allegro_ready() {
   log("Loader initialised!");
   return _progress_check();
 }
-
-//@}

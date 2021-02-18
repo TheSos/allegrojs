@@ -1,7 +1,3 @@
-////////////////////////////////////////////
-/// @name HELPER MATH FUNCTIONS
-//@{
-
 /// Pi
 export const PI = 3.14159265;
 
@@ -221,5 +217,3 @@ export function scaleclamp(
   cmp_val = cmp_val < min2 ? cmp_val : min2;
   return cmp_val > max2 ? cmp_val : max2;
 }
-
-//@}

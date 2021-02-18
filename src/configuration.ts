@@ -1,10 +1,15 @@
-/// 1.4
-
 import { _downloadables } from "./core.js";
 import { log } from "./debug.js";
 import { CONFIG, CONFIG_DATA } from "./types.js";
 
+/**
+ * Internal list of config files
+ */
 const configs: CONFIG[] = [];
+
+/**
+ * Default structure
+ */
 let config: CONFIG = {
   file: "",
   data: {},
@@ -12,7 +17,16 @@ let config: CONFIG = {
   type: "config",
 };
 
-// Parse a config file into data
+/**
+ * Parse a config file into data
+ *
+ * @remarks
+ * This splits config data into keys
+ *
+ * @param data - String to parse
+ *
+ * @internal
+ */
 function _parse_config_file(data: string): CONFIG_DATA {
   const conf: CONFIG_DATA = {};
 
@@ -38,7 +52,16 @@ function _parse_config_file(data: string): CONFIG_DATA {
   return conf;
 }
 
-/// 1.4.1
+/**
+ * Set config file
+ *
+ * @remarks
+ * Sets up config file and loads it
+ *
+ * @param filename - Name of file to load
+ *
+ * @allegro 1.4.1
+ */
 export function set_config_file(filename: string) {
   log("Loading config " + filename + "...");
   config.file = filename;
@@ -60,19 +83,46 @@ export function set_config_file(filename: string) {
   };
 }
 
-/// 1.4.2
+/**
+ * Set config data
+ *
+ * @remarks
+ * Sets data of config file manually
+ *
+ * @param data - Data to config
+ * @param length - Length of data
+ *
+ * @allegro 1.4.2
+ */
 export function set_config_data(data: CONFIG_DATA, length: number) {
   config.data = data;
   void length;
 }
 
-/// 1.4.3, 1.4.4
+/**
+ * Override config data
+ *
+ * @remarks
+ * Overrides data of config file manually
+ *
+ * @param data - Data to config
+ * @param length - Length of data
+ *
+ * @allegro 1.4.3, 1.4.4
+ */
 export function override_config_data(data: CONFIG_DATA, length: number) {
   config.data = data;
   void length;
 }
 
-/// 1.4.5
+/**
+ * Push config state
+ *
+ * @remarks
+ * Push config state to stack
+ *
+ * @allegro 1.4.5
+ */
 export function push_config_state() {
   configs.push(config);
   config = {
@@ -83,7 +133,14 @@ export function push_config_state() {
   };
 }
 
-/// 1.4.6
+/**
+ * Pop config state
+ *
+ * @remarks
+ * Pop config state from stack
+ *
+ * @allegro 1.4.6
+ */
 export function pop_config_state() {
   const top = configs.pop();
   if (top) {
@@ -91,17 +148,50 @@ export function pop_config_state() {
   }
 }
 
-/// 1.4.7
+/**
+ * Flush config state
+ *
+ * @remarks
+ * Writes the current config file from contents if contents are changed.
+ *
+ * @allegro 1.4.7
+ *
+ * @alpha
+ */
 export function flush_config_state() {
   /// NOOP
 }
 
-/// 1.4.8
+/**
+ * Reload config texts
+ *
+ * @remarks
+ * Reloads the translated strings returned by get config text().
+ * This is useful to switch to another language in your program at runtime.
+ *
+ * @param new_language - Language to read
+ *
+ * @allegro 1.4.8
+ *
+ * @alpha
+ */
 export function reload_config_texts(new_language: string) {
   void new_language;
 }
 
-/// 1.4.9
+/**
+ * Hook config section
+ *
+ * @remarks
+ * Hook getter into config system
+ *
+ * @param section - Section to hook into
+ * @param intgetter - Getter for ints
+ * @param stringgetter - Getter for strings
+ * @param stringsetter - Setter for strings
+ *
+ * @allegro 1.4.9
+ */
 export function hook_config_section(
   section: string,
   intgetter: (name: string, def: number) => void,
@@ -114,51 +204,154 @@ export function hook_config_section(
   void stringsetter;
 }
 
-/// 1.4.10
+/**
+ * Config is hooked
+ *
+ * @remarks
+ * Return if the config is hooked into
+ *
+ * @param section - Section to check if its hooked
+ *
+ * @returns Config hooked status
+ *
+ * @allegro 1.4.10
+ */
 export function config_is_hooked(section: number) {
   void section;
   return false;
 }
 
-/// 1.4.11
+/**
+ * Get config string
+ *
+ * @remarks
+ * Get section of config
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ *
+ * @allegro 1.4.11
+ */
 export function get_config_string(section: string, name: string, def: string) {
   return config.data[section]?.[name] ?? def;
 }
 
-/// 1.4.12
+/**
+ * Get config integer
+ *
+ * @remarks
+ * Get integer from config file
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ * @returns integer if found
+ *
+ * @allegro 1.4.12
+ */
 export function get_config_int(section: string, name: string, def: number) {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseInt(data, 10) : def;
 }
 
-/// 1.4.13
+/**
+ * Get config hex
+ *
+ * @remarks
+ * Get hex from config file
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ * @returns hex if found
+ *
+ * @allegro 1.4.13
+ */
 export function get_config_hex(section: string, name: string, def: number) {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseInt(data, 10) : def;
 }
 
-/// 1.4.14
+/**
+ * Get config float
+ *
+ * @remarks
+ * Get float from config file
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ * @returns float if found
+ *
+ * @allegro 1.4.14
+ */
 export function get_config_float(section: string, name: string, def: number) {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseFloat(data) : def;
 }
 
-/// 1.4.15
+/**
+ * Get config id
+ *
+ * @remarks
+ * Get id from config file
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ * @returns id if found
+ *
+ * @allegro 1.4.15
+ */
 export function get_config_id(section: string, name: string, def: string) {
   return config.data[section]?.[name] ?? def;
 }
 
-/// 1.4.16
+/**
+ * Get config array
+ *
+ * @remarks
+ * Get array from config file
+ *
+ * @param section - section to read
+ * @param name - sectiton name to read
+ * @param def - Language string
+ * @returns array if found
+ *
+ * @allegro 1.4.16
+ */
 export function get_config_argv(section: string, name: string) {
   return (config.data[section]?.[name] ?? "").split(" ");
 }
 
-/// 1.4.17
+/**
+ * Get config text
+ *
+ * @remarks
+ * Get string from config file
+ *
+ * @param msg - text to get
+ * @returns text if found
+ *
+ * @allegro 1.4.17
+ */
 export function get_config_text(msg: string) {
   return msg;
 }
 
-/// 1.4.18
+/**
+ * Set config string
+ *
+ * @remarks
+ * Sets string in config file
+ *
+ * @param section - section to write to
+ * @param name - name of entry to write to
+ * @param val - string value
+ *
+ * @allegro 1.4.18
+ */
 export function set_config_string(section: string, name: string, val: string) {
   if (!section) {
     config.data[section] = {};
@@ -166,7 +359,18 @@ export function set_config_string(section: string, name: string, val: string) {
   config.data[section] = { ...config.data[section], [name]: val };
 }
 
-/// 1.4.19
+/**
+ * Set config int
+ *
+ * @remarks
+ * Sets int in config file
+ *
+ * @param section - section to write to
+ * @param name - name of entry to write to
+ * @param val - int value
+ *
+ * @allegro 1.4.19
+ */
 export function set_config_int(section: string, name: string, val: number) {
   if (!section) {
     config.data[section] = {};
@@ -174,7 +378,18 @@ export function set_config_int(section: string, name: string, val: number) {
   config.data[section] = { ...config.data[section], [name]: val.toString() };
 }
 
-/// 1.4.20
+/**
+ * Set config hex
+ *
+ * @remarks
+ * Sets hex in config file
+ *
+ * @param section - section to write to
+ * @param name - name of entry to write to
+ * @param val - hex value
+ *
+ * @allegro 1.4.20
+ */
 export function set_config_hex(section: string, name: string, val: number) {
   if (!section) {
     config.data[section] = {};
@@ -182,7 +397,18 @@ export function set_config_hex(section: string, name: string, val: number) {
   config.data[section] = { ...config.data[section], [name]: val.toString() };
 }
 
-/// 1.4.21
+/**
+ * Set config float
+ *
+ * @remarks
+ * Sets float in config file
+ *
+ * @param section - section to write to
+ * @param name - name of entry to write to
+ * @param val - float value
+ *
+ * @allegro 1.4.21
+ */
 export function set_config_float(section: string, name: string, val: number) {
   if (!section) {
     config.data[section] = {};
@@ -190,7 +416,18 @@ export function set_config_float(section: string, name: string, val: number) {
   config.data[section] = { ...config.data[section], [name]: val.toString() };
 }
 
-/// 1.4.22
+/**
+ * Set config id
+ *
+ * @remarks
+ * Sets id in config file
+ *
+ * @param section - section to write to
+ * @param name - name of entry to write to
+ * @param val - id value
+ *
+ * @allegro 1.4.22
+ */
 export function set_config_id(section: string, name: string, val: number) {
   if (!section) {
     config.data[section] = {};
@@ -198,18 +435,45 @@ export function set_config_id(section: string, name: string, val: number) {
   config.data[section] = { ...config.data[section], [name]: val.toString() };
 }
 
-/// 1.4.23
+/**
+ * List config entries
+ *
+ * @remarks
+ * List entries in config file
+ *
+ * @param section - section to write to
+ *
+ * @allegro 1.4.23
+ */
 export function list_config_entries(section: string) {
   return Object.keys(config.data[section] ?? {});
 }
 
-/// 1.4.24
+/**
+ * List config sections
+ *
+ * @remarks
+ * List sections in config file
+ *
+ * @param names - array of names
+ *
+ * @allegro 1.4.24
+ */
 export function list_config_sections(names: string[]) {
   void names;
   return Object.keys(config.data);
 }
 
-/// 1.4.25
+/**
+ * Free config entries
+ *
+ * @remarks
+ * Free names in config file
+ *
+ * @param names - array of names to free
+ *
+ * @allegro 1.4.25
+ */
 export function free_config_entries(names: string[]) {
   names.forEach((name) => delete config.data[name]);
 }

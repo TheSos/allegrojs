@@ -32,7 +32,7 @@ jobs:
         run: yarn build-examples
 
       - name: Create documents
-        run: yarn doc
+        run: yarn docs
 
       - name: Add no jekyll
         run: touch docs/.nojekyll

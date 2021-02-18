@@ -6,13 +6,25 @@ import { _uberloop } from "./core.js";
 import { log } from "./debug.js";
 import { vsprintf } from "./sprintf.js";
 
-/// 1.1.1 Installs allegro.
-/// This function must be called before anything else.
+/**
+ * Installs allegro.
+ *
+ * @remarks
+ * This should be called before anything else, or allegro_init
+ *
+ * @param system_id - Id of system to setup. Does not matter
+ * @param errno_ptr - Unused error pointer
+ * @param atexit_ptr - Function called on exit
+ *
+ * @returns Zero on success, anything else on fail
+ *
+ * @allegro 1.1.1
+ */
 export function install_allegro(
   system_id: "SYSTEM_AUTODETECT" | "SYSTEM_NONE",
   errno_ptr: number,
   atexit_ptr: () => void
-) {
+): number {
   void system_id;
   void errno_ptr;
   void atexit_ptr;
@@ -20,68 +32,202 @@ export function install_allegro(
   log("Allegro installed!");
   window.setInterval(_uberloop, 16.6);
   log("Game loop initialised!");
-}
 
-/// 1.1.2 Wrapper for install_allegro.
-export function allegro_init(): number {
-  install_allegro("SYSTEM_AUTODETECT", 0, atexit);
   return 0;
 }
 
-/// 1.1.3
+/**
+ * Wrapper for install_allegro.
+ *
+ * @remarks
+ * Simply calls install_allegro with default parameters
+ *
+ * @returns Zero on success, other on fail
+ *
+ * @allegro 1.1.2
+ */
+export function allegro_init(): number {
+  return install_allegro("SYSTEM_AUTODETECT", 0, atexit);
+}
+
+export function atexit(): void {
+  log("Allegro destroyed");
+}
+
+/**
+ * Exit allegro
+ *
+ * @remarks
+ * Cleans up allegro and removes all installed handlers
+ *
+ * @allegro 1.1.3
+ */
 export function allegro_exit() {
   log("Allegro exited.");
 }
 
-/// 1.1.4 Macro to be placed after the end of main()
+/**
+ * End of main
+ *
+ * @remarks
+ * Macro to be placed after the end of main()
+ * This does nothing, it is only here for comaptibility
+ *
+ * @allegro 1.1.4
+ */
 export function END_OF_MAIN() {
   /// Noop
 }
 
-/// 1.1.5
+/**
+ * Allegro ID
+ *
+ * @remarks
+ * This usually contains date and version number.
+ * We just return Allegro TS
+ *
+ * @allegro 1.1.5
+ */
 export const allegro_id = "Allegro TS";
 
-/// 1.1.6
+/**
+ * Allegro Error
+ *
+ * @remarks
+ * String that will be populated with errors if needed.
+ *
+ * @allegro 1.1.6
+ */
 export const allegro_error = "";
 
-/// 1.1.7
+/**
+ * Allegro version
+ *
+ * @remarks
+ * Number representing version (4 in our case)
+ *
+ * @allegro 1.1.7
+ */
 export const ALLEGRO_VERSION = 4;
 
-/// 1.1.8
+/**
+ * Allegro sub version
+ *
+ * @remarks
+ * Number representing sub version of allegro
+ *
+ * @allegro 1.1.8
+ */
 export const ALLEGRO_SUB_VERSION = 1;
 
-/// 1.1.9
+/**
+ * Allegro wip version
+ *
+ * @remarks
+ * Number representing wip version of allegro
+ *
+ * @allegro 1.1.9
+ */
 export const ALLEGRO_WIP_VERSION = 16;
 
-/// 1.1.10
+/**
+ * Allegro version string
+ *
+ * @remarks
+ * Number representing full version
+ *
+ * @allegro 1.1.10
+ */
 export const ALLEGRO_VERSION_STR = "4.1.16";
 
-/// 1.1.11
+/**
+ * Allegro date string
+ *
+ * @remarks
+ * Allegro year
+ *
+ * @allegro 1.1.11
+ */
 export const ALLEGRO_DATE_STR = "2021";
 
-/// 1.1.12
+/**
+ * Allegro date
+ *
+ * @remarks
+ * We dont do anything with this
+ *
+ * @allegro 1.1.12
+ */
 export const ALLEGRO_DATE = 0;
 
-/// 1.1.13
+/**
+ * Allegro ID macro
+ *
+ * @remarks
+ * This macro can be used to create a packed 32 bit integer from 8 bit characters,
+ * on both 32 and 64 bit machines. These can be used for various things,
+ * like custom datafile objects or system IDs.
+ *
+ * @allegro 1.1.13
+ */
 export function AL_ID(a: string, b: string, c: string, d: string) {
   return a + b + c + d;
 }
 
-/// 1.1.14
+/**
+ * Make version
+ *
+ * @remarks
+ * This macro can be used to check if some Allegro version is (binary) compatible
+ * with the current version.
+ *
+ * @allegro 1.1.14
+ */
 export function MAKE_VERSION(a: number, b: number, c: number) {
   return a + b + c;
 }
 
-/// 1.1.15
+/**
+ * OS type string
+ *
+ * @remarks
+ * We set it to BROWSER
+ *
+ * @allegro 1.1.15
+ */
 export const os_type = "OSTYPE_BROWSER";
 
-/// 1.1.16
+/**
+ * OS version
+ *
+ * @remarks
+ * OS version set to 0
+ *
+ * @allegro 1.1.16
+ */
 export const os_version = 0;
 
-/// 1.1.17
+/**
+ * OS multitasking
+ *
+ * @remarks
+ * True if os supports multitasking
+ *
+ * @allegro 1.1.17
+ */
 export const os_multitasking = true;
 
-/// 1.1.18
+/**
+ * Allegro Message
+ *
+ * @remarks
+ * Show a dialog with allegro message
+ *
+ * @param text_format - String to format
+ * @param args - Other args for formatting
+ *
+ * @allegro 1.1.18
+ */
 export function allegro_message(
   text_format: string,
   ...args: (number | string)[]
@@ -90,32 +236,65 @@ export function allegro_message(
   alert(vsprintf(text_format, args));
 }
 
-/// 1.1.19
+/**
+ * Set window title
+ *
+ * @remarks
+ * Set title of browser window
+ *
+ * @param name - Name to assign to title
+ *
+ * @allegro 1.1.19
+ */
 export function set_window_title(name: string) {
   document.title = name;
 }
 
-/// 1.1.20
+/**
+ * Set close buttton callback
+ *
+ * @remarks
+ * Create callback for on close of browser
+ *
+ * @param proc - Procedure to call on exit
+ *
+ * @allegro 1.1.20
+ */
 export function set_close_button_callback(proc: () => void) {
   window.onbeforeunload = proc;
 }
 
-/// 1.1.21
-export function atexit(): void {
-  log("Allegro destroyed");
-}
-
-/// 1.1.22
+/**
+ * Get color depth of desktop
+ *
+ * @remarks
+ * Returns desktop color depth (32)
+ *
+ * @allegro 1.1.21
+ */
 export function desktop_color_depth(): number {
   return 32;
 }
 
-/// 1.1.23
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.1.22
+ */
 export function get_desktop_resolution(width: number, height: number) {
   return { width, height };
 }
 
-/// 1.1.24
+/**
+ * Check cpu
+ *
+ * @remarks
+ * Setup cpu info
+ *
+ * @allegro 1.1.23
+ */
 export function check_cpu() {
   cpu_vendor = "Browser CPU";
   cpu_family = "Browser CPU Family";
@@ -123,16 +302,42 @@ export function check_cpu() {
   cpu_capabilities = 0;
 }
 
-/// 1.1.25
+/**
+ * Cpu vendor
+ *
+ * @remarks
+ * Vendor of cpu
+ *
+ * @allegro 1.1.24
+ */
 export let cpu_vendor = "";
 
-/// 1.1.26
+/**
+ * Cpu family
+ *
+ * @remarks
+ * Family of cpu
+ *
+ * @allegro 1.1.25
+ */
 export let cpu_family = "";
 
-/// 1.1.27
+/**
+ * Cpu model
+ *
+ * @remarks
+ * Model of cpu
+ *
+ * @allegro 1.1.26
+ */
 export let cpu_model = "";
 
-/// 1.1.28
+/**
+ * Packed list of cpu capabilities
+ *
+ * @remarks
+ * Capibilities of cpu
+ *
+ * @allegro 1.1.27
+ */
 export let cpu_capabilities = 0;
-
-//@}

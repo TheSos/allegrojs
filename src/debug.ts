@@ -1,7 +1,3 @@
-////////////////////////////////////////////
-/// @name DEBUG FUNCTIONS
-//@{
-
 let _debug_enabled = false;
 let _debug_element: HTMLElement | null = null;
 
@@ -56,5 +52,3 @@ export function wipe_log() {
   if (!_debug_enabled || !_debug_element) return;
   _debug_element.innerHTML = "";
 }
-
-//@}

@@ -1,19 +1,23 @@
-////////////////////////////////////////////
-/// @name BLITTING AND SPRITES
-//@{
-
 import { RAD } from "./math.js";
 import { BITMAP } from "./types.js";
 
-/// 1.15.1 Blit
-/// This is how you draw backgrounds and stuff. masked_ versions are omitted, since everything is 32-bit RGBA anyways. The source and dest parameters are swapped compared to draw_sprite for historical, 20 year old reasons that must stay the same no matter what.
-/// @param source source bitmap
-/// @param dest destination bitmap
-/// @param sx,sy source origin
-/// @param dx,dy top-left bitmap corner coordinates in target bitmap
-/// @param w,h blit size
-/// @todo make rotated versions of this
-/// @todo tell everyone that blitting to itself is slower than the other thing (requires copy?)
+/**
+ * Blit
+ *
+ * @remarks
+ * Map sprite to screen
+ *
+ * @param source - source bitmap
+ * @param dest - destination bitmap
+ * @param sx - source origin x
+ * @param sy - source origin y
+ * @param dx - destination origin x
+ * @param dy - destination origin y
+ * @param w - width of sprite
+ * @param h - height of sprite
+ *
+ * @allegro 1.15.1
+ */
 export function blit(
   source: BITMAP | undefined,
   dest: BITMAP | undefined,
@@ -40,14 +44,25 @@ export function blit(
   );
 }
 
-/// 1.15.2 Scaled blit
-/// Draws a scaled chunk of an image on a bitmap. It's not slower.
-/// @param source source bitmap
-/// @param dest destination bitmap
-/// @param sx,sy source origin
-/// @param sw,sh source dimensions
-/// @param dx,dy top-left bitmap corner coordinates in target bitmap
-/// @param dw,dh destination dimensions
+/**
+ * Scaled blit
+ *
+ * @remarks
+ * Draws a scaled chunk of an image on a bitmap. It's not slower.
+ *
+ * @param source - source bitmap
+ * @param dest - destination bitmap
+ * @param sx - source origin x
+ * @param sy - source origin y
+ * @param sw - source width
+ * @param sh - source height
+ * @param dx - destination origin x
+ * @param dy - destination origin y
+ * @param dw - destination width
+ * @param dh - destination height
+ *
+ * @allegro 1.15.2
+ */
 export function stretch_blit(
   source: BITMAP | undefined,
   dest: BITMAP | undefined,
@@ -66,7 +81,14 @@ export function stretch_blit(
   dest.context.drawImage(source.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
 }
 
-/// 1.15.3
+/**
+ * Masked blit
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.15.3
+ */
 export function masked_blit(
   sprite: BITMAP | undefined,
   dest: BITMAP | undefined,
@@ -87,7 +109,14 @@ export function masked_blit(
   void height;
 }
 
-/// 1.15.4
+/**
+ * Masked streth blit
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.15.4
+ */
 export function masked_stretch_blit(
   sprite: BITMAP | undefined,
   dest: BITMAP | undefined,
@@ -112,11 +141,19 @@ export function masked_stretch_blit(
   void dest_h;
 }
 
-/// 1.15.5 Draws a sprite
-/// This is probably the fastest method to get images on screen. The image will be centered. Opposed to traditional allegro approach, sprite is drawn centered.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y coordinates of the top left corder of the image center
+/**
+ * Draws a sprite
+ *
+ * @remarks
+ * This is probably the fastest method to get images on screen.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ *
+ * @allegro 1.15.5
+ */
 export function draw_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -129,13 +166,21 @@ export function draw_sprite(
   bmp.context.drawImage(sprite.canvas, x, y);
 }
 
-/// 1.15.6 Draws a stretched sprite
-/// Draws a sprite stretching it to given width and height. The sprite will be centered. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y coordinates of the top left corder of the image
-/// @param sx horizontal scale , 1.0 is unscaled
-/// @param sy vertical scale (defaults to sx)
+/**
+ * Draws a stretched sprite
+ *
+ * @remarks
+ * This is probably the fastest method to get images on screen.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param w - width
+ * @param h - height
+ *
+ * @allegro 1.15.6
+ */
 export function stretch_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -156,7 +201,19 @@ export function stretch_sprite(
   bmp.context.restore();
 }
 
-/// 1.15.7
+/**
+ * Draw sprite vertical flip
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ *
+ * @allegro 1.15.7
+ */
 export function draw_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -166,7 +223,19 @@ export function draw_sprite_v_flip(
   draw_sprite(bmp, sprite, x, y);
 }
 
-/// 1.15.8
+/**
+ * Draw transparent sprite
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ *
+ * @allegro 1.15.8
+ */
 export function draw_trans_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -176,7 +245,20 @@ export function draw_trans_sprite(
   draw_sprite(bmp, sprite, x, y);
 }
 
-/// 1.15.9
+/**
+ * Draw lit sprite
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param color - color tint
+ *
+ * @allegro 1.15.9
+ */
 export function draw_lit_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -188,7 +270,23 @@ export function draw_lit_sprite(
   draw_sprite(bmp, sprite, x, y);
 }
 
-/// 1.15.10
+/**
+ * Draw gouraud sprite
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param c1 - color 1
+ * @param c2 - color 2
+ * @param c3 - color 3
+ * @param c4 - color 4
+ *
+ * @allegro 1.15.10
+ */
 export function draw_gouraud_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -206,7 +304,14 @@ export function draw_gouraud_sprite(
   draw_sprite(bmp, sprite, x, y);
 }
 
-/// 1.15.11
+/**
+ * Draw character ex
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.15.11
+ */
 export function draw_character_ex(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -220,13 +325,21 @@ export function draw_character_ex(
   draw_sprite(bmp, sprite, x, y);
 }
 
-/// 1.15.12
-/// Draws a rotated sprite
-/// Draws a sprite rotating it around its centre point. The sprite will be centred and rotated around its centre.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y coordinates of the centre of the image
-/// @param angle angle of rotation in degrees
+/**
+ * Rotate sprite
+ *
+ * @remarks
+ * Draws a rotated sprite
+ * Draws a sprite rotating it around its centre point.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param angle - angle of rotation in degrees
+ *
+ * @allegro 1.15.12
+ */
 export function rotate_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -247,7 +360,20 @@ export function rotate_sprite(
   bmp.context.restore();
 }
 
-/// 1.15.13
+/**
+ * Rotate sprite with vertical flip
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param angle - angle of rotation in degrees
+ *
+ * @allegro 1.15.13
+ */
 export function rotate_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -262,14 +388,22 @@ export function rotate_sprite_v_flip(
   void angle;
 }
 
-/// 1.15.14 Draws a rotated sprite and scales it
-/// Draws a sprite rotating it around its centre point. The sprite is also scaled. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center. The sprite will be centred and rotated around its centre.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y coordinates of the centre of the image
-/// @param angle angle of rotation in degrees
-/// @param sx horizontal scale, 1.0 is unscaled
-/// @param sy vertical scale (defaults to sx)
+/**
+ * Draws a rotated sprite and scales it
+ *
+ * @remarks
+ * Draws a sprite rotating it around its centre point. The sprite is also scaled. You can omit sy value for uniform scaling. YOu can use negative scale for flipping. Scaling is around the center. The sprite will be centred and rotated around its centre.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param angle - angle of rotation in degrees
+ * @param sx - horizontal scale, 1.0 is unscaled
+ * @param sy - vertical scale, 1.0 is unscaled
+ *
+ * @allegro 1.15.14
+ */
 export function rotate_scaled_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -277,23 +411,37 @@ export function rotate_scaled_sprite(
   y: number,
   angle: number,
   sx: number,
-  sy?: number
+  sy: number
 ) {
   if (!bmp || !sprite) {
     return;
   }
   const u = (sx * sprite.w) / 2;
-  const v = ((sy ?? sx) * sprite.h) / 2;
+  const v = (sy * sprite.h) / 2;
   bmp.context.save();
   bmp.context.translate(x, y);
   bmp.context.rotate(RAD(angle));
   bmp.context.translate(-u, -v);
-  bmp.context.scale(sx, sy ?? sx);
+  bmp.context.scale(sx, sy);
   bmp.context.drawImage(sprite.canvas, 0, 0);
   bmp.context.restore();
 }
 
-/// 1.15.15
+/**
+ * Rotate scaled sprite with vertical flip
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param angle - angle of rotation in degrees
+ * @param scale - scale of sprite
+ *
+ * @allegro 1.15.15
+ */
 export function rotate_sprite_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -310,13 +458,22 @@ export function rotate_sprite_sprite_v_flip(
   void scale;
 }
 
-/// 1.15.16 Draws a sprite rotated around an arbitrary point
-/// Draws a sprite rotating it around a given point. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y target coordinates of the pivot point
-/// @param cx,cy pivot point coordinates
-/// @param angle angle of rotation in degrees
+/**
+ * Draws a sprite rotated around an arbitrary point
+ *
+ * @remarks
+ * Draws a sprite rotating it around a given point. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param cx - Pivot point x
+ * @param cy - Pivot point y
+ * @param angle - angle of rotation in degrees
+ *
+ * @allegro 1.15.16
+ */
 export function pivot_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -337,7 +494,23 @@ export function pivot_sprite(
   bmp.context.restore();
 }
 
-/// 1.15.17
+/**
+ * Pivot sprite with vertical flip
+ *
+ * @remarks
+ * Draws a sprite rotating it around a given point.
+ * Then flips it.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param cx - Pivot point x
+ * @param cy - Pivot point y
+ * @param angle - angle of rotation in degrees
+ *
+ * @allegro 1.15.17
+ */
 export function pivot_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -356,15 +529,24 @@ export function pivot_sprite_v_flip(
   void angle;
 }
 
-/// 1.15.18 Draws a sprite rotated around an arbitrary point and scaled
-/// Draws a sprite rotating it around a given point. The sprite is also scaled. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image  before scaling. You can omit sy value for uniform scaling. You can use negative scale for flipping.
-/// @param bmp target bitmap
-/// @param sprite sprite bitmap
-/// @param x,y target coordinates of the pivot point
-/// @param cx,cy pivot point coordinates
-/// @param angle angle of rotation in degrees
-/// @param sx horizontal scale , 1.0 is unscaled
-/// @param sy vertical scale (defaults to sx)
+/**
+ * Draws a sprite rotated around an arbitrary point and scaled
+ *
+ * @remarks
+ * Draws a sprite rotating it around a given point. The sprite is also scaled. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image  before scaling. You can omit sy value for uniform scaling. You can use negative scale for flipping.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param cx - Pivot point x
+ * @param cy - Pivot point y
+ * @param angle - angle of rotation in degrees
+ * @param sx - scale x
+ * @param xy - scale y
+ *
+ * @allegro 1.15.18
+ */
 export function pivot_scaled_sprite(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -374,23 +556,39 @@ export function pivot_scaled_sprite(
   cy: number,
   angle: number,
   sx: number,
-  sy?: number
+  sy: number
 ) {
   if (!bmp || !sprite) {
     return;
   }
   const u = sx * cx;
-  const v = (sy ?? sx) * cy;
+  const v = sy * cy;
   bmp.context.save();
   bmp.context.translate(x, y);
   bmp.context.rotate(RAD(angle));
   bmp.context.translate(-u, -v);
-  bmp.context.scale(sx, sy ?? sx);
+  bmp.context.scale(sx, sy);
   bmp.context.drawImage(sprite.canvas, 0, 0);
   bmp.context.restore();
 }
 
-/// 1.15.19
+/**
+ * Draws a sprite rotated around an arbitrary point and scaled and flipped.
+ *
+ * @remarks
+ * Draws a sprite rotating it around a given point. The sprite is also scaled. Sprite is drawn centered to the pivot point. The pivot point is relative to top-left corner of the image  before scaling. You can omit sy value for uniform scaling. You can use negative scale for flipping.
+ *
+ * @param bmp - target bitmap
+ * @param sprite - sprite bitmap
+ * @param x - x position
+ * @param y - y position
+ * @param cx - Pivot point x
+ * @param cy - Pivot point y
+ * @param angle - angle of rotation in degrees
+ * @param scale - scale amount
+ *
+ * @allegro 1.15.19
+ */
 export function pivot_scaled_sprite_v_flip(
   bmp: BITMAP | undefined,
   sprite: BITMAP | undefined,
@@ -410,5 +608,3 @@ export function pivot_scaled_sprite_v_flip(
   void angle;
   void scale;
 }
-
-//@}

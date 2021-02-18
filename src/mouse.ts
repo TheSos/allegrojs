@@ -48,9 +48,16 @@ const _cursors: Record<CURSOR_TYPES, BITMAP | null> = {
   MOUSE_CURSOR_QUESTION: null,
 };
 
-/// 1.5.1 Installs mouse handlers.
-/// Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
-/// @param menu If true, context menu will be available on right click on canvas. Default is false.
+/**
+ * Installs mouse handlers.
+ *
+ * @remarks
+ * Must be called after set_gfx_mode() to be able to determine mouse position within the given canvas!
+ *
+ * @param menu - If true, context menu will be available on right click on canvas. Default is false.
+ *
+ * @allegro 1.5.1
+ */
 export function install_mouse(menu = false) {
   if (_mouse_installed) {
     _allog("Mouse already installed");
@@ -77,7 +84,14 @@ export function install_mouse(menu = false) {
   return 0;
 }
 
-/// 1.5.2 Removes mouse handlers.
+/**
+ * Removes mouse handlers.
+ *
+ * @remarks
+ * Remove mouse handler
+ *
+ * @allegro 1.5.2
+ */
 export function remove_mouse() {
   if (!_mouse_installed) {
     _error("You must call install_mouse before remove_mouse");
@@ -94,69 +108,152 @@ export function remove_mouse() {
   return 0;
 }
 
-/// 1.5.3
+/**
+ * Poll Mouse
+ *
+ * @remarks
+ * Does nothing!
+ *
+ * @allegro 1.5.3
+ */
 export function poll_mouse() {
   _mouse_loop();
 }
 
-/// 1.5.4
+/**
+ * Mouse needs poll
+ *
+ * @remarks
+ * Returns false, since we don't poll
+ *
+ * @allegro 1.5.4
+ */
 export function mouse_needs_poll(): boolean {
   return false;
 }
 
-/// 1.5.5
+/**
+ * Enable hardware cursor
+ *
+ * @remarks
+ * Enable hardware cursor (aka browser cursor)
+ *
+ * @allegro 1.5.5
+ */
 export function enable_hardware_cursor() {
   _hardware_cursor = true;
 }
 
-/// 1.5.6
+/**
+ * Disable hardware cursor
+ *
+ * @remarks
+ * Disables hardware cursor
+ *
+ * @allegro 1.5.6
+ */
 export function disable_hardware_cursor() {
   _hardware_cursor = false;
 }
 
-/// 1.5.7
-export function select_mouse_cursor(cursor: CURSOR_TYPES) {
+/**
+ * Select mouse cursor
+ *
+ * @remarks
+ * Select mouse cursor (sprite or os)
+ *
+ * @param cursor - Cursor type
+ *
+ * @allegro 1.5.7
+ */
+export function select_mouse_cursor(cursor: CURSOR_TYPES): void {
   _selected_cursor = cursor;
   if (_hardware_cursor) {
     show_os_cursor(cursor);
   }
 }
 
-/// 1.5.8
+/**
+ * Set mouse cursor bitmap
+ *
+ * @remarks
+ * Override default bitmap sprite for cursor type
+ *
+ * @param cursor - Type to override
+ * @param bmp - Bitmap to use
+ *
+ * @allegro 1.5.8
+ */
 export function set_mouse_cursor_bitmap(
   cursor: CURSOR_TYPES,
   bmp: BITMAP | null
-) {
+): void {
   _cursors[cursor] = bmp;
 }
 
-/// 1.5.9
-/// Mouse X position within the canvas.
+/**
+ * Mouse X position within the canvas
+ *
+ * @allegro 1.5.9
+ */
 export let mouse_x = -1;
 
-/// Mouse Y position within the canvas
+/**
+ * Mouse Y position within the canvas
+ *
+ * @allegro 1.5.9
+ */
 export let mouse_y = -1;
 
-/// Mouse wheel position.
-/// This might not work consistently across all browsers!
+/**
+ * Mouse wheel position within the canvas
+ *
+ * @remarks
+ * This might not work consistently across all browsers!
+ *
+ * @allegro 1.5.9
+ */
 export let mouse_z = -1;
 
-/// Mouse fourth axis position.
+/**
+ * Mouse fourth axis position
+ *
+ * @allegro 1.5.9
+ */
 export const mouse_w = -1;
 
-/// Mouse button bitmask.
-/// Each bit in the mask represents a separate mouse button state. If right mouse button is down, mouse_b value would be 4, 00100 in binary. Each bit represents one mouse button. use something like if (mouse_b&1) to check for separate buttons.
-/// * Button 0 is LMB. (mouse_b&1)
-/// * Button 1 is MMB / wheel. (mouse_b&2)
-/// * Button 2 is RMB. (mouse_b&4)
+/**
+ * Mouse button bitmask.
+ *
+ * @remarks
+ * Each bit in the mask represents a separate mouse button state. If right mouse button is down, mouse_b value would be 4, 00100 in binary. Each bit represents one mouse button. use something like if (mouse_b&1) to check for separate buttons.
+ * - Button 0 is LMB. (mouse_b&1)
+ * - Button 1 is MMB / wheel. (mouse_b&2)
+ * - Button 2 is RMB. (mouse_b&4)
+ *
+ * @allegro 1.5.9
+ */
 export let mouse_b = 0;
 
-/// 1.5.10
+/**
+ * Current mouse sprite
+ *
+ * @allegro 1.5.10
+ */
 export const mouse_sprite: BITMAP | null = null;
 
-/// 1.5.11
+/**
+ * Show mouse
+ *
+ * @remarks
+ * Show mouse on bitmap
+ *
+ * @returns -1 on fail, 0 on success
+ *
+ * @allegro 1.5.11
+ */
 /// Enables showing system mouse cursor over canvas
-export function show_mouse(bmp: BITMAP | null) {
+export function show_mouse(bmp: BITMAP | null): number {
   if (!_mouse_installed) {
     _error("You must call install_mouse before show_mouse");
     return -1;
@@ -169,10 +266,18 @@ export function show_mouse(bmp: BITMAP | null) {
   return 0;
 }
 
-/// 1.5.12
-/// Disables system mouse cursor over canvas.
-/// Use this if you would like to provide your own cursor bitmap
-export function scare_mouse() {
+/**
+ * Scare mouse
+ *
+ * @remarks
+ * Disables system mouse cursor over canvas.
+ * Use this if you would like to provide your own cursor bitmap
+ *
+ * @returns -1 on fail, 0 on success
+ *
+ * @allegro 1.5.12
+ */
+export function scare_mouse(): number {
   if (!_mouse_installed) {
     _error("You must call install_mouse before hide_mouse");
     return -1;
@@ -181,7 +286,19 @@ export function scare_mouse() {
   return 0;
 }
 
-/// 1.5.13
+/**
+ * Scare mouse area
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param x - X point
+ * @param y - Y point
+ * @param w - Width of area
+ * @param h - Height of area
+ *
+ * @allegro 1.5.13
+ */
 export function scare_mouse_area(x: number, y: number, w: number, h: number) {
   void x;
   void y;
@@ -189,7 +306,16 @@ export function scare_mouse_area(x: number, y: number, w: number, h: number) {
   void h;
 }
 
-/// 1.5.15
+/**
+ * Show OS cursor
+ *
+ * @remarks
+ * Shows os cursor instead of sprite cursor
+ *
+ * @param cursor - type of cursor
+ *
+ * @allegro 1.5.15
+ */
 export function show_os_cursor(cursor: CURSOR_TYPES) {
   switch (cursor) {
     case "MOUSE_CURSOR_ALLEGRO":
@@ -216,21 +342,56 @@ export function show_os_cursor(cursor: CURSOR_TYPES) {
   }
 }
 
-/// 1.5.16
+/**
+ * Freeze mouse flaga
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.5.16
+ */
 export const freeze_mouse_flag = false;
 
-/// 1.5.17
+/**
+ * Manually position mouse
+ *
+ * @remarks
+ * This is simulataed
+ *
+ * @param x - X position to move to
+ * @param y - Y position to move to
+ *
+ * @allegro 1.5.17
+ */
 export function position_mouse(x: number, y: number) {
   mouse_x = x;
   mouse_y = y;
 }
 
-/// 1.5.18
+/**
+ * Position mouse z
+ *
+ * @param mouse_z - Move z position manually
+ *
+ * @allegro 1.5.18
+ */
 export function position_mouse_z(z: number) {
   mouse_z = z;
 }
 
-/// 1.5.19
+/**
+ * Set mouse range
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param x1 - Min x position
+ * @param y1 - Min y position
+ * @param y2 - Max x position
+ * @param y2 - Max y position
+ *
+ * @allegro 1.5.19
+ */
 export function set_mouse_range(
   x1: number,
   y1: number,
@@ -244,69 +405,111 @@ export function set_mouse_range(
   // NOOP
 }
 
-/// 1.5.20
+/**
+ * Set mouse speed
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param xspeed - speed in x position
+ * @param yspeed - speed in y position
+ *
+ * @allegro 1.5.20
+ */
 export function set_mouse_speed(xspeed: number, yspeed: number) {
   void xspeed;
   void yspeed;
   // NOOP
 }
 
-/// 1.5.21
+/**
+ * Set mouse sprite
+ *
+ * @remarks
+ * Override default allegro sprite
+ *
+ * @param sprite - sprite to set
+ *
+ * @allegro 1.5.21
+ */
 export function set_mouse_sprite(sprite: BITMAP | null) {
   _cursors.MOUSE_CURSOR_ALLEGRO = sprite;
 }
 
-/// 1.5.22
+/**
+ * Set mouse sprite focus
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param x - Focus x poisiton
+ * @param y - Focus y position
+ *
+ * @allegro 1.5.22
+ */
 export function set_mouse_sprite_focus(x: number, y: number) {
   _mouse_focus_x = x;
   _mouse_focus_y = y;
 }
 
-/// 1.5.23
+/**
+ * Get mouse mickeys
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.5.23
+ */
 export function get_mouse_mickeys(mickeyx: number, mickeyy: number) {
   void mickeyx;
   void mickeyy;
   // NOOP
 }
 
-/// 1.5.24
+/**
+ * Mouse callback
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.5.24
+ */
 export function mouse_callback(flags: number) {
   void flags;
   // NOOP
 }
 
-/// INTERNAL
-/// Mouse mickey, X position since last loop().
-/// Only works inside loop()
+// Mouse mickey, X position since last loop().
+// Only works inside loop()
 export let mouse_mx = 0;
 
-/// Mouse mickey, Y position since last loop().
-/// Only works inside loop()
+// Mouse mickey, Y position since last loop().
+// Only works inside loop()
 export let mouse_my = 0;
 
-/// Mouse mickey, wheel position since last loop().
-/// Only works inside loop()
+// Mouse mickey, wheel position since last loop().
+// Only works inside loop()
 export let mouse_mz = 0;
 
-/// Checks if mouse was installed
+// Checks if mouse was installed
 export let _mouse_installed = false;
 
-/// last mouse x position
+// last mouse x position
 export let _last_mouse_x = -1;
 
-/// last mouse y position
+// last mouse y position
 export let _last_mouse_y = -1;
 
-/// last mouse wheel position
+// last mouse wheel position
 export let _last_mouse_z = -1;
 
-/// is context menu enabled?
+// is context menu enabled?
 export const _menu = false;
 
-/// is menu supressed?
+// is menu supressed?
 export let _menu_supress = false;
 
-/// Simple internal mouse loop
+// Simple internal mouse loop
 export function _mouse_loop() {
   if (_mouse_installed) {
     mouse_mx = mouse_x - _last_mouse_x;
@@ -315,7 +518,7 @@ export function _mouse_loop() {
   }
 }
 
-/// Mouse reset loop
+// Mouse reset loop
 export function _mouse_loop_reset() {
   if (_mouse_installed) {
     mouse_mx = 0;
@@ -341,35 +544,32 @@ export function _mouse_loop_reset() {
   }
 }
 
-/// Mouse context menu suppressor
+// Mouse context menu suppressor
 export function _mousemenu(e: MouseEvent) {
   e.preventDefault();
 }
 
-/// mouse up event handler
+// mouse up event handler
 export function _mouseup(e: MouseEvent) {
   mouse_b &= ~(1 << e.button);
   e.preventDefault();
 }
 
-/// mouse down event handler
+// mouse down event handler
 export function _mousedown(e: MouseEvent) {
   mouse_b |= 1 << e.button;
   e.preventDefault();
 }
 
-/// mouse move event handler
+// mouse move event handler
 export function _mousemove(e: MouseEvent) {
   mouse_x = e.offsetX;
   mouse_y = e.offsetY;
   e.preventDefault();
 }
 
-/// mouse wheel event handler
+// mouse wheel event handler
 export function _mousewheel(e: WheelEvent) {
   mouse_z += e.deltaY;
   e.preventDefault();
 }
-
-//@}
-////////////////////////////////////////////

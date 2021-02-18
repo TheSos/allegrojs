@@ -1,13 +1,16 @@
-////////////////////////////////////////////
-/// @name KEYBOARD ROUTINES
-//@{
-
 import { _allog, log } from "./debug.js";
 import { rest } from "./timer.js";
 
-/// 1.7.1 Installs keyboard handlers
-/// Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppressed
-/// @param enable_keys array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the only ones on the list.
+/**
+ * Installs keyboard handlers
+ *
+ * @remarks
+ * Unlike mouse, keyboard can be installed before initialising graphics, and the handlers will function over the entire website, as opposed to canvas only. After this call, the key[] array can be used to check state of each key. All keys will have their default action disabled, unless specified in the enable_keys array. This means that i.e. backspace won't go back, arrows won't scroll. By default, function keys  (KEY_F1..KEY_F12) are the only ones not suppressed
+ *
+ * @param enable_keys - array of keys that are not going to have their default action prevented, i.e. [KEY_F5] will enable reloading the website. By default, if this is omitted, function keys are the only ones on the list.
+ *
+ * @allegro 1.7.1
+ */
 export function install_keyboard(enable_keys?: number[]) {
   if (_keyboard_installed) {
     _allog("Keyboard already installed");
@@ -28,7 +31,14 @@ export function install_keyboard(enable_keys?: number[]) {
   return 0;
 }
 
-/// 1.7.2 Uninstalls keyboard
+/**
+ * Uninstalls keyboard
+ *
+ * @remarks
+ * Simply removes event listeners from document
+ *
+ * @allegro 1.7.2
+ */
 export function remove_keyboard() {
   if (!_keyboard_installed) {
     _allog("Keyboard not installed");
@@ -41,7 +51,19 @@ export function remove_keyboard() {
   return 0;
 }
 
-/// 1.7.3
+/**
+ * Installs hooks for keyboard input
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param keypressed - Callback on keypress
+ * @param readkey - Callback for handling key read
+ *
+ * @allegro 1.7.3
+ *
+ * @alpha
+ */
 export function install_keyboard_hooks(
   keypressed: () => void,
   readkey: () => void
@@ -50,41 +72,85 @@ export function install_keyboard_hooks(
   void readkey;
 }
 
-/// 1.7.4
+/**
+ * Poll Keyboard
+ *
+ * @remarks
+ * Needs to do nothing since our key events are happening in background using events
+ *
+ * @allegro 1.7.4
+ */
 export function poll_keyboard(): number {
   return 0;
 }
 
-/// 1.7.5
+/**
+ * Keyboard needs poll
+ *
+ * @remarks
+ * Always false since we do not use polling system
+ *
+ * @allegro 1.7.5
+ */
 export function keyboard_needs_poll(): boolean {
   return false;
 }
 
-/// 1.7.6 Array of flags indicating state of each key.
-/// Available keyboard scan codes are as follows:
-/// *     KEY_A ... KEY_Z,
-/// *     KEY_0 ... KEY_9,
-/// *     KEY_0_PAD ... KEY_9_PAD,
-/// *     KEY_F1 ... KEY_F12,
-/// *     KEY_ESC, KEY_TILDE, KEY_MINUS, KEY_EQUALS, KEY_BACKSPACE, KEY_TAB, KEY_OPENBRACE, KEY_CLOSEBRACE, KEY_ENTER, KEY_COLON, KEY_QUOTE, KEY_BACKSLASH, KEY_COMMA, KEY_STOP, KEY_SLASH, KEY_SPACE,
-/// *     KEY_INSERT, KEY_DEL, KEY_HOME, KEY_END, KEY_PGUP, KEY_PGDN, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN,
-/// *     KEY_SLASH_PAD, KEY_ASTERISK, KEY_MINUS_PAD, KEY_PLUS_PAD, KEY_DEL_PAD, KEY_ENTER_PAD,
-/// *     KEY_PRTSCR, KEY_PAUSE,
-/// *     KEY_LSHIFT, KEY_RSHIFT, KEY_LCONTROL, KEY_RCONTROL, KEY_ALT, KEY_ALTGR, KEY_LWIN, KEY_RWIN, KEY_MENU, KEY_SCRLOCK, KEY_NUMLOCK, KEY_CAPSLOCK
-/// *     KEY_EQUALS_PAD, KEY_BACKQUOTE, KEY_SEMICOLON, KEY_COMMAND
+/**
+ * Array of flags indicating state of each key.
+ *
+ * @remarks
+ * Available keyboard scan codes are as follows:
+ *   KEY_A ... KEY_Z,
+ *   KEY_0 ... KEY_9,
+ *   KEY_0_PAD ... KEY_9_PAD,
+ *   KEY_F1 ... KEY_F12,
+ *   KEY_ESC, KEY_TILDE, KEY_MINUS, KEY_EQUALS, KEY_BACKSPACE, KEY_TAB, KEY_OPENBRACE, KEY_CLOSEBRACE, KEY_ENTER, KEY_COLON, KEY_QUOTE, KEY_BACKSLASH, KEY_COMMA, KEY_STOP, KEY_SLASH, KEY_SPACE,
+ *   KEY_INSERT, KEY_DEL, KEY_HOME, KEY_END, KEY_PGUP, KEY_PGDN, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN,
+ *   KEY_SLASH_PAD, KEY_ASTERISK, KEY_MINUS_PAD, KEY_PLUS_PAD, KEY_DEL_PAD, KEY_ENTER_PAD,
+ *   KEY_PRTSCR, KEY_PAUSE,
+ *   KEY_LSHIFT, KEY_RSHIFT, KEY_LCONTROL, KEY_RCONTROL, KEY_ALT, KEY_ALTGR, KEY_LWIN, KEY_RWIN, KEY_MENU, KEY_SCRLOCK, KEY_NUMLOCK, KEY_CAPSLOCK
+ *   KEY_EQUALS_PAD, KEY_BACKQUOTE, KEY_SEMICOLON, KEY_COMMAND
+ *
+ * @allegro 1.7.6
+ */
 export const key: boolean[] = [];
 
 export const key_buffer: number[] = [];
 
-/// 1.7.7
+/**
+ * No idea
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.7.7
+ *
+ * @alpha
+ */
 export const key_shifts = 0;
 
-/// 1.7.8
+/**
+ * Check if any key has been pressed
+ *
+ * @remarks
+ * Simply checks key buffer for existing keys
+ *
+ * @allegro 1.7.8
+ */
 export function keypressed(): boolean {
   return key_buffer.length > 0;
 }
 
-/// 1.7.9
+/**
+ * Read key from keybuffer
+ *
+ * @remarks
+ * This function is a promise that resolves when a key has been put in the keybuffer.
+ * Once one has beeen found, it pops the key off the top off the key_buffer stack and returns it.
+ *
+ * @allegro 1.7.9
+ */
 export async function readkey(): Promise<number> {
   while (key_buffer.length === 0) {
     // eslint-disable-next-line no-await-in-loop
@@ -97,72 +163,214 @@ export async function readkey(): Promise<number> {
   return -1;
 }
 
-/// 1.7.10
+/**
+ * Read unicode key
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param scancode - Unicode scancode to read
+ *
+ * @allegro 1.7.10
+ *
+ * @alpha
+ */
 export function ureadkey(scancode: number): number {
   void scancode;
   return 0;
 }
 
-/// 1.7.11
+/**
+ * Convert scancode to ascii
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param scancode - Unicode scancode to convert to ascii
+ *
+ * @allegro 1.7.11
+ *
+ * @alpha
+ */
 export function scancode_to_ascii(scancode: number) {
   return scancode;
 }
 
-/// 1.7.12
+/**
+ * Convert scancode to name
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param scancode - Unicode scancode
+ *
+ * @allegro 1.7.12
+ *
+ * @alpha
+ */
 export function scancode_to_name(scancode: number) {
   return scancode;
 }
 
-/// 1.7.13
+/**
+ * Simulate keypress
+ *
+ * @remarks
+ * Shoves a key into the keybuffer as if it has been pressed.
+ *
+ * @param key - Key to simulate pressing
+ *
+ * @allegro 1.7.13
+ */
 export function simulate_keypress(key: number) {
   _keydown_handler(key);
 }
 
-/// 1.7.14
+/**
+ * Simulate ukeypress
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param key - Code of key
+ * @param scancode - Code for unicode character
+ *
+ * @allegro 1.7.14
+ *
+ * @alpha
+ */
 export function simulate_ukeypress(key: number, scancode: number) {
   void scancode;
   _keydown_handler(key);
 }
 
-/// 1.7.15
+/**
+ * Keyboard callback
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param key - Code of key
+ *
+ * @allegro 1.7.15
+ *
+ * @alpha
+ */
 export function keyboard_callback(key: number) {
   void key;
 }
 
-/// 1.7.16
+/**
+ * Keyboard unicode callback
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param key - ASCII key code
+ * @param scancode - Code for unicode character
+ *
+ * @allegro 1.7.16
+ *
+ * @alpha
+ */
 export function keyboard_ucallback(key: number, scancode: number) {
   void key;
   void scancode;
 }
 
-/// 1.7.17
+/**
+ * Low level of keyboard callback
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param key - ASCII key code
+ *
+ * @allegro 1.7.17
+ *
+ * @alpha
+ */
 export function keyboard_lowlevel_callback(key: number) {
   void key;
 }
 
-/// 1.7.18
+/**
+ * Set keyboard LEDS
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param leds - Packed int containing leds to enable
+ *
+ * @allegro 1.7.18
+ *
+ * @alpha
+ */
 export function set_leds(leds: number) {
   void leds;
 }
 
-/// 1.7.19
+/**
+ * Set keyboard rate
+ *
+ * @remarks
+ * Meant to limit how often keyboard is polled for repeated keys, probably can not implement
+ *
+ * @param delay - Delay time
+ * @param repeat - Disable repeated keys
+ *
+ * @allegro 1.7.19
+ *
+ * @alpha
+ */
 export function set_keyboard_rate(delay: number, repeat: number) {
   void delay;
   void repeat;
 }
 
-/// 1.7.20
+/**
+ * Clear keybuffer
+ *
+ * @remarks
+ * Clears all items from key_buffer
+ *
+ * @allegro 1.7.20
+ */
 export function clear_keybuf() {
   key_buffer.length = 0;
 }
 
-/// 1.7.21
+/**
+ * Three finger flag
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.7.21
+ *
+ * @alpha
+ */
 export const three_finger_flag = false;
 
-/// 1.7.22
+/**
+ * Key Led Flag
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.7.22
+ *
+ * @alpha
+ */
 export const key_led_flag = false;
 
-/// Internal
+/**
+ * KEY Codes
+ *
+ * @remarks
+ * These should be identical to allegro key codes
+ *
+ */
 export const KEY_0 = 0x30,
   KEY_0_PAD = 0x60,
   KEY_1 = 0x31,
@@ -268,10 +476,24 @@ export const KEY_0 = 0x30,
   KEY_Y = 0x59,
   KEY_Z = 0x5a;
 
-/// Is keyboard even installed
+/**
+ * Is keyboard installed
+ *
+ * @remarks
+ * Flag for if keyboard has been installed yet
+ *
+ * @internal
+ */
 export let _keyboard_installed = false;
 
-/// default keys to not suppress
+/**
+ * Default unsupressed keys
+ *
+ * @remarks
+ * Default internal keys which represent what not to supress in browser
+ *
+ * @internal
+ */
 export const _default_enabled_keys = [
   KEY_F1,
   KEY_F2,
@@ -288,35 +510,77 @@ export const _default_enabled_keys = [
   KEY_ESC,
 ];
 
-/// array of prevent default avoiders
+/**
+ * Unsupressed keys
+ *
+ * @remarks
+ * Internal keys which represent what not to supress in browser
+ *
+ * @internal
+ */
 let _enabled_keys: number[] = [];
 
-/// Internal keyboard loop
+/**
+ * Internal Keyboard loop
+ *
+ * @remarks
+ * Run internal keyboard routines
+ *
+ * @internal
+ */
 export function _keyboard_loop() {
   if (_keyboard_installed) {
     key_buffer.length = 0;
   }
 }
 
-/// key down event handler
+/**
+ * Internal keydown listener
+ *
+ * @remarks
+ * Gets called when a key is down if keyboard has been installed
+ *
+ * @internal
+ */
 function _keydown(e: KeyboardEvent) {
   _keydown_handler(e.keyCode);
   if (!_enabled_keys.includes(e.keyCode)) e.preventDefault();
 }
 
+/**
+ * Internal keydown helper
+ *
+ * @remarks
+ * Set keycodes and add to keybuffer
+ *
+ * @internal
+ */
 function _keydown_handler(keyCode: number) {
   key[keyCode] = true;
   key_buffer.push(keyCode << 8);
 }
 
-/// key up event handler
+/**
+ * Internal keyup handler
+ *
+ * @remarks
+ * Gets called when a key is up if keyboard has been installed
+ *
+ * @internal
+ */
 function _keyup(e: KeyboardEvent) {
   _keyup_handler(e.keyCode);
   if (!_enabled_keys.includes(e.keyCode)) e.preventDefault();
 }
 
+/**
+ * Internal keyup helper
+ *
+ * @remarks
+ * Unset keycodes
+ *
+ * @internal
+ */
 function _keyup_handler(keyCode: number) {
   key[keyCode] = false;
 }
-
-//@}

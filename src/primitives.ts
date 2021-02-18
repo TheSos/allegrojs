@@ -1,24 +1,34 @@
-////////////////////////////////////////////
-/// @name DRAWING PRIMITIVES
-// @{
-
 import { getr, getg, getb, geta } from "./color.js";
 import { PI2, RAD } from "./math.js";
 import { BITMAP } from "./types.js";
 
-/// 1.14.1
-/// Clears bitmap to transparent black.
-/// Fills the entire bitmap with 0 value, which represents transparent black.
-/// @param bitmap bitmap to be cleared
+/**
+ * Clear Bitmap
+ *
+ * @remarks
+ * Clears bitmap to transparent black.
+ * Fills the entire bitmap with 0 value, which represents transparent black.
+ *
+ * @param bitmap - bitmap to be cleared
+ *
+ * @allegro 1.14.1
+ */
 export function clear_bitmap(bitmap: BITMAP | undefined) {
   clear_to_color(bitmap, 0x000000);
 }
 
-/// 1.14.2
-/// Clears bitmap to specified colour.
-/// Fills the entire bitmap with colour value.
-/// @param bitmap bitmap to be cleared
-/// @param colour colour in 0xAARRGGBB format
+/**
+ * Clear to color
+ *
+ * @remarks
+ * Clears bitmap to specified colour.
+ * Fills the entire bitmap with colour value.
+ *
+ * @param bitmap - bitmap to be cleared
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.2
+ */
 export function clear_to_color(bitmap: BITMAP | undefined, colour: number) {
   if (!bitmap) {
     return;
@@ -28,12 +38,19 @@ export function clear_to_color(bitmap: BITMAP | undefined, colour: number) {
   bitmap.context.fillRect(0, 0, bitmap.w, bitmap.h);
 }
 
-/// 1.14.3 Gets pixel colour from bitmap
-/// Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
-/// @param bitmap bitmap object to update
-/// @param x x coordinate of pixel
-/// @param y y coordinate of pixel
-/// @param colour colour in 0xAARRGGBB format
+/**
+ * Gets pixel colour from bitmap
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.3
+ */
 export function putpixel(
   bmp: BITMAP | undefined,
   x: number,
@@ -47,7 +64,19 @@ export function putpixel(
   bmp.context.fillRect(x, y, 1, 1);
 }
 
-/// 1.14.4
+/**
+ * Put pixel fast
+ *
+ * @remarks
+ * Since we dont have access to speedy c routines, this just calls put pixel
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.4
+ */
 export function _putpixel(
   bmp: BITMAP | undefined,
   x: number,
@@ -57,6 +86,19 @@ export function _putpixel(
   return putpixel(bmp, x, y, c);
 }
 
+/**
+ * Put pixel fast 15 bit
+ *
+ * @remarks
+ * Since we dont have access to color modes, this just calls put pixel
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.4
+ */
 export function _putpixel15(
   bmp: BITMAP | undefined,
   x: number,
@@ -66,6 +108,19 @@ export function _putpixel15(
   return putpixel(bmp, x, y, c);
 }
 
+/**
+ * Put pixel fast 16 bit
+ *
+ * @remarks
+ * Since we dont have access to color modes, this just calls put pixel
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.4
+ */
 export function _putpixel16(
   bmp: BITMAP | undefined,
   x: number,
@@ -75,6 +130,19 @@ export function _putpixel16(
   return putpixel(bmp, x, y, c);
 }
 
+/**
+ * Put pixel fast 24 bit
+ *
+ * @remarks
+ * Since we dont have access to color modes, this just calls put pixel
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.4
+ */
 export function _putpixel24(
   bmp: BITMAP | undefined,
   x: number,
@@ -84,6 +152,19 @@ export function _putpixel24(
   return putpixel(bmp, x, y, c);
 }
 
+/**
+ * Put pixel fast 32 bit
+ *
+ * @remarks
+ * Since we dont have access to color modes, this just calls put pixel
+ *
+ * @param bmp - bitmap object to update
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @param c - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.4
+ */
 export function _putpixel32(
   bmp: BITMAP | undefined,
   x: number,
@@ -93,13 +174,25 @@ export function _putpixel32(
   return putpixel(bmp, x, y, c);
 }
 
-/// 1.14.5 Gets pixel colour from bitmap
-/// Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
-/// @param bitmap bitmap object to poll
-/// @param x x coordinate of pixel
-/// @param y y coordinate of pixel
-/// @return colour in 0xAARRGGBB format
-export function getpixel(bmp: BITMAP | undefined, x: number, y: number) {
+/**
+ * Gets pixel colour from bitmap
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ *
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
+export function getpixel(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   if (!bmp || x < 0 || y < 0 || x >= bmp.w || y >= bmp.h) {
     return -1;
   }
@@ -113,71 +206,162 @@ export function getpixel(bmp: BITMAP | undefined, x: number, y: number) {
   );
 }
 
+/**
+ * Fast gets pixel colour from bitmap
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ * This is not actually fast
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
 export function _getpixel(bmp: BITMAP | undefined, x: number, y: number) {
   return getpixel(bmp, x, y);
 }
 
+/**
+ * Fast gets pixel 15 bit
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ * This is not actually fast
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
 export function _getpixel15(bmp: BITMAP | undefined, x: number, y: number) {
   return getpixel(bmp, x, y);
 }
 
+/**
+ * Fast gets pixel 16 bit
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ * This is not actually fast
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
 export function _getpixel16(bmp: BITMAP | undefined, x: number, y: number) {
   return getpixel(bmp, x, y);
 }
 
+/**
+ * Fast gets pixel 24 bit
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ * This is not actually fast
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
 export function _getpixel24(bmp: BITMAP | undefined, x: number, y: number) {
   return getpixel(bmp, x, y);
 }
 
+/**
+ * Fast gets pixel 32 bit
+ *
+ * @remarks
+ * Reads pixel from bitmap at given coordinates. This is probably super slow, and shouldn't be used inside loops.
+ * This is not actually fast
+ *
+ * @param bmp - bitmap object to poll
+ * @param x - x coordinate of pixel
+ * @param y - y coordinate of pixel
+ * @returns colour in 0xAARRGGBB format or -1 if it is out of bounds
+ *
+ * @allegro 1.14.5
+ */
 export function _getpixel32(bmp: BITMAP | undefined, x: number, y: number) {
   return getpixel(bmp, x, y);
 }
 
-/// 1.14.7 Draws a vertical line.
-/// Draws a vertical line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
-/// @param bitmap to be drawn to
-/// @param x column to draw the line to
-/// @param y1,y2 line endpoints
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width (defaults to 1)
+/**
+ * Draws a vertical line.
+ *
+ * @remarks
+ * Draws a vertical line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - column to draw the line to
+ * @param y1 - line end 1
+ * @param y2 - line end 2
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.7
+ */
 export function vline(
   bitmap: BITMAP | undefined,
   x: number,
   y1: number,
   y2: number,
-  colour: number,
-  width = 1
-) {
+  colour: number
+): void {
   if (!bitmap) {
     return;
   }
   _fillstyle(bitmap, colour);
-  bitmap.context.fillRect(x - width / 2, y1, width, y2 - y1);
+  bitmap.context.fillRect(x - 1 / 2, y1, 1, y2 - y1);
 }
 
-/// 1.14.8 Draws a horizontal line.
-/// Draws a horizontal line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
-/// @param bitmap to be drawn to
-/// @param y row to draw the line to
-/// @param x1,x2 line endpoints
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width (defaults to 1)
+/**
+ * Draws a horizontal line.
+ *
+ * @remarks
+ * Draws a horizontal line from one point to another using given colour. Probably slightly faster than line() method, since this one uses rectfill() to draw the line.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param y - row to draw the line to
+ * @param x1 - line endpoint 1
+ * @param x2 - line endpoint 2
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.8
+ */
 export function hline(
   bitmap: BITMAP | undefined,
   x1: number,
   y: number,
   x2: number,
-  colour: number,
-  width = 1
-) {
+  colour: number
+): void {
   if (!bitmap) {
     return;
   }
   _fillstyle(bitmap, colour);
-  bitmap.context.fillRect(x1, y - width / 2, x2 - x1, width);
+  bitmap.context.fillRect(x1, y - 1 / 2, x2 - x1, 1);
 }
 
-/// 1.14.9
+/**
+ * Do line
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.14.9
+ *
+ * @alpha
+ */
 export function do_line(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -196,13 +380,21 @@ export function do_line(
   void proc;
 }
 
-/// 1.14.10 Draws a line.
-/// Draws a line from one point to another using given colour.
-/// @param bitmap to be drawn to
-/// @param x1,y1 start point coordinates
-/// @param x2,y2 end point coordinates
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a line.
+ *
+ * @remarks
+ * Draws a line from one point to another using given colour.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x1 - start x
+ * @param y1 - start y
+ * @param x2 - end x
+ * @param y2 - end y
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.10
+ */
 export function line(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -221,7 +413,21 @@ export function line(
   bitmap.context.stroke();
 }
 
-/// 1.14.11
+/**
+ * Draws a line quickly
+ *
+ * @remarks
+ * Just calls line
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x1 - start x
+ * @param y1 - start y
+ * @param x2 - end x
+ * @param y2 - end y
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.11
+ */
 export function fastline(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -232,15 +438,23 @@ export function fastline(
 ) {
   line(bitmap, x1, y1, x2, y2, colour);
 }
-
-/// 1.14.12 Draws a triangle.
-/// Draws a triangle using three coordinates. The triangle is not filled.
-/// @param bitmap to be drawn to
-/// @param x1,y1 first point coordinates
-/// @param x2,y2 second point coordinates
-/// @param x3,y3 third point coordinates
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a triangle
+ *
+ * @remarks
+ * Draws a triangle using three coordinates. The triangle is not filled.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x1 - point 1 x
+ * @param y1 - point 1 y
+ * @param x2 - point 2 x
+ * @param y2 - point 2 y
+ * @param x2 - point 2 x
+ * @param y2 - point 2 y
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.12
+ */
 export function triangle(
   bitmap: BITMAP | undefined,
   x1: number,
@@ -263,19 +477,25 @@ export function triangle(
   bitmap.context.fill();
 }
 
-/// 1.14.13 Draws a polygon.
-/// Draws a polygon using three coordinates. The polygon is not filled.
-/// @param bitmap to be drawn to
-/// @param vertices number of vertices to draw
-/// @param points array containing vertices*2 elements of polygon coordinates in [x1,y1,x2,y2,x3...] format
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a polygon
+ *
+ * @remarks
+ * Draws a polygon using three coordinates. The polygon is not filled.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param vertices - number of vertices to draw
+ * @param points - array containing vertices*2 elements of polygon coordinates in [x1,y1,x2,y2,x3...] format
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.13
+ */
 export function polygon(
   bitmap: BITMAP | undefined,
   vertices: number,
   points: number[],
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -289,51 +509,76 @@ export function polygon(
   bitmap.context.fill();
 }
 
-/// 1.14.14 Draws a rectangle.
-/// Draws a rectangle from one point to another using given colour. The rectangle is not filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
-/// @param bitmap to be drawn to
-/// @param x1,y1 start point coordinates
-/// @param w,h width and height
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a rectangle.
+ *
+ * @remarks
+ * Draws a rectangle from one point to another using given colour.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x1 - point 1 x
+ * @param y1 - point 1 y
+ * @param x2 - point 2 x
+ * @param y2 - point 2 y
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.14
+ */
 export function rect(
   bitmap: BITMAP | undefined,
   x1: number,
   y1: number,
-  w: number,
-  h: number,
-  colour: number,
-  width: number
-) {
+  x2: number,
+  y2: number,
+  colour: number
+): void {
   if (!bitmap) {
     return;
   }
-  _strokestyle(bitmap, colour, width);
-  bitmap.context.strokeRect(x1, y1, w, h);
+  _strokestyle(bitmap, colour);
+  bitmap.context.strokeRect(x1, y1, x2 - x1, y2 - y1);
 }
 
-/// 1.14.15 Draws a filled ectangle.
-/// Draws a rectangle from one point to another using given colour. The rectangle is filled. Opposed to traditional allegro approach, width and height have to be provided, not an end point.
-/// @param bitmap to be drawn to
-/// @param x1,y1 start point coordinates
-/// @param w,h width and height
-/// @param colour colour in 0xAARRGGBB format
+/**
+ * Draws a filled rectangle.
+ *
+ * @remarks
+ * Draws a rectangle from one point to another using given colour.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x1 - point 1 x
+ * @param y1 - point 1 y
+ * @param x2 - point 2 x
+ * @param y2 - point 2 y
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.15
+ */
 export function rectfill(
   bitmap: BITMAP | undefined,
   x1: number,
   y1: number,
-  w: number,
-  h: number,
+  x2: number,
+  y2: number,
   colour: number
 ) {
   if (!bitmap) {
     return;
   }
   _fillstyle(bitmap, colour);
-  bitmap.context.fillRect(x1, y1, w, h);
+  bitmap.context.fillRect(x1, y1, x2 - x1, y2 - y1);
 }
 
-/// 1.14.16
+/**
+ * Do Circle
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @allegro 1.14.16
+ *
+ * @alpha
+ */
 export function do_circle(
   bmp: BITMAP | undefined,
   x: number,
@@ -350,13 +595,20 @@ export function do_circle(
   void proc;
 }
 
-/// 1.14.17 Draws a circle.
-/// Draws a circle at specified centre point and radius. The circle is not filled
-/// @param bitmap to be drawn to
-/// @param x,y centre point coordinates
-/// @param r circle radius
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a circle.
+ *
+ * @remarks
+ * Draws a circle at specified centre point and radius. The circle is not filled
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param radius - circle radius
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.17
+ */
 export function circle(
   bitmap: BITMAP | undefined,
   x: number,
@@ -373,19 +625,27 @@ export function circle(
   bitmap.context.stroke();
 }
 
-/// 1.14.18 Draws a circle.
-/// Draws a circle at specified centre point and radius. The circle is filled
-/// @param bitmap to be drawn to
-/// @param x,y centre point coordinates
-/// @param r circle radius
-/// @param colour colour in 0xAARRGGBB format
+/**
+ * Draws a filled circle
+ *
+ * @remarks
+ * Draws a circle at specified centre point and radius. The circle is filled
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param radius - circle radius
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.18
+ */
 export function circlefill(
   bitmap: BITMAP | undefined,
   x: number,
   y: number,
   radius: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -395,7 +655,23 @@ export function circlefill(
   bitmap.context.fill();
 }
 
-/// 1.14.19
+/**
+ * Do Ellipse
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param rx - radius in y direction
+ * @param ry - radius in x direction
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.19
+ *
+ * @alpha
+ */
 export function do_ellipse(
   bitmap: BITMAP | undefined,
   x: number,
@@ -414,28 +690,33 @@ export function do_ellipse(
   void proc;
 }
 
-/// 1.14.20
-
-/// Draws an ellipse.
-/// Draws an ellipse at specified centre point and radius. The ellipse is not filled
-/// @param bitmap to be drawn to
-/// @param x,y centre point coordinates
-/// @param rx,ry ellipse radius in x and y
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws an ellipse
+ *
+ * @remarks
+ * Draws an ellipse at specified centre point and radius. The ellipse is not filled
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param rx - radius in y direction
+ * @param ry - radius in x direction
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.20
+ */
 export function ellipse(
   bitmap: BITMAP | undefined,
   x: number,
   y: number,
   rx: number,
   ry: number,
-  colour: number,
-  width: number
+  colour: number
 ) {
   if (!bitmap) {
     return;
   }
-  _strokestyle(bitmap, colour, width);
+  _strokestyle(bitmap, colour);
   bitmap.context.save();
   bitmap.context.translate(x, y);
   bitmap.context.scale(rx, ry);
@@ -445,12 +726,21 @@ export function ellipse(
   bitmap.context.stroke();
 }
 
-/// 1.14.21 Draws an ellipse.
-/// Draws an ellipse at specified centre point and radius. The ellipse is filled
-/// @param bitmap to be drawn to
-/// @param x,y centre point coordinates
-/// @param rx,ry ellipse radius in x and y
-/// @param colour colour in 0xAARRGGBB format
+/**
+ * Draws an filled ellipse
+ *
+ * @remarks
+ * Draws an filled ellipse at specified centre point and radius. The ellipse is not filled
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param rx - radius in y direction
+ * @param ry - radius in x direction
+ * @param colour - colour in 0xAARRGGBB format
+ *
+ * @allegro 1.14.20
+ */
 export function ellipsefill(
   bitmap: BITMAP | undefined,
   x: number,
@@ -472,13 +762,31 @@ export function ellipsefill(
   bitmap.context.fill();
 }
 
-/// 1.14.22
+/**
+ * Do Arc
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param a1 - angle 1 of arc
+ * @param a2 - angle 2 of arc
+ * @param r - radius of arc
+ * @param d - parameter to pass to proc
+ * @param proc - procedure to call per point
+ *
+ * @allegro 1.14.22
+ *
+ * @alpha
+ */
 export function do_arc(
   bitmap: BITMAP | undefined,
   x: number,
   y: number,
-  ang1: number,
-  ang2: number,
+  a1: number,
+  a2: number,
   r: number,
   d: number,
   proc: (bmp: BITMAP, x: number, y: number, d: number) => void
@@ -486,21 +794,32 @@ export function do_arc(
   void bitmap;
   void x;
   void y;
-  void ang1;
-  void ang2;
+  void a1;
+  void a2;
   void r;
   void d;
   void proc;
 }
 
-/// 1.14.23 Draws a arc.
-/// Draws a circle at specified centre point and radius. The arc is not filled
-/// @param bitmap to be drawn to
-/// @param x,y centre point coordinates
-/// @param ang1,ang2 angles to draw the arc between measured anticlockwise from the positive x axis in degrees
-/// @param r radius
-/// @param colour colour in 0xAARRGGBB format
-/// @param width line width
+/**
+ * Draws a arc.
+ *
+ * @remarks
+ * Draws a circular arc with centre x, y and radius r, in an anticlockwise direction
+ * starting from the angle a1 and ending when it reaches a2. These values are specified
+ * in 16.16 fixed point format, with 256 equal to a full circle, 64 a right angle, etc.
+ * Zero is to the right of the centre point, and larger values rotate anticlockwise from there.
+ *
+ * @param bitmap - bitmap to be drawn to
+ * @param x - centre point x coordinates
+ * @param y - centre point y coordinates
+ * @param ang1 - angle 1 of arc
+ * @param ang2 - angle 2 of arc
+ * @param r - radius of arc
+ * @param colour - colour of arc
+ *
+ * @allegro 1.14.23
+ */
 export function arc(
   bitmap: BITMAP | undefined,
   x: number,
@@ -513,7 +832,7 @@ export function arc(
   if (!bitmap) {
     return;
   }
-  _strokestyle(bitmap, colour, 1);
+  _strokestyle(bitmap, colour);
   bitmap.context.beginPath();
   if (ang1 > ang2) {
     bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2));
@@ -523,7 +842,21 @@ export function arc(
   bitmap.context.stroke();
 }
 
-/// 1.14.24
+/**
+ * Calc spline
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param points - Points on spline
+ * @param npts - Number of points on spline (length of points)
+ * @param x - X position
+ * @param y - Y position
+ *
+ * @allegro 1.14.24
+ *
+ * @alpha
+ */
 export function calc_spline(
   points: number[],
   npts: number,
@@ -536,7 +869,20 @@ export function calc_spline(
   void y;
 }
 
-/// 1.14.25
+/**
+ * Draw bezier spline
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - Bitmap to draw to
+ * @param points - Points on spline (must be 8)
+ * @param color - Color of spline
+ *
+ * @allegro 1.14.25
+ *
+ * @alpha
+ */
 export function spline(
   bmp: BITMAP | undefined,
   points: number[],
@@ -547,7 +893,21 @@ export function spline(
   void color;
 }
 
-/// 1.14.26
+/**
+ * Flood fill area
+ *
+ * @remarks
+ * Not implemented
+ *
+ * @param bmp - Bitmap to draw to
+ * @param x - X position to start fill
+ * @param y - Y position to start fill
+ * @param color - Color of fill
+ *
+ * @allegro 1.14.26
+ *
+ * @alpha
+ */
 export function floodfill(
   bmp: BITMAP | undefined,
   x: number,
@@ -560,8 +920,16 @@ export function floodfill(
   void color;
 }
 
-/// INTERNAL
-/// Helper for setting fill style
+/**
+ * Fill Style Helper
+ *
+ * @remarks
+ * A function that handles canvas filling on a bitmap
+ *
+ * @param bitmap - Bitmap to draw to
+ * @param colour - Colour of fill
+ *
+ */
 export function _fillstyle(bitmap: BITMAP | undefined, colour: number) {
   if (!bitmap) {
     return;
@@ -578,7 +946,17 @@ export function _fillstyle(bitmap: BITMAP | undefined, colour: number) {
     ")";
 }
 
-/// Helper for setting stroke style
+/**
+ * Stroke Style Helper
+ *
+ * @remarks
+ * A function that handles canvas stroke on a bitmap
+ *
+ * @param bitmap - Bitmap to draw to
+ * @param colour - Colour of fill
+ * @param width - Width of stroke (usually 1)
+ *
+ */
 export function _strokestyle(
   bitmap: BITMAP | undefined,
   colour: number,
@@ -599,5 +977,3 @@ export function _strokestyle(
     (255 - geta(colour)) / 255 +
     ")";
 }
-
-//@}

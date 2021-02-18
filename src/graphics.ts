@@ -23,47 +23,101 @@ export const gfx_driver = {
   windowed: true,
 };
 
-/// 1.10.2
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.10.2
+ */
 /// Screen bitmap width in pixels
 export let SCREEN_W = 0;
 
-/// 1.10.3
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.10.3
+ */
 /// Screen bitmap height in pixels
 export let SCREEN_H = 0;
 
-/// 1.9.1
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.1
+ */
 export function set_color_depth(depth: number) {
   void depth;
   return 0;
 }
 
-/// 1.9.2
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.2
+ */
 export function get_color_depth() {
   return 32;
 }
 
-/// 1.9.3
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.3
+ */
 export function request_refresh_rate(rate: number) {
   void rate;
 }
 
-/// 1.9.4
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.4
+ */
 export function get_refresh_rate() {
   return 60;
 }
 
-/// 1.9.5
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.5
+ */
 export function get_gfx_mode_list(card: number) {
   void card;
   return [[0, 0, 0]];
 }
 
-/// 1.9.6
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.6
+ */
 export function destroy_gfx_mode_list(mode_list: number[]) {
   void mode_list;
 }
 
-/// 1.9.7
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.7
+ */
 /// Enables graphics.
 /// This function should be before calling any other graphics routines. It selects the canvas element for rendering and sets the resolution. It also loads the default font.
 /// @param width canvas width in pixels, 0 for don't care (will use actual canvas size)
@@ -116,7 +170,13 @@ export const GFX_AUTODETECT_FULLSCREEN = 1;
 export const GFX_AUTODETECT_WINDOWED = 2;
 export const GFX_SAFE = 3;
 
-/// 1.9.8
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.8
+ */
 export function set_display_switch_mode(mode: number) {
   void mode;
   return 0;
@@ -128,28 +188,58 @@ export const SWITCH_AMNESIA = 2;
 export const SWITCH_BACKGROUND = 3;
 export const SWITCH_BACKAMNESIA = 4;
 
-/// 1.9.9
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.9
+ */
 export function set_display_switch_callback(dir: number, cb: () => void) {
   void dir;
   void cb;
 }
 
-/// 1.9.10
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.10
+ */
 export function remove_display_switch_callback(cb: () => void) {
   void cb;
 }
 
-/// 1.9.11
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.11
+ */
 export function get_dispaly_switch_mode() {
   return 0;
 }
 
-/// 1.9.12
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.12
+ */
 export function is_windowed_mode() {
   return true;
 }
 
-/// 1.9.13
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.13
+ */
 export const gfx_capabilities = 0;
 
 export const GFX_CAN_SCROLL = 0x00000001;
@@ -180,29 +270,59 @@ export const GFX_HW_VRAM_STRETCH_BLIT_MASKED = 0x01000000;
 export const GFX_HW_SYS_STRETCH_BLIT = 0x02000000;
 export const GFX_HW_SYS_STRETCH_BLIT_MASKED = 0x04000000;
 
-/// 1.9.14
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.14
+ */
 export function enable_triple_buffer(): number {
   return 0;
 }
 
-/// 1.9.15
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.15
+ */
 export function scroll_screen(x: number, y: number) {
   void x;
   void y;
 }
 
-/// 1.9.16
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.16
+ */
 export function request_scroll(x: number, y: number) {
   void x;
   void y;
 }
 
-/// 1.9.17
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.17
+ */
 export function poll_scroll() {
   // NOOP
 }
 
-/// 1.9.18
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.18
+ */
 export function show_video_bitmap(bmp: BITMAP | undefined) {
   if (!bmp || bmp.w !== screen.w || bmp.h !== screen.h) {
     return;
@@ -211,13 +331,25 @@ export function show_video_bitmap(bmp: BITMAP | undefined) {
   draw_sprite(screen, bmp, 0, 0);
 }
 
-/// 1.9.19
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.19
+ */
 export function request_video_bitmap(bmp: BITMAP | undefined) {
   void bmp;
   return 0;
 }
 
-/// 1.9.20
+/**
+ *
+ *
+ * @remarks
+ *
+ * @allegro 1.9.20
+ */
 export function vsync() {
   // NOOP
 }
