@@ -39,9 +39,10 @@ jobs:
 
       - name: Copy to directory
         run: |
-          mv docs public
-          mv examples public/examples
-          mv build public/build
+          mkdir public
+          mv -v docs public
+          mv -v examples public/examples
+          mv -v build public/build
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@4.0.0
