@@ -31,7 +31,6 @@ import {
   ellipsefill,
   arc,
   spline,
-  readkey,
   clear_to_color,
   keypressed,
   clear_keybuf,

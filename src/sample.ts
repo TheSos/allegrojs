@@ -5,6 +5,13 @@ import { SAMPLE } from "./types.js";
 let _volume = 1.0;
 let _midi_volume = 1.0;
 
+export const digi_driver = {
+  id: 0,
+  name: "Browser DIGI",
+  desc: "Browser DIGI",
+  ascii_name: "Browser DIGI",
+};
+
 /**
  * Samples
  *
@@ -148,7 +155,14 @@ export function load_sample(filename: string) {
  * @allegro 1.27.8
  */
 export function destroy_sample(spl: SAMPLE) {
-  void spl;
+  const index = _samples.findIndex((s) => s === spl);
+  console.log(index, _samples);
+  if (index !== -1) {
+    log("Sample destroyed at index " + index);
+    spl.element.pause();
+    spl.element.remove();
+    _samples.splice(index, 1);
+  }
 }
 
 /**

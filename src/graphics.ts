@@ -1,14 +1,17 @@
-////////////////////////////////////////////
-/// @name GRAPHICS MODES
-//@{
-
-import { makecol } from "./allegro.js";
+import { makecol, _uberloop } from "./allegro.js";
 import { log, _error } from "./debug.js";
 import { clear_to_color } from "./primitives.js";
 import { draw_sprite } from "./sprites.js";
 import { BITMAP, FONT } from "./types.js";
 import { screen } from "./bitmap.js";
+import { _set_loop_interval } from "./config.js";
 
+/**
+ * Graphics Driver
+ *
+ * @remarks
+ * Graphics driver set by set_gfx_mode()
+ */
 export const gfx_driver = {
   id: 0,
   name: "No Graphics",
@@ -24,29 +27,24 @@ export const gfx_driver = {
 };
 
 /**
- *
- *
- * @remarks
+ * Screen bitmap width in pixels
  *
  * @allegro 1.10.2
  */
-/// Screen bitmap width in pixels
 export let SCREEN_W = 0;
 
 /**
- *
- *
- * @remarks
+ * Screen bitmap height in pixels
  *
  * @allegro 1.10.3
  */
-/// Screen bitmap height in pixels
 export let SCREEN_H = 0;
 
 /**
- *
+ * Set color depth
  *
  * @remarks
+ * Not implemented
  *
  * @allegro 1.9.1
  */
@@ -56,9 +54,10 @@ export function set_color_depth(depth: number) {
 }
 
 /**
- *
+ * Get color depth
  *
  * @remarks
+ * Simply returns 32
  *
  * @allegro 1.9.2
  */
@@ -67,9 +66,12 @@ export function get_color_depth() {
 }
 
 /**
- *
+ * Request refresh rate
  *
  * @remarks
+ * Request hardware refresh rate
+ *
+ * @param rate - refresh rate
  *
  * @allegro 1.9.3
  */
@@ -78,9 +80,10 @@ export function request_refresh_rate(rate: number) {
 }
 
 /**
- *
+ * Get refresh rate
  *
  * @remarks
+ * Simply returns 60
  *
  * @allegro 1.9.4
  */
@@ -112,18 +115,20 @@ export function destroy_gfx_mode_list(mode_list: number[]) {
 }
 
 /**
- *
+ * Enables graphics.
  *
  * @remarks
+ * This function should be before calling any other graphics routines. It selects the canvas element for rendering and sets the resolution. It also loads the default font.
+ *
+ * @param card - Graphics mode, fullscreen attatches a listener to fullscreen when clicked
+ * @param w - canvas width in pixels, 0 for don't care (will use actual canvas size)
+ * @param h - canvas height in pixels, 0 for don't care (will use actual canvas size)
+ * @param v_w - Video width (not supported)
+ * @param v_h - video height (not supported)
+ * @returns 0 on success or -1 on error
  *
  * @allegro 1.9.7
  */
-/// Enables graphics.
-/// This function should be before calling any other graphics routines. It selects the canvas element for rendering and sets the resolution. It also loads the default font.
-/// @param width canvas width in pixels, 0 for don't care (will use actual canvas size)
-/// @param height canvas height in pixels, 0 for don't care (will use actual canvas size)
-/// @param smooth disable/enable pixel smoothing, deaults to true
-/// @return 0 on success or -1 on error
 export function set_gfx_mode(
   card: number,
   w: number,
@@ -134,7 +139,6 @@ export function set_gfx_mode(
   // NOOP
   void v_w;
   void v_h;
-  void card;
 
   // Turn off image aliasing
   screen.context.imageSmoothingEnabled = false;
@@ -161,6 +165,21 @@ export function set_gfx_mode(
   font = { element: null, file: "", name: "Monospace", size: 12, type: "fnt" };
   _gfx_installed = true;
   log("Graphics mode set to " + w + " x " + h);
+
+  // Special cases for cards
+  if (card === GFX_AUTODETECT_FULLSCREEN) {
+    const requestFullscreen = () => {
+      void screen.canvas.requestFullscreen();
+      screen.canvas.removeEventListener("click", requestFullscreen);
+    };
+    screen.canvas.addEventListener("click", requestFullscreen);
+  } else if (card === GFX_TEXT) {
+    screen.canvas.width = 0;
+    screen.canvas.height = 0;
+    screen.w = 0;
+    screen.h = 0;
+  }
+
   return 0;
 }
 
@@ -171,15 +190,42 @@ export const GFX_AUTODETECT_WINDOWED = 2;
 export const GFX_SAFE = 3;
 
 /**
- *
+ * Set display switching mode
  *
  * @remarks
+ * Changes behavior when out of focus
+ *
+ * @param mode - Switch mode
+ *
+ * @returns 0 on success, -1 otherwise
  *
  * @allegro 1.9.8
  */
 export function set_display_switch_mode(mode: number) {
-  void mode;
-  return 0;
+  // Reset switch callbacks
+  _switch_in_callbacks.length = 0;
+  _switch_out_callbacks.length = 0;
+
+  // Set switch mode
+  _switch_mode = mode;
+
+  switch (mode) {
+    case SWITCH_AMNESIA:
+    case SWITCH_PAUSE:
+      screen.canvas.addEventListener("pointerleave", () => {
+        _set_loop_interval(-1);
+      });
+      screen.canvas.addEventListener("pointerenter", () => {
+        _set_loop_interval(window.setInterval(_uberloop, 16.6));
+      });
+      return 0;
+    case SWITCH_NONE:
+      return -1;
+    case SWITCH_BACKAMNESIA:
+    case SWITCH_BACKGROUND:
+    default:
+      return 0;
+  }
 }
 
 export const SWITCH_NONE = 0;
@@ -188,55 +234,101 @@ export const SWITCH_AMNESIA = 2;
 export const SWITCH_BACKGROUND = 3;
 export const SWITCH_BACKAMNESIA = 4;
 
+let _switch_mode = SWITCH_PAUSE;
+
 /**
- *
+ * Set display switch callback
  *
  * @remarks
+ * Like allegro, we limit callbacks to 8
+ *
+ * @param dir - Either SWITCH_IN or SWITCH_OUT
+ * @param cb - Callback to be called on switch
+ * @returns 0 on success, -1 otherwise
  *
  * @allegro 1.9.9
  */
 export function set_display_switch_callback(dir: number, cb: () => void) {
-  void dir;
-  void cb;
+  // Limit at 8
+  if (_switch_in_callbacks.length + _switch_out_callbacks.length >= 8) {
+    return -1;
+  }
+
+  // Switch in mode
+  if (dir === SWITCH_IN) {
+    _switch_in_callbacks.push(cb);
+  }
+  // Switch out mode
+  else if (dir === SWITCH_OUT) {
+    _switch_out_callbacks.push(cb);
+  }
+
+  return 0;
 }
 
+const _switch_in_callbacks: (() => void)[] = [];
+const _switch_out_callbacks: (() => void)[] = [];
+
+export const SWITCH_IN = 0;
+export const SWITCH_OUT = 1;
+
 /**
- *
+ * Remove a display switch callback
  *
  * @remarks
+ * This can be useful for things like pausing games etc.
+ * Can be called safely even if CB is not installed.
+ *
+ * @param cb - Callback to remove
  *
  * @allegro 1.9.10
  */
 export function remove_display_switch_callback(cb: () => void) {
-  void cb;
+  const in_index = _switch_in_callbacks.findIndex((proc) => proc === cb);
+  const out_index = _switch_out_callbacks.findIndex((proc) => proc === cb);
+
+  if (in_index !== -1) {
+    _switch_in_callbacks.splice(in_index, 1);
+  }
+
+  if (out_index !== -1) {
+    _switch_in_callbacks.splice(out_index, 1);
+  }
 }
 
 /**
- *
+ * Get display switch mode
  *
  * @remarks
+ * Returns current display switch mode
+ *
+ * @returns switch mode
  *
  * @allegro 1.9.11
  */
-export function get_dispaly_switch_mode() {
-  return 0;
+export function get_display_switch_mode() {
+  return _switch_mode;
 }
 
 /**
- *
+ * Is windowed mode
  *
  * @remarks
+ * Changes when user has allowed fullscreen
+ *
+ * @returns Windowed mode
  *
  * @allegro 1.9.12
  */
 export function is_windowed_mode() {
-  return true;
+  return !document.fullscreenElement;
 }
 
 /**
- *
+ * Graphics capabilities
  *
  * @remarks
+ * Capibilities of graphics
  *
  * @allegro 1.9.13
  */
@@ -271,9 +363,10 @@ export const GFX_HW_SYS_STRETCH_BLIT = 0x02000000;
 export const GFX_HW_SYS_STRETCH_BLIT_MASKED = 0x04000000;
 
 /**
- *
+ * Enable tripe buffer
  *
  * @remarks
+ * Does nothing!
  *
  * @allegro 1.9.14
  */
@@ -282,9 +375,10 @@ export function enable_triple_buffer(): number {
 }
 
 /**
- *
+ * Scroll screen
  *
  * @remarks
+ * Not implemented
  *
  * @allegro 1.9.15
  */
@@ -294,9 +388,10 @@ export function scroll_screen(x: number, y: number) {
 }
 
 /**
- *
+ * Request scroll
  *
  * @remarks
+ * Not implemented
  *
  * @allegro 1.9.16
  */
@@ -306,9 +401,10 @@ export function request_scroll(x: number, y: number) {
 }
 
 /**
- *
+ * Poll Scroll
  *
  * @remarks
+ * Not implemented
  *
  * @allegro 1.9.17
  */
@@ -317,9 +413,13 @@ export function poll_scroll() {
 }
 
 /**
- *
+ * Show video bitmap
  *
  * @remarks
+ * Shortcut to drawing bitmap to screen.
+ * MUST be of same dimensions.
+ *
+ * @param bmp - Bitmap to show
  *
  * @allegro 1.9.18
  */
@@ -332,21 +432,26 @@ export function show_video_bitmap(bmp: BITMAP | undefined) {
 }
 
 /**
- *
+ * Request video bitmap
  *
  * @remarks
+ * Simply returns back the same bitmap
+ *
+ * @param bmp - Bitmap to get video bitmap of
  *
  * @allegro 1.9.19
  */
-export function request_video_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return 0;
+export function request_video_bitmap(
+  bmp: BITMAP | undefined
+): BITMAP | undefined {
+  return bmp;
 }
 
 /**
- *
+ * Vsync
  *
  * @remarks
+ * Does nothing
  *
  * @allegro 1.9.20
  */
@@ -359,5 +464,3 @@ export let _gfx_installed = false;
 /// default font
 // eslint-disable-next-line @typescript-eslint/init-declarations
 export let font!: FONT;
-
-//@}

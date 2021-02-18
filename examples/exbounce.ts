@@ -9,7 +9,6 @@ import {
   SCREEN_H,
   play_sample,
   enable_debug,
-  BPS_TO_TIMER,
   makecol,
   clear_to_color,
   install_sound,
@@ -23,6 +22,10 @@ import {
   install_keyboard,
   DIGI_AUTODETECT,
   init_allegro_ts,
+  set_display_switch_mode,
+  SWITCH_PAUSE,
+  GFX_AUTODETECT_WINDOWED,
+  allegro_init,
 } from "../build/allegro.js";
 
 // bitmap oobjects
@@ -104,9 +107,12 @@ async function main() {
   // enable debugging to console element
   enable_debug("debug");
 
-  // put allegro in canvas with id="canvas_id"
+  allegro_init();
+
   // make the dimesnions 640x480
-  set_gfx_mode(1, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+
+  set_display_switch_mode(SWITCH_PAUSE);
 
   install_sound(DIGI_AUTODETECT, DIGI_AUTODETECT, null);
 

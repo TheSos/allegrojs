@@ -7,6 +7,22 @@ import { log } from "./debug.js";
 import { vsprintf } from "./sprintf.js";
 
 /**
+ * Loop interval for pausing
+ *
+ * @internal
+ */
+let _loop_interval = -1;
+
+export function _set_loop_interval(interval: number) {
+  if (_loop_interval !== -1) {
+    window.clearInterval(_loop_interval);
+  }
+  if (interval !== -1) {
+    _loop_interval = interval;
+  }
+}
+
+/**
  * Installs allegro.
  *
  * @remarks
@@ -30,7 +46,7 @@ export function install_allegro(
   void atexit_ptr;
   check_cpu();
   log("Allegro installed!");
-  window.setInterval(_uberloop, 16.6);
+  _set_loop_interval(window.setInterval(_uberloop, 16.6));
   log("Game loop initialised!");
 
   return 0;

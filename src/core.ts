@@ -1,5 +1,11 @@
 import { log, _error } from "./debug.js";
-import { font, SCREEN_H, SCREEN_W } from "./graphics.js";
+import {
+  font,
+  GFX_AUTODETECT_WINDOWED,
+  SCREEN_H,
+  SCREEN_W,
+  set_gfx_mode,
+} from "./graphics.js";
 import { _keyboard_loop } from "./keyboard.js";
 import { scaleclamp } from "./math.js";
 import { _mouse_loop, _mouse_loop_reset } from "./mouse.js";
@@ -127,6 +133,7 @@ export function init_allegro_ts(
 // Start it up
 async function boot(main: () => Promise<number>) {
   const code = await main();
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 320, 200, 0, 0);
   clear_to_color(screen, makecol(100, 100, 100));
   textprintf_centre_ex(
     screen,
