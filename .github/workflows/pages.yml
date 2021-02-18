@@ -34,15 +34,15 @@ jobs:
       - name: Create documents
         run: yarn docs
 
-      - name: Add no jekyll
-        run: touch docs/.nojekyll
-
       - name: Copy to directory
         run: |
           mkdir public
-          mv -v docs public
-          mv -v examples public/examples
-          mv -v build public/build
+          cp -r docs/* public
+          cp -r examples public/examples
+          cp -r build public/build
+
+      - name: Add no jekyll
+        run: touch public/.nojekyll
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@4.0.0
