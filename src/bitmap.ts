@@ -1,5 +1,7 @@
+import { makecol } from "./color.js";
 import { _downloadables } from "./core.js";
 import { log } from "./debug.js";
+import { blit } from "./sprites.js";
 import { BITMAP, PACKFILE, RGB } from "./types.js";
 
 /**
@@ -17,6 +19,11 @@ export const screen: BITMAP = {
   context: (null as unknown) as CanvasRenderingContext2D,
   ready: false,
   type: "bmp",
+  clipping: false,
+  clipping_rect: { x1: 0, y1: 0, x2: 0, y2: 0 },
+  is_screen: true,
+  mem_type: "video",
+  parent: null,
 };
 
 /**
@@ -49,6 +56,16 @@ export function create_bitmap(width: number, height: number): BITMAP {
     context: ctx,
     ready: true,
     type: "bmp",
+    clipping: true,
+    clipping_rect: {
+      x1: 0,
+      y1: 0,
+      x2: width,
+      y2: height,
+    },
+    is_screen: false,
+    mem_type: "memory",
+    parent: null,
   };
 }
 
@@ -88,8 +105,6 @@ export function create_bitmap_ex(
  * @returns bitmap object
  *
  * @allegro 1.10.6
- *
- * @alpha
  */
 export function create_sub_bitmap(
   parent: BITMAP | undefined,
@@ -97,11 +112,14 @@ export function create_sub_bitmap(
   y: number,
   width: number,
   height: number
-): BITMAP {
-  void parent;
-  void x;
-  void y;
-  return create_bitmap(width, height);
+): BITMAP | null {
+  if (!parent) {
+    return null;
+  }
+  const new_bmp = create_bitmap(width, height);
+  blit(new_bmp, parent, x, y, 0, 0, width, height);
+  new_bmp.parent = parent;
+  return new_bmp;
 }
 
 /**
@@ -118,7 +136,9 @@ export function create_sub_bitmap(
  * @allegro 1.10.7
  */
 export function create_video_bitmap(width: number, height: number): BITMAP {
-  return create_bitmap(width, height);
+  const bmp = create_bitmap(width, height);
+  bmp.mem_type = "video";
+  return bmp;
 }
 
 /**
@@ -135,22 +155,27 @@ export function create_video_bitmap(width: number, height: number): BITMAP {
  * @allegro 1.10.8
  */
 export function create_system_bitmap(width: number, height: number): BITMAP {
-  return create_bitmap(width, height);
+  const bmp = create_bitmap(width, height);
+  bmp.mem_type = "system";
+  return bmp;
 }
 
 /**
  * Destroys a bitmap
  *
  * @remarks
- * Since JS has a garbage collector this currently does nothing.
- * Probably should delete bitmap.
+ * Removes the canvas and removes ready state
  *
  * @param bitmap - BITMAP to delete
  *
  * @allegro 1.10.9
  */
 export function destroy_bitmap(bitmap: BITMAP | undefined): void {
-  void bitmap;
+  if (!bitmap) {
+    return;
+  }
+  bitmap.canvas.remove();
+  bitmap.ready = false;
 }
 
 /**
@@ -186,17 +211,15 @@ export function bitmap_color_depth(bmp: BITMAP | undefined) {
  * Get bitmap mask depth
  *
  * @remarks
- * Not implemented
+ * Returns magic pink
  *
  * @param bitmap - BITMAP to check mask color of
  *
  * @allegro 1.10.12
- *
- * @alpha
  */
 export function bitmap_mask_color(bmp: BITMAP | undefined) {
   void bmp;
-  return 0;
+  return makecol(255, 0, 255);
 }
 
 /**
@@ -209,27 +232,29 @@ export function bitmap_mask_color(bmp: BITMAP | undefined) {
  * @param bmp2 - second BITMAP
  *
  * @allegro 1.10.13
- *
- * @alpha
  */
 export function is_same_bitmap(
   bmp1: BITMAP | undefined,
   bmp2: BITMAP | undefined
 ) {
-  return bmp1 === bmp2;
+  if (!bmp1 || !bmp2) {
+    return false;
+  }
+  return (
+    bmp1 === bmp2 ||
+    (typeof bmp1.parent !== "undefined" && bmp1.parent === bmp2.parent)
+  );
 }
 
 /**
  * Check if bitmap is planar
  *
  * @remarks
- * Not implemented
+ * We dont support planar bitmaps, return false
  *
  * @param bmp - BITMAP to check planar-ness
  *
  * @allegro 1.10.14
- *
- * @alpha
  */
 export function is_planar_bitmap(bmp: BITMAP | undefined) {
   void bmp;
@@ -240,101 +265,100 @@ export function is_planar_bitmap(bmp: BITMAP | undefined) {
  * Check if bitmap is linear
  *
  * @remarks
- * Not implemented
+ * All bitmaps can be treated as linear bitmaps, so we reutrn true
  *
  * @param bmp - BITMAP to check linear-ness
  *
  * @allegro 1.10.15
- *
- * @alpha
  */
 export function is_linear_bitmap(bmp: BITMAP | undefined) {
   void bmp;
-  return false;
+  return true;
 }
 
 /**
  * Check if bitmap is memory bitmap
  *
  * @remarks
- * Not implemented
+ * Checks if is screen flag is set
  *
  * @param bmp - BITMAP to check if memory
  *
  * @allegro 1.10.16
- *
- * @alpha
  */
 export function is_memory_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return false;
+  if (!bmp) {
+    return false;
+  }
+  return !bmp.is_screen;
 }
 
 /**
  * Check if bitmap is screen bitmap
  *
  * @remarks
- * Simply compares bitmap with global screen bitmap. Does not check if it is a sub bitmap.
+ * Checks if screen flag is set
  *
  * @param bmp - BITMAP to check if screen
  *
  * @allegro 1.10.17
- *
- * @alpha
  */
 export function is_screen_bitmap(bmp: BITMAP | undefined) {
-  return bmp === screen;
+  if (!bmp) {
+    return false;
+  }
+  return bmp.is_screen;
 }
 
 /**
  * Check if bitmap is video bitmap
  *
  * @remarks
- * Not implemented
+ * Checks if screen or created with create_video_bitmap
  *
  * @param bmp - BITMAP to check if video bitmap
  *
  * @allegro 1.10.18
- *
- * @alpha
  */
 export function is_video_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return false;
+  if (!bmp) {
+    return false;
+  }
+  return bmp.mem_type === "video";
 }
 
 /**
  * Check if bitmap is system bitmap
  *
  * @remarks
- * Not implemented
+ * Checks if bitmap was created using create_system_bitmap
  *
  * @param bmp - BITMAP to check if system bitmap
  *
  * @allegro 1.10.19
- *
- * @alpha
  */
 export function is_system_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return false;
+  if (!bmp) {
+    return false;
+  }
+  return bmp.mem_type === "system";
 }
 
 /**
  * Check if bitmap is sub bitmap
  *
  * @remarks
- * Not implemented
+ * Check if created using create_sub_bitmap
  *
  * @param bmp - BITMAP to check if sub bitmap
  *
  * @allegro 1.10.20
- *
- * @alpha
  */
 export function is_sub_bitmap(bmp: BITMAP | undefined) {
-  void bmp;
-  return false;
+  if (!bmp) {
+    return false;
+  }
+  return Boolean(bmp.parent);
 }
 
 /**
@@ -393,7 +417,7 @@ export function release_screen() {
  * Set clip rect
  *
  * @remarks
- * Not implemented
+ * Overrite bitmap clipping rectangle
  *
  * @param bitmap - BITMAP to set clip on
  * @param x1 - left bound
@@ -410,46 +434,44 @@ export function set_clip_rect(
   x2: number,
   y2: number
 ) {
-  void bitmap;
-  void x1;
-  void y1;
-  void x2;
-  void y2;
+  if (!bitmap) {
+    return;
+  }
+  bitmap.clipping_rect = {
+    x1,
+    y1,
+    x2,
+    y2,
+  };
 }
 
 /**
  * Get clip rect
  *
  * @remarks
- * Not implemented
+ * Returns clipping rectangle or null.
+ * Since we can not assign parameter pointers, this differs from actual allegro
+ * behaviour in that it returns an object.
  *
  * @param bitmap - BITMAP to get clipping
- * @param x1 - left bound
- * @param y1 - top bound
- * @param x2 - right bound
- * @param y2 - bottom bound
  *
  * @allegro 1.10.26
  */
-export function get_clip_rect(
-  bitmap: BITMAP | undefined,
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number
-) {
-  void bitmap;
-  void x1;
-  void y1;
-  void x2;
-  void y2;
+export function get_clip_rect(bitmap: BITMAP | undefined) {
+  if (!bitmap) {
+    return null;
+  }
+  return bitmap.clipping_rect;
 }
 
 /**
  * Add clip rect
  *
  * @remarks
- * Not implemented
+ * Sets the clipping rectangle of the specified bitmap as the intersection
+ * of its current clipping rectangle and the rectangle described by the four coordinates.
+ *
+ * Currently just sets it
  *
  * @param bitmap - BITMAP to add clipping
  * @param x1 - left bound
@@ -466,50 +488,63 @@ export function add_clip_rect(
   x2: number,
   y2: number
 ) {
-  void bitmap;
-  void x1;
-  void y1;
-  void x2;
-  void y2;
+  if (!bitmap) {
+    return;
+  }
+  bitmap.clipping_rect = {
+    x1,
+    y1,
+    x2,
+    y2,
+  };
 }
 
 /**
  * Set clip state
  *
  * @remarks
- * Not implemented
+ * Enables or disables clipping
  *
  * @param bitmap - BITMAP to modify clip state
  * @param state - clip state
  *
  * @allegro 1.10.28
  */
-export function set_clip_state(bitmap: BITMAP | undefined, state: number) {
-  void bitmap;
-  void state;
+export function set_clip_state(bitmap: BITMAP | undefined, state: boolean) {
+  if (!bitmap) {
+    return;
+  }
+  bitmap.clipping = state;
 }
 
 /**
  * Get clip state
  *
  * @remarks
- * Not implemented
+ * Simply checks bitmaps clipping rectangles
  *
  * @param bitmap - BITMAP to check clip state of
- * @returns clip state of bitmap
+ * @returns non zero if clipping enabled, otherwise zero
  *
  * @allegro 1.10.29
  */
-export function get_clip_state(bitmap: BITMAP | undefined) {
-  void bitmap;
-  return 0;
+export function get_clip_state(bitmap: BITMAP | undefined): number {
+  if (!bitmap) {
+    return 0;
+  }
+  return bitmap.clipping ? 1 : 0;
 }
 
 /**
  * Check if inside bitmap
  *
  * @remarks
- * Not implemented
+ * Returns non-zero if point (x, y) lies inside the bitmap.
+ * If ‘clip’ is non-zero, the function compares the coordinates with the
+ * clipping rectangle, that is it returns non-zero if the point lies
+ * inside the clipping rectangle or if clipping is disabled for the bitmap.
+ * If ‘clip’ is zero, the function compares the coordinates with the actual
+ * dimensions of the bitmap.
  *
  * @param bmp - BITMAP to check if point is inside
  * @param x - x position of point
@@ -525,18 +560,31 @@ export function is_inside_bitmap(
   y: number,
   clip: number
 ) {
-  void bmp;
-  void x;
-  void y;
-  void clip;
-  return false;
+  if (!bmp) {
+    return false;
+  }
+  // Check bitmap
+  if (clip === 0) {
+    return x >= 0 && y >= 0 && x < bmp.w && y < bmp.h;
+  }
+  // Check if clipping
+  return (
+    !bmp.clipping ||
+    (x >= bmp.clipping_rect.x1 &&
+      y >= bmp.clipping_rect.y1 &&
+      x < bmp.clipping_rect.x2 &&
+      y < bmp.clipping_rect.x2)
+  );
 }
 
 /**
  * Loads bitmap from file
  *
  * @remarks
- * Loads image from file asynchronously. This means that the execution won't stall for the image, and it's data won't be accessible right off the start. You can check for bitmap object's 'ready' member to see if it has loaded, but you probably should avoid stalling execution for that, as JS doesn't really like that.
+ * Loads image from file asynchronously. This means that the execution won't stall for the image,
+ * and it's data won't be accessible right off the start. You can check for bitmap object's 'ready'
+ * member to see if it has loaded, but you probably should avoid stalling execution for that,
+ * as JS doesn't really like that.
  *
  * @param filename - URL of image
  * @returns bitmap object, or -1 on error
@@ -563,6 +611,11 @@ export function load_bitmap(filename: string, pal?: RGB): BITMAP {
     h: -1,
     ready: false,
     type: "bmp",
+    clipping: true,
+    clipping_rect: { x1: 0, y1: 0, x2: 0, y2: 0 },
+    is_screen: false,
+    mem_type: "memory",
+    parent: null,
   };
 
   _downloadables.push(bmp);
@@ -581,6 +634,12 @@ export function load_bitmap(filename: string, pal?: RGB): BITMAP {
     bmp.context.drawImage(img, 0, 0);
     bmp.w = img.width;
     bmp.h = img.height;
+    bmp.clipping_rect = {
+      x1: 0,
+      y1: 0,
+      x2: bmp.w,
+      y2: bmp.h,
+    };
     bmp.ready = true;
   };
 
@@ -612,7 +671,7 @@ export function load_bmp(filename: string): BITMAP {
  *
  * @allegro 1.11.3
  */
-export function load_bmp_pf(f: PACKFILE, pal: RGB) {
+export function load_bmp_pf(f: PACKFILE, pal?: RGB) {
   void f;
   void pal;
 }
@@ -628,7 +687,7 @@ export function load_bmp_pf(f: PACKFILE, pal: RGB) {
  *
  * @allegro 1.11.4
  */
-export function load_lbm(filename: string, pal: RGB) {
+export function load_lbm(filename: string, pal?: RGB) {
   void filename;
   void pal;
 }
@@ -644,7 +703,7 @@ export function load_lbm(filename: string, pal: RGB) {
  *
  * @allegro 1.11.5
  */
-export function load_pcx(filename: string, pal: RGB) {
+export function load_pcx(filename: string, pal?: RGB) {
   void filename;
   void pal;
 }
@@ -660,7 +719,7 @@ export function load_pcx(filename: string, pal: RGB) {
  *
  * @allegro 1.11.6
  */
-export function load_pcx_pf(f: PACKFILE, pal: RGB) {
+export function load_pcx_pf(f: PACKFILE, pal?: RGB) {
   void f;
   void pal;
 }
@@ -691,7 +750,7 @@ export function load_tga(filename: string, pal?: RGB) {
  *
  * @allegro 1.11.8
  */
-export function load_tga_pf(f: PACKFILE, pal: RGB) {
+export function load_tga_pf(f: PACKFILE, pal?: RGB) {
   void f;
   void pal;
 }
@@ -700,24 +759,29 @@ export function load_tga_pf(f: PACKFILE, pal: RGB) {
  * Save BITMAP to file
  *
  * @remarks
- * Not implemented
+ * Save a bitmap by simulating a click on a dataurl link
  *
  * @param filename - File to save to
  * @param bmp - BITMAP to save
  * @param pal - PALETTE to use when saving
  *
  * @allegro 1.11.9
- *
- * @alpha
  */
 export function save_bitmap(
   filename: string,
   bmp: BITMAP | undefined,
-  pal: RGB
+  pal?: RGB
 ) {
-  void filename;
-  void bmp;
+  if (!bmp) {
+    return;
+  }
   void pal;
+  const image = bmp.canvas.toDataURL("image/png", 1.0);
+  const a = document.createElement("a");
+  a.href = image;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
 }
 
 /**
@@ -731,10 +795,8 @@ export function save_bitmap(
  * @param pal - PALETTE to use when saving
  *
  * @allegro 1.11.10
- *
- * @alpha
  */
-export function save_bmp(filename: string, bmp: BITMAP | undefined, pal: RGB) {
+export function save_bmp(filename: string, bmp: BITMAP | undefined, pal?: RGB) {
   save_bitmap(filename, bmp, pal);
 }
 
@@ -752,7 +814,7 @@ export function save_bmp(filename: string, bmp: BITMAP | undefined, pal: RGB) {
  *
  * @alpha
  */
-export function save_bmp_pf(f: PACKFILE, bmp: BITMAP | undefined, pal: RGB) {
+export function save_bmp_pf(f: PACKFILE, bmp: BITMAP | undefined, pal?: RGB) {
   void f;
   void bmp;
   void pal;
@@ -762,17 +824,15 @@ export function save_bmp_pf(f: PACKFILE, bmp: BITMAP | undefined, pal: RGB) {
  * Save PCX to file
  *
  * @remarks
- * Not implemented
+ * Alias of save_bitmap
  *
  * @param filename - File to save to
  * @param bmp - BITMAP to save
  * @param pal - PALETTE to use when saving
  *
  * @allegro 1.11.12
- *
- * @alpha
  */
-export function save_pcx(filename: string, bmp: BITMAP | undefined, pal: RGB) {
+export function save_pcx(filename: string, bmp: BITMAP | undefined, pal?: RGB) {
   save_bitmap(filename, bmp, pal);
 }
 
@@ -790,7 +850,7 @@ export function save_pcx(filename: string, bmp: BITMAP | undefined, pal: RGB) {
  *
  * @alpha
  */
-export function save_pcx_pf(f: PACKFILE, bmp: BITMAP | undefined, pal: RGB) {
+export function save_pcx_pf(f: PACKFILE, bmp: BITMAP | undefined, pal?: RGB) {
   void f;
   void bmp;
   void pal;
@@ -800,17 +860,15 @@ export function save_pcx_pf(f: PACKFILE, bmp: BITMAP | undefined, pal: RGB) {
  * Save TGA to file
  *
  * @remarks
- * Not implemented
+ * Alias of save_bitmap
  *
  * @param filename- File to save to
  * @param bmp - BITMAP to save
  * @param pal - PALETTE to use when saving
  *
  * @allegro 1.11.14
- *
- * @alpha
  */
-export function save_tga(filename: string, bmp: BITMAP | undefined, pal: RGB) {
+export function save_tga(filename: string, bmp: BITMAP | undefined, pal?: RGB) {
   save_bitmap(filename, bmp, pal);
 }
 
@@ -828,7 +886,7 @@ export function save_tga(filename: string, bmp: BITMAP | undefined, pal: RGB) {
  *
  * @alpha
  */
-export function save_tga_pf(f: PACKFILE, bmp: BITMAP | undefined, pal: RGB) {
+export function save_tga_pf(f: PACKFILE, bmp: BITMAP | undefined, pal?: RGB) {
   void f;
   void bmp;
   void pal;

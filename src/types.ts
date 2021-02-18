@@ -74,6 +74,21 @@ export type BITMAP = {
   context: CanvasRenderingContext2D;
   ready: boolean;
   type: "bmp";
+  clipping_rect: CLIPPING_RECTANGLE;
+  clipping: boolean;
+  is_screen: boolean;
+  mem_type: "memory" | "system" | "video";
+  parent: BITMAP | null;
+};
+
+/**
+ * Subtype for clipping rectangles
+ */
+type CLIPPING_RECTANGLE = {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
 };
 
 /**

@@ -50,4 +50,5 @@ Build Emscripten examples
 - [Simple Game](https://alegemaate.com/allegrots/examples/exgame)
 - [Hello World!](https://alegemaate.com/allegrots/examples/exhello)
 - [Python Turtle](https://alegemaate.com/allegrots/examples/exturtle)
+- [Save Bitmap](https://alegemaate.com/allegrots/examples/exsavebmp)
 - [Stress Test](https://alegemaate.com/allegrots/examples/stress)

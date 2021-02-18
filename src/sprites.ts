@@ -88,7 +88,7 @@ export function stretch_blit(
  * Not implemented
  *
  * @allegro 1.15.3
- * 
+ *
  * @alpha
  */
 export function masked_blit(
@@ -118,7 +118,7 @@ export function masked_blit(
  * Not implemented
  *
  * @allegro 1.15.4
- * 
+ *
  * @alpha
  */
 export function masked_stretch_blit(
@@ -289,8 +289,8 @@ export function draw_sprite_vh_flip(
   }
   bmp.context.save();
   bmp.context.translate(x, y);
-  bmp.context.scale(1-, -1);
-  bmp.context.translate(-x- sprite.w, -y - sprite.h);
+  bmp.context.scale(-1, -1);
+  bmp.context.translate(-x - sprite.w, -y - sprite.h);
   bmp.context.drawImage(sprite.canvas, x, y);
   bmp.context.restore();
 }
@@ -307,7 +307,7 @@ export function draw_sprite_vh_flip(
  * @param y - y position
  *
  * @allegro 1.15.8
- * 
+ *
  * @alpha
  */
 export function draw_trans_sprite(
@@ -332,7 +332,7 @@ export function draw_trans_sprite(
  * @param color - color tint
  *
  * @allegro 1.15.9
- * 
+ *
  * @alpha
  */
 export function draw_lit_sprite(
@@ -362,7 +362,7 @@ export function draw_lit_sprite(
  * @param c4 - color 4
  *
  * @allegro 1.15.10
- * 
+ *
  * @alpha
  */
 export function draw_gouraud_sprite(
@@ -389,7 +389,7 @@ export function draw_gouraud_sprite(
  * Not implemented
  *
  * @allegro 1.15.11
- * 
+ *
  * @alpha
  */
 export function draw_character_ex(
