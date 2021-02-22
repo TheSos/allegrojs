@@ -89,6 +89,10 @@ const AllegroJS = {
     unpack_bitmap: function (ptr) {
       return getValue(ptr, "i32");
     },
+    // Helper which unpacks and gets a bitmap
+    get_bitmap: function (ptr) {
+      return ALLEG.bitmaps[ALLEG.unpack_bitmap(ptr)];
+    },
   },
 
   // Bitmap.ts
@@ -108,13 +112,7 @@ const AllegroJS = {
   create_sub_bitmap: function (parent, x, y, width, height) {
     return ALLEG.alloc_pack_bitmap(
       ALLEG.bitmaps.push(
-        create_sub_bitmap(
-          ALLEG.bitmaps[ALLEG.unpack_bitmap(parent)],
-          x,
-          y,
-          width,
-          height
-        )
+        create_sub_bitmap(ALLEG.get_bitmap(parent), x, y, width, height)
       ) - 1
     );
   },
@@ -129,66 +127,66 @@ const AllegroJS = {
     );
   },
   destroy_bitmap: function (bmp) {
-    return destroy_bitmap(ALLEG.unpack_bitmap(bmp));
+    return destroy_bitmap(ALLEG.get_bitmap(bmp));
   },
   lock_bitmap: function (bitmap) {
-    return lock_bitmap(ALLEG.unpack_bitmap(bitmap));
+    return lock_bitmap(ALLEG.get_bitmap(bitmap));
   },
   bitmap_color_depth: function (bmp) {
-    return bitmap_color_depth(ALLEG.unpack_bitmap(bmp));
+    return bitmap_color_depth(ALLEG.get_bitmap(bmp));
   },
   bitmap_mask_color: function (bmp) {
-    return bitmap_mask_color(ALLEG.unpack_bitmap(bmp));
+    return bitmap_mask_color(ALLEG.get_bitmap(bmp));
   },
   is_same_bitmap: function (bmp1, bmp2) {
-    return is_same_bitmap(ALLEG.unpack_bitmap(bmp1), ALLEG.unpack_bitmap(bmp2));
+    return is_same_bitmap(ALLEG.get_bitmap(bmp1), ALLEG.get_bitmap(bmp2));
   },
   is_planar_bitmap: function (bmp) {
-    return is_planar_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_planar_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_linear_bitmap: function (bmp) {
-    return is_linear_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_linear_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_memory_bitmap: function (bmp) {
-    return is_memory_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_memory_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_screen_bitmap: function (bmp) {
-    return is_screen_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_screen_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_video_bitmap: function (bmp) {
-    return is_video_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_video_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_system_bitmap: function (bmp) {
-    return is_system_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_system_bitmap(ALLEG.get_bitmap(bmp));
   },
   is_sub_bitmap: function (bmp) {
-    return is_sub_bitmap(ALLEG.unpack_bitmap(bmp));
+    return is_sub_bitmap(ALLEG.get_bitmap(bmp));
   },
   acquire_bitmap: function (bmp) {
-    return acquire_bitmap(ALLEG.unpack_bitmap(bmp));
+    return acquire_bitmap(ALLEG.get_bitmap(bmp));
   },
   release_bitmap: function (bmp) {
-    return release_bitmap(ALLEG.unpack_bitmap(bmp));
+    return release_bitmap(ALLEG.get_bitmap(bmp));
   },
   acquire_screen,
   release_screen,
   set_clip_rect: function (bitmap, x1, y1, x2, y2) {
-    return set_clip_rect(ALLEG.unpack_bitmap(bitmap), x1, y1, x2, y2);
+    return set_clip_rect(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2);
   },
   get_clip_rect: function (bitmap) {
-    return get_clip_rect(ALLEG.unpack_bitmap(bitmap));
+    return get_clip_rect(ALLEG.get_bitmap(bitmap));
   },
   add_clip_rect: function (bitmap, x1, y1, x2, y2) {
-    return add_clip_rect(ALLEG.unpack_bitmap(bitmap), x1, y1, x2, y2);
+    return add_clip_rect(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2);
   },
   set_clip_state: function (bitmap, state) {
-    return set_clip_state(ALLEG.unpack_bitmap(bitmap), state);
+    return set_clip_state(ALLEG.get_bitmap(bitmap), state);
   },
   get_clip_state: function (bitmap) {
-    return get_clip_state(ALLEG.unpack_bitmap(bitmap));
+    return get_clip_state(ALLEG.get_bitmap(bitmap));
   },
   is_inside_bitmap: function (bmp, x, y, clip) {
-    return is_inside_bitmap(ALLEG.unpack_bitmap(bmp), x, y, clip);
+    return is_inside_bitmap(ALLEG.get_bitmap(bmp), x, y, clip);
   },
   load_bitmap: function (filename, pal) {
     const filename_s = UTF8ToString(filename);
@@ -231,28 +229,28 @@ const AllegroJS = {
   },
   save_bitmap: function (filename, bmp, pal) {
     const filename_s = UTF8ToString(filename);
-    return save_bitmap(filename_s, ALLEG.unpack_bitmap(bmp), pal);
+    return save_bitmap(filename_s, ALLEG.get_bitmap(bmp), pal);
   },
   save_bmp: function (filename, bmp, pal) {
     const filename_s = UTF8ToString(filename);
-    return save_bmp(filename_s, ALLEG.unpack_bitmap(bmp), pal);
+    return save_bmp(filename_s, ALLEG.get_bitmap(bmp), pal);
   },
   save_bmp_pf: function (f, bmp, pal) {
-    return save_bmp_pf(f, ALLEG.unpack_bitmap(bmp), pal);
+    return save_bmp_pf(f, ALLEG.get_bitmap(bmp), pal);
   },
   save_pcx: function (filename, bmp, pal) {
     const filename_s = UTF8ToString(filename);
-    return save_pcx(filename_s, ALLEG.unpack_bitmap(bmp), pal);
+    return save_pcx(filename_s, ALLEG.get_bitmap(bmp), pal);
   },
   save_pcx_pf: function (f, bmp, pal) {
-    return save_pcx_pf(f, ALLEG.unpack_bitmap(bmp), pal);
+    return save_pcx_pf(f, ALLEG.get_bitmap(bmp), pal);
   },
   save_tga: function (filename, bmp, pal) {
     const filename_s = UTF8ToString(filename);
-    return save_tga(filename_s, ALLEG.unpack_bitmap(bmp), pal);
+    return save_tga(filename_s, ALLEG.get_bitmap(bmp), pal);
   },
   save_tga_pf: function (f, bmp, pal) {
-    return save_tga_pf(f, ALLEG.unpack_bitmap(bmp), pal);
+    return save_tga_pf(f, ALLEG.get_bitmap(bmp), pal);
   },
   register_bitmap_file_type: function (ext, load, save) {
     const ext_s = UTF8ToString(filename);
@@ -447,20 +445,12 @@ const AllegroJS = {
   },
   textout_ex: function (bitmap, f, s, x, y, color, bg) {
     const str = UTF8ToString(s);
-    textout_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
-      ALLEG.fonts[f],
-      str,
-      x,
-      y,
-      color,
-      bg
-    );
+    textout_ex(ALLEG.get_bitmap(bitmap), ALLEG.fonts[f], str, x, y, color, bg);
   },
   textout_centre_ex: function (bitmap, f, s, x, y, color, bg) {
     const str = UTF8ToString(s);
     textout_centre_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       str,
       x,
@@ -472,7 +462,7 @@ const AllegroJS = {
   textout_right_ex: function (bitmap, f, s, x, y, color, bg) {
     const str = UTF8ToString(s);
     textout_right_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       str,
       x,
@@ -484,7 +474,7 @@ const AllegroJS = {
   textout_justify_ex: function (bitmap, f, s, x, y, color, bg) {
     const str = UTF8ToString(s);
     textout_justify_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       x,
       y,
@@ -496,7 +486,7 @@ const AllegroJS = {
   textprintf_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
     const str = UTF8ToString(s);
     textprintf_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       x,
       y,
@@ -509,7 +499,7 @@ const AllegroJS = {
   textprintf_centre_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
     const str = UTF8ToString(s);
     textprintf_centre_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       x,
       y,
@@ -522,7 +512,7 @@ const AllegroJS = {
   textprintf_right_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
     const str = UTF8ToString(s);
     textprintf_right_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       x,
       y,
@@ -535,7 +525,7 @@ const AllegroJS = {
   textprintf_justify_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
     const str = UTF8ToString(s);
     textprintf_justify_ex(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
+      ALLEG.get_bitmap(bitmap),
       ALLEG.fonts[f],
       x,
       y,
@@ -579,7 +569,7 @@ const AllegroJS = {
   request_scroll,
   poll_scroll,
   show_video_bitmap: function (bmp) {
-    show_video_bitmap(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)]);
+    show_video_bitmap(ALLEG.get_bitmap(bmp));
   },
   request_video_bitmap,
   vsync,
@@ -593,8 +583,8 @@ const AllegroJS = {
   keyboard_needs_poll,
   keypressed,
   readkey: function (time) {
-    Asyncify.handleAsync(async () => {
-      await readkey(time);
+    return Asyncify.handleAsync(async () => {
+      return await readkey(time);
     });
   },
   ureadkey,
@@ -632,7 +622,7 @@ const AllegroJS = {
   select_mouse_cursor,
   set_mouse_cursor_bitmap,
   show_mouse: function (bmp) {
-    show_mouse(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)]);
+    show_mouse(ALLEG.get_bitmap(bmp));
   },
   scare_mouse,
   scare_mouse_area,
@@ -668,121 +658,92 @@ const AllegroJS = {
 
   // Primitives.ts
   clear_bitmap: function (bitmap) {
-    clear_bitmap(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)]);
+    clear_bitmap(ALLEG.get_bitmap(bitmap));
   },
   clear_to_color: function (bitmap, color) {
-    clear_to_color(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], color);
+    clear_to_color(ALLEG.get_bitmap(bitmap), color);
   },
   putpixel: function (bmp, x, y, c) {
-    putpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    putpixel(ALLEG.get_bitmap(bmp), x, y, c);
   },
   _putpixel: function (bmp, x, y, c) {
-    _putpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    _putpixel(ALLEG.get_bitmap(bmp), x, y, c);
   },
   _putpixel15: function (bmp, x, y, c) {
-    _putpixel15(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    _putpixel15(ALLEG.get_bitmap(bmp), x, y, c);
   },
   _putpixel16: function (bmp, x, y, c) {
-    _putpixel16(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    _putpixel16(ALLEG.get_bitmap(bmp), x, y, c);
   },
   _putpixel24: function (bmp, x, y, c) {
-    _putpixel24(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    _putpixel24(ALLEG.get_bitmap(bmp), x, y, c);
   },
   _putpixel32: function (bmp, x, y, c) {
-    _putpixel32(ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)], x, y, c);
+    _putpixel32(ALLEG.get_bitmap(bmp), x, y, c);
   },
   getpixel: function (bitmap, x, y) {
-    return getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   _getpixel: function (bitmap, x, y) {
-    return _getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return _getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   _getpixel15: function (bitmap, x, y) {
-    return _getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return _getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   _getpixel16: function (bitmap, x, y) {
-    return _getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return _getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   _getpixel24: function (bitmap, x, y) {
-    return _getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return _getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   _getpixel32: function (bitmap, x, y) {
-    return _getpixel(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y);
+    return _getpixel(ALLEG.get_bitmap(bitmap), x, y);
   },
   vline: function (bitmap, x, y1, y2, color) {
-    vline(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y1, y2, color);
+    vline(ALLEG.get_bitmap(bitmap), x, y1, y2, color);
   },
   hline: function (bitmap, x1, y, x2, color) {
-    hline(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x1, y, x2, color);
+    hline(ALLEG.get_bitmap(bitmap), x1, y, x2, color);
   },
   line: function (bitmap, x1, y1, x2, y2, color) {
-    line(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x1, y1, x2, y2, color);
+    line(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, color);
   },
   fastline: function (bitmap, x1, y1, x2, y2, color) {
-    fastline(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x1, y1, x2, y2, color);
+    fastline(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, color);
   },
   triangle: function (bitmap, x1, y1, x2, y2, x3, y3, color) {
-    triangle(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
-      x1,
-      y1,
-      x2,
-      y2,
-      x3,
-      y3,
-      color
-    );
+    triangle(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, x3, y3, color);
   },
   polygon: function (bitmap, vertices, points, color) {
     const points_arr = ALLEG.readArray32FromMemory(points, vertices);
-    polygon(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
-      vertices,
-      points_arr,
-      color
-    );
+    polygon(ALLEG.get_bitmap(bitmap), vertices, points_arr, color);
   },
   rect: function (bitmap, x1, y1, x2, y2, color) {
-    rect(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x1, y1, x2, y2, color);
+    rect(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, color);
   },
   rectfill: function (bitmap, x1, y1, x2, y2, color) {
-    rectfill(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x1, y1, x2, y2, color);
+    rectfill(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, color);
   },
   circle: function (bitmap, x, y, radius, color) {
-    circle(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y, radius, color);
+    circle(ALLEG.get_bitmap(bitmap), x, y, radius, color);
   },
   circlefill: function (bitmap, x, y, radius, color) {
-    circlefill(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y, radius, color);
+    circlefill(ALLEG.get_bitmap(bitmap), x, y, radius, color);
   },
   ellipse: function (bitmap, x, y, rx, ry, color) {
-    ellipse(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y, rx, ry, color);
+    ellipse(ALLEG.get_bitmap(bitmap), x, y, rx, ry, color);
   },
   ellipsefill: function (bitmap, x, y, rx, ry, color) {
-    ellipsefill(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
-      x,
-      y,
-      rx,
-      ry,
-      color
-    );
+    ellipsefill(ALLEG.get_bitmap(bitmap), x, y, rx, ry, color);
   },
   arc: function (bitmap, x, y, ang1, ang2, radius, color) {
-    arc(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)],
-      x,
-      y,
-      ang1,
-      ang2,
-      radius,
-      color
-    );
+    arc(ALLEG.get_bitmap(bitmap), x, y, ang1, ang2, radius, color);
   },
   spline: function (bitmap, points, color) {
-    spline(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], points, color);
+    spline(ALLEG.get_bitmap(bitmap), points, color);
   },
   floodfill: function (bmp, x, y, color) {
-    floodfill(ALLEG.bitmaps[ALLEG.unpack_bitmap(bitmap)], x, y, color);
+    floodfill(ALLEG.get_bitmap(bitmap), x, y, color);
   },
 
   // Sample.ts
@@ -814,35 +775,18 @@ const AllegroJS = {
 
   // Sprites.ts
   draw_sprite_h_flip: function (bmp, sprite, x, y) {
-    draw_sprite_h_flip(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
-      x,
-      y
-    );
+    draw_sprite_h_flip(ALLEG.get_bitmap(bmp), ALLEG.get_bitmap(sprite), x, y);
   },
   stretch_sprite: function (bmp, sprite, x, y, w, h) {
-    stretch_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
-      x,
-      y,
-      w,
-      h
-    );
+    stretch_sprite(ALLEG.get_bitmap(bmp), ALLEG.get_bitmap(sprite), x, y, w, h);
   },
   draw_sprite: function (bmp, sprite, x, y) {
-    draw_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
-      x,
-      y
-    );
+    draw_sprite(ALLEG.get_bitmap(bmp), ALLEG.get_bitmap(sprite), x, y);
   },
   scaled_sprite: function (bmp, sprite, x, y, sx, sy) {
     scaled_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
+      ALLEG.get_bitmap(bmp),
+      ALLEG.get_bitmap(sprite),
       x,
       y,
       sx,
@@ -850,18 +794,12 @@ const AllegroJS = {
     );
   },
   rotate_sprite: function (bmp, sprite, x, y, angle) {
-    rotate_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
-      x,
-      y,
-      angle
-    );
+    rotate_sprite(ALLEG.get_bitmap(bmp), ALLEG.get_bitmap(sprite), x, y, angle);
   },
   pivot_sprite: function (bmp, sprite, x, y, cx, cy, angle) {
     pivot_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
+      ALLEG.get_bitmap(bmp),
+      ALLEG.get_bitmap(sprite),
       x,
       y,
       cx,
@@ -871,8 +809,8 @@ const AllegroJS = {
   },
   rotate_scaled_sprite: function (bmp, sprite, x, y, angle, scale) {
     rotate_scaled_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
+      ALLEG.get_bitmap(bmp),
+      ALLEG.get_bitmap(sprite),
       x,
       y,
       angle,
@@ -881,8 +819,8 @@ const AllegroJS = {
   },
   pivot_scaled_sprite: function (bmp, sprite, x, y, cx, cy, angle, scale) {
     pivot_scaled_sprite(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(bmp)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(sprite)],
+      ALLEG.get_bitmap(bmp),
+      ALLEG.get_bitmap(sprite),
       x,
       y,
       cx,
@@ -893,8 +831,8 @@ const AllegroJS = {
   },
   blit: function (source, dest, sx, sy, dx, dy, w, h) {
     blit(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(source)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(dest)],
+      ALLEG.get_bitmap(source),
+      ALLEG.get_bitmap(dest),
       sx,
       sy,
       dx,
@@ -904,17 +842,12 @@ const AllegroJS = {
     );
   },
   simple_blit: function (source, dest, x, y) {
-    simple_blit(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(source)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(dest)],
-      x,
-      y
-    );
+    simple_blit(ALLEG.get_bitmap(source), ALLEG.get_bitmap(dest), x, y);
   },
   stretch_blit: function (source, dest, sx, sy, sw, sh, dx, dy, dw, dh) {
     stretch_blit(
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(source)],
-      ALLEG.bitmaps[ALLEG.unpack_bitmap(dest)],
+      ALLEG.get_bitmap(source),
+      ALLEG.get_bitmap(dest),
       sx,
       sy,
       sw,

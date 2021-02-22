@@ -167,7 +167,7 @@ export function keypressed(): boolean {
 export async function readkey(): Promise<number> {
   while (key_buffer.length === 0) {
     // eslint-disable-next-line no-await-in-loop
-    await rest(10);
+    await rest(5);
   }
   const top = key_buffer.pop();
   if (typeof top === "number") {
@@ -560,7 +560,7 @@ let _enabled_keys: number[] = [];
  */
 export function _keyboard_loop(): void {
   if (_keyboard_installed) {
-    key_buffer.length = 0;
+    // Nothing
   }
 }
 

@@ -11,6 +11,7 @@
  *    due to software emulation, or flicker free smooth hardware
  *    accelerated animation.
  */
+#include <stdio.h>
 #include <stdlib.h>
 #include "allegro.h"
 

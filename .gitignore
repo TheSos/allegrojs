@@ -3,3 +3,4 @@ build
 *.log
 examples/*.js
 docs
+.DS_Store

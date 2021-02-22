@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "allegro.h": "c"
+    "allegro.h": "c",
+    "stdlib.h": "c"
   }
 }
