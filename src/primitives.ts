@@ -1,4 +1,4 @@
-import { getr, getg, getb, geta } from "./color.js";
+import { geta, getb, getg, getr } from "./color.js";
 import { PI2, RAD } from "./math.js";
 import { BITMAP } from "./types.js";
 
@@ -13,7 +13,7 @@ import { BITMAP } from "./types.js";
  *
  * @allegro 1.14.1
  */
-export function clear_bitmap(bitmap: BITMAP | undefined) {
+export function clear_bitmap(bitmap: BITMAP | undefined): void {
   clear_to_color(bitmap, 0x000000);
 }
 
@@ -29,7 +29,10 @@ export function clear_bitmap(bitmap: BITMAP | undefined) {
  *
  * @allegro 1.14.2
  */
-export function clear_to_color(bitmap: BITMAP | undefined, colour: number) {
+export function clear_to_color(
+  bitmap: BITMAP | undefined,
+  colour: number
+): void {
   if (!bitmap) {
     return;
   }
@@ -56,7 +59,7 @@ export function putpixel(
   x: number,
   y: number,
   c: number
-) {
+): void {
   if (!bmp) {
     return;
   }
@@ -82,8 +85,8 @@ export function _putpixel(
   x: number,
   y: number,
   c: number
-) {
-  return putpixel(bmp, x, y, c);
+): void {
+  putpixel(bmp, x, y, c);
 }
 
 /**
@@ -104,8 +107,8 @@ export function _putpixel15(
   x: number,
   y: number,
   c: number
-) {
-  return putpixel(bmp, x, y, c);
+): void {
+  putpixel(bmp, x, y, c);
 }
 
 /**
@@ -126,8 +129,8 @@ export function _putpixel16(
   x: number,
   y: number,
   c: number
-) {
-  return putpixel(bmp, x, y, c);
+): void {
+  putpixel(bmp, x, y, c);
 }
 
 /**
@@ -148,8 +151,8 @@ export function _putpixel24(
   x: number,
   y: number,
   c: number
-) {
-  return putpixel(bmp, x, y, c);
+): void {
+  putpixel(bmp, x, y, c);
 }
 
 /**
@@ -170,8 +173,8 @@ export function _putpixel32(
   x: number,
   y: number,
   c: number
-) {
-  return putpixel(bmp, x, y, c);
+): void {
+  putpixel(bmp, x, y, c);
 }
 
 /**
@@ -220,7 +223,11 @@ export function getpixel(
  *
  * @allegro 1.14.5
  */
-export function _getpixel(bmp: BITMAP | undefined, x: number, y: number) {
+export function _getpixel(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   return getpixel(bmp, x, y);
 }
 
@@ -238,7 +245,11 @@ export function _getpixel(bmp: BITMAP | undefined, x: number, y: number) {
  *
  * @allegro 1.14.5
  */
-export function _getpixel15(bmp: BITMAP | undefined, x: number, y: number) {
+export function _getpixel15(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   return getpixel(bmp, x, y);
 }
 
@@ -256,7 +267,11 @@ export function _getpixel15(bmp: BITMAP | undefined, x: number, y: number) {
  *
  * @allegro 1.14.5
  */
-export function _getpixel16(bmp: BITMAP | undefined, x: number, y: number) {
+export function _getpixel16(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   return getpixel(bmp, x, y);
 }
 
@@ -274,7 +289,11 @@ export function _getpixel16(bmp: BITMAP | undefined, x: number, y: number) {
  *
  * @allegro 1.14.5
  */
-export function _getpixel24(bmp: BITMAP | undefined, x: number, y: number) {
+export function _getpixel24(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   return getpixel(bmp, x, y);
 }
 
@@ -292,7 +311,11 @@ export function _getpixel24(bmp: BITMAP | undefined, x: number, y: number) {
  *
  * @allegro 1.14.5
  */
-export function _getpixel32(bmp: BITMAP | undefined, x: number, y: number) {
+export function _getpixel32(
+  bmp: BITMAP | undefined,
+  x: number,
+  y: number
+): number {
   return getpixel(bmp, x, y);
 }
 
@@ -370,7 +393,7 @@ export function do_line(
   y2: number,
   d: number,
   proc: (bmp: BITMAP, x: number, y: number, d: number) => void
-) {
+): void {
   void bitmap;
   void x1;
   void y1;
@@ -402,7 +425,7 @@ export function line(
   x2: number,
   y2: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -435,7 +458,7 @@ export function fastline(
   x2: number,
   y2: number,
   colour: number
-) {
+): void {
   line(bitmap, x1, y1, x2, y2, colour);
 }
 /**
@@ -464,7 +487,7 @@ export function triangle(
   x3: number,
   y3: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -561,7 +584,7 @@ export function rectfill(
   x2: number,
   y2: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -586,7 +609,7 @@ export function do_circle(
   radius: number,
   d: number,
   proc: (bmp: BITMAP, x: number, y: number, d: number) => void
-) {
+): void {
   void bmp;
   void x;
   void y;
@@ -615,7 +638,7 @@ export function circle(
   y: number,
   radius: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -680,7 +703,7 @@ export function do_ellipse(
   ry: number,
   d: number,
   proc: (bmp: BITMAP, x: number, y: number, d: number) => void
-) {
+): void {
   void bitmap;
   void x;
   void y;
@@ -712,7 +735,7 @@ export function ellipse(
   rx: number,
   ry: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -748,7 +771,7 @@ export function ellipsefill(
   rx: number,
   ry: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -790,7 +813,7 @@ export function do_arc(
   r: number,
   d: number,
   proc: (bmp: BITMAP, x: number, y: number, d: number) => void
-) {
+): void {
   void bitmap;
   void x;
   void y;
@@ -828,7 +851,7 @@ export function arc(
   ang2: number,
   r: number,
   colour: number
-) {
+): void {
   if (!bitmap) {
     return;
   }
@@ -862,7 +885,7 @@ export function calc_spline(
   npts: number,
   x: number,
   y: number
-) {
+): void {
   void points;
   void npts;
   void x;
@@ -886,12 +909,10 @@ export function spline(
   bmp: BITMAP | undefined,
   points: number[],
   color: number
-) {
+): void {
   if (!bmp || points.length !== 8) {
     return;
   }
-
-  console.log("here");
 
   _strokestyle(bmp, color);
   bmp.context.beginPath();
@@ -934,7 +955,7 @@ export function floodfill(
   x: number,
   y: number,
   color: number
-) {
+): void {
   void bmp;
   void x;
   void y;
@@ -951,20 +972,13 @@ export function floodfill(
  * @param colour - Colour of fill
  *
  */
-export function _fillstyle(bitmap: BITMAP | undefined, colour: number) {
+export function _fillstyle(bitmap: BITMAP | undefined, colour: number): void {
   if (!bitmap) {
     return;
   }
-  bitmap.context.fillStyle =
-    "rgba(" +
-    getr(colour) +
-    "," +
-    getg(colour) +
-    "," +
-    getb(colour) +
-    "," +
-    (255 - geta(colour)) / 255 +
-    ")";
+  bitmap.context.fillStyle = `rgba(${getr(colour)},${getg(colour)},${getb(
+    colour
+  )},${(255 - geta(colour)) / 255})`;
 }
 
 /**
@@ -982,19 +996,12 @@ export function _strokestyle(
   bitmap: BITMAP | undefined,
   colour: number,
   width = 1
-) {
+): void {
   if (!bitmap) {
     return;
   }
   bitmap.context.lineWidth = width;
-  bitmap.context.strokeStyle =
-    "rgba(" +
-    getr(colour) +
-    "," +
-    getg(colour) +
-    "," +
-    getb(colour) +
-    "," +
-    (255 - geta(colour)) / 255 +
-    ")";
+  bitmap.context.strokeStyle = `rgba(${getr(colour)},${getg(colour)},${getb(
+    colour
+  )},${(255 - geta(colour)) / 255})`;
 }

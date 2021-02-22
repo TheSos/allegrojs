@@ -61,7 +61,7 @@ void update() {
 
   // if it bounced, play a sound
   if (bounced) {
-    play_sample(bounce, 255, 1000, 0);
+    play_sample(bounce, 255, 127, 1000, 0);
   }
 
   // add gravity
@@ -70,22 +70,24 @@ void update() {
 
 // entry point of our example
 int main(void) {
-  // Start
+// Start
+#ifdef EMSCRIPTEN
   init_allegro_ts("canvas");
+#endif
 
   // put allegro in canvas with id="canvas_id"
   // make the dimesnions 640x480
-  set_gfx_mode(1, 640, 480, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
 
   install_sound(DIGI_AUTODETECT, DIGI_AUTODETECT, NULL);
 
   install_keyboard();
 
   // load ball image
-  ball = load_bmp("data/planet.png");
+  ball = load_bmp("data/planet.png", NULL);
 
   // load background image
-  clouds = load_bmp("data/clouds.png");
+  clouds = load_bmp("data/clouds.png", NULL);
 
   // load the bounce sound
   bounce = load_sample("data/bounce.mp3");
@@ -111,5 +113,4 @@ int main(void) {
   // the end
   return 0;
 }
-// make sure that main() gets called as soon as the wesbite has loaded
 END_OF_MAIN();

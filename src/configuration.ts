@@ -62,17 +62,17 @@ function _parse_config_file(data: string): CONFIG_DATA {
  *
  * @allegro 1.4.1
  */
-export function set_config_file(filename: string) {
-  log("Loading config " + filename + "...");
+export function set_config_file(filename: string): void {
+  log(`Loading config ${filename}...`);
   config.file = filename;
 
   _downloadables.push(config);
 
-  // read text from URL location
+  // Read text from URL location
   const request = new XMLHttpRequest();
   request.open("GET", filename, true);
   request.send(null);
-  request.onreadystatechange = () => {
+  request.onreadystatechange = (): void => {
     if (request.readyState === 4 && request.status === 200) {
       const type = request.getResponseHeader("Content-Type");
       if (type?.indexOf("text") !== 1) {
@@ -94,7 +94,7 @@ export function set_config_file(filename: string) {
  *
  * @allegro 1.4.2
  */
-export function set_config_data(data: CONFIG_DATA, length: number) {
+export function set_config_data(data: CONFIG_DATA, length: number): void {
   config.data = data;
   void length;
 }
@@ -110,7 +110,7 @@ export function set_config_data(data: CONFIG_DATA, length: number) {
  *
  * @allegro 1.4.3, 1.4.4
  */
-export function override_config_data(data: CONFIG_DATA, length: number) {
+export function override_config_data(data: CONFIG_DATA, length: number): void {
   config.data = data;
   void length;
 }
@@ -123,7 +123,7 @@ export function override_config_data(data: CONFIG_DATA, length: number) {
  *
  * @allegro 1.4.5
  */
-export function push_config_state() {
+export function push_config_state(): void {
   configs.push(config);
   config = {
     file: "",
@@ -141,7 +141,7 @@ export function push_config_state() {
  *
  * @allegro 1.4.6
  */
-export function pop_config_state() {
+export function pop_config_state(): void {
   const top = configs.pop();
   if (top) {
     config = top;
@@ -158,8 +158,8 @@ export function pop_config_state() {
  *
  * @alpha
  */
-export function flush_config_state() {
-  /// NOOP
+export function flush_config_state(): void {
+  // NOOP
 }
 
 /**
@@ -175,7 +175,7 @@ export function flush_config_state() {
  *
  * @alpha
  */
-export function reload_config_texts(new_language: string) {
+export function reload_config_texts(new_language: string): void {
   void new_language;
 }
 
@@ -197,7 +197,7 @@ export function hook_config_section(
   intgetter: (name: string, def: number) => void,
   stringgetter: (name: string, def: string) => void,
   stringsetter: (name: string, value: string) => void
-) {
+): void {
   void section;
   void intgetter;
   void stringgetter;
@@ -216,7 +216,7 @@ export function hook_config_section(
  *
  * @allegro 1.4.10
  */
-export function config_is_hooked(section: number) {
+export function config_is_hooked(section: number): boolean {
   void section;
   return false;
 }
@@ -233,7 +233,11 @@ export function config_is_hooked(section: number) {
  *
  * @allegro 1.4.11
  */
-export function get_config_string(section: string, name: string, def: string) {
+export function get_config_string(
+  section: string,
+  name: string,
+  def: string
+): string {
   return config.data[section]?.[name] ?? def;
 }
 
@@ -250,7 +254,11 @@ export function get_config_string(section: string, name: string, def: string) {
  *
  * @allegro 1.4.12
  */
-export function get_config_int(section: string, name: string, def: number) {
+export function get_config_int(
+  section: string,
+  name: string,
+  def: number
+): number {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseInt(data, 10) : def;
 }
@@ -268,7 +276,11 @@ export function get_config_int(section: string, name: string, def: number) {
  *
  * @allegro 1.4.13
  */
-export function get_config_hex(section: string, name: string, def: number) {
+export function get_config_hex(
+  section: string,
+  name: string,
+  def: number
+): number {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseInt(data, 10) : def;
 }
@@ -286,7 +298,11 @@ export function get_config_hex(section: string, name: string, def: number) {
  *
  * @allegro 1.4.14
  */
-export function get_config_float(section: string, name: string, def: number) {
+export function get_config_float(
+  section: string,
+  name: string,
+  def: number
+): number {
   const data = config.data[section]?.[name];
   return typeof data === "string" ? parseFloat(data) : def;
 }
@@ -304,7 +320,11 @@ export function get_config_float(section: string, name: string, def: number) {
  *
  * @allegro 1.4.15
  */
-export function get_config_id(section: string, name: string, def: string) {
+export function get_config_id(
+  section: string,
+  name: string,
+  def: string
+): string {
   return config.data[section]?.[name] ?? def;
 }
 
@@ -321,7 +341,7 @@ export function get_config_id(section: string, name: string, def: string) {
  *
  * @allegro 1.4.16
  */
-export function get_config_argv(section: string, name: string) {
+export function get_config_argv(section: string, name: string): string[] {
   return (config.data[section]?.[name] ?? "").split(" ");
 }
 
@@ -336,7 +356,7 @@ export function get_config_argv(section: string, name: string) {
  *
  * @allegro 1.4.17
  */
-export function get_config_text(msg: string) {
+export function get_config_text(msg: string): string {
   return msg;
 }
 
@@ -352,7 +372,11 @@ export function get_config_text(msg: string) {
  *
  * @allegro 1.4.18
  */
-export function set_config_string(section: string, name: string, val: string) {
+export function set_config_string(
+  section: string,
+  name: string,
+  val: string
+): void {
   if (!section) {
     config.data[section] = {};
   }
@@ -371,7 +395,11 @@ export function set_config_string(section: string, name: string, val: string) {
  *
  * @allegro 1.4.19
  */
-export function set_config_int(section: string, name: string, val: number) {
+export function set_config_int(
+  section: string,
+  name: string,
+  val: number
+): void {
   if (!section) {
     config.data[section] = {};
   }
@@ -390,7 +418,11 @@ export function set_config_int(section: string, name: string, val: number) {
  *
  * @allegro 1.4.20
  */
-export function set_config_hex(section: string, name: string, val: number) {
+export function set_config_hex(
+  section: string,
+  name: string,
+  val: number
+): void {
   if (!section) {
     config.data[section] = {};
   }
@@ -409,7 +441,11 @@ export function set_config_hex(section: string, name: string, val: number) {
  *
  * @allegro 1.4.21
  */
-export function set_config_float(section: string, name: string, val: number) {
+export function set_config_float(
+  section: string,
+  name: string,
+  val: number
+): void {
   if (!section) {
     config.data[section] = {};
   }
@@ -428,7 +464,11 @@ export function set_config_float(section: string, name: string, val: number) {
  *
  * @allegro 1.4.22
  */
-export function set_config_id(section: string, name: string, val: number) {
+export function set_config_id(
+  section: string,
+  name: string,
+  val: number
+): void {
   if (!section) {
     config.data[section] = {};
   }
@@ -445,7 +485,7 @@ export function set_config_id(section: string, name: string, val: number) {
  *
  * @allegro 1.4.23
  */
-export function list_config_entries(section: string) {
+export function list_config_entries(section: string): string[] {
   return Object.keys(config.data[section] ?? {});
 }
 
@@ -459,7 +499,7 @@ export function list_config_entries(section: string) {
  *
  * @allegro 1.4.24
  */
-export function list_config_sections(names: string[]) {
+export function list_config_sections(names: string[]): string[] {
   void names;
   return Object.keys(config.data);
 }
@@ -474,6 +514,7 @@ export function list_config_sections(names: string[]) {
  *
  * @allegro 1.4.25
  */
-export function free_config_entries(names: string[]) {
+export function free_config_entries(names: string[]): void {
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   names.forEach((name) => delete config.data[name]);
 }

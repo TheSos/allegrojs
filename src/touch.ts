@@ -1,25 +1,24 @@
-/// @name TOUCH ROUTINES
-//@{
-
-import { log, _allog } from "./debug.js";
+import { _allog, log } from "./debug.js";
 import { screen } from "./bitmap.js";
 import { ALLEGRO_TOUCH_EVENT } from "./types.js";
 
-/// is touch installed
+// Is touch installed
 export let _touch_installed = false;
 
-/// Array of ALLEGRO_TOUCH_EVENT holding the currently held touches
+// Array of ALLEGRO_TOUCH_EVENT holding the currently held touches
 export const touch: ALLEGRO_TOUCH_EVENT[] = [];
 
-/// Array of ALLEGRO_TOUCH_EVENT holding the just started touches
+// Array of ALLEGRO_TOUCH_EVENT holding the just started touches
 export const touch_pressed: ALLEGRO_TOUCH_EVENT[] = [];
 
-/// Array of ALLEGRO_TOUCH_EVENT holding the just finished touches
+// Array of ALLEGRO_TOUCH_EVENT holding the just finished touches
 export const touch_released: ALLEGRO_TOUCH_EVENT[] = [];
 
-/// Installs touch support
-/// Installs handlers for touch events. After calling this, touch* arrays will get populated with multitouch data maximum touch points depend on the device. Four is usually a safe option.
-export function install_touch() {
+/*
+ * Installs touch support
+ * Installs handlers for touch events. After calling this, touch* arrays will get populated with multitouch data maximum touch points depend on the device. Four is usually a safe option.
+ */
+export function install_touch(): number {
   if (_touch_installed) {
     _allog("Touch already installed");
     return -1;
@@ -33,9 +32,11 @@ export function install_touch() {
   return 0;
 }
 
-/// Removes touch support
-/// Uninstalls handlers for touch events.
-export function remove_touch() {
+/*
+ * Removes touch support
+ * Uninstalls handlers for touch events.
+ */
+export function remove_touch(): number {
   if (!_touch_installed) {
     _allog("Touch not installed");
     return -1;
@@ -49,7 +50,7 @@ export function remove_touch() {
   return 0;
 }
 
-export function _touch_loop() {
+export function _touch_loop(): void {
   if (_touch_installed) {
     touch_released.length = 0;
     touch_pressed.length = 0;
@@ -63,14 +64,14 @@ export function _touch_loop() {
   }
 }
 
-export function _get_touch(id?: number) {
+export function _get_touch(id?: number): ALLEGRO_TOUCH_EVENT | null {
   if (typeof id !== "number") {
     return null;
   }
   return touch.find((t) => t.id === id) ?? null;
 }
 
-export function _touchstart(e: TouchEvent) {
+export function _touchstart(e: TouchEvent): void {
   if (!e.target) {
     return;
   }
@@ -99,7 +100,7 @@ export function _touchstart(e: TouchEvent) {
   e.preventDefault();
 }
 
-export function _touchend(e: TouchEvent) {
+export function _touchend(e: TouchEvent): void {
   for (let c = 0; c < e.changedTouches.length; c += 1) {
     const point = e.changedTouches.item(c);
     const t = _get_touch(point?.identifier);
@@ -112,7 +113,7 @@ export function _touchend(e: TouchEvent) {
   e.preventDefault();
 }
 
-export function _touchmove(e: TouchEvent) {
+export function _touchmove(e: TouchEvent): void {
   if (!e.target) {
     return;
   }
@@ -131,6 +132,3 @@ export function _touchmove(e: TouchEvent) {
   }
   e.preventDefault();
 }
-
-//@}
-////////////////////////////////////////////

@@ -1,9 +1,12 @@
-import { log, _error } from "./debug.js";
+import { screen } from "./bitmap.js";
+import { makecol } from "./color.js";
+import { _error, log } from "./debug.js";
+import { textprintf_centre_ex } from "./font.js";
 import {
-  font,
   GFX_AUTODETECT_WINDOWED,
   SCREEN_H,
   SCREEN_W,
+  font,
   set_gfx_mode,
 } from "./graphics.js";
 import { _keyboard_loop } from "./keyboard.js";
@@ -11,31 +14,28 @@ import { scaleclamp } from "./math.js";
 import { _mouse_loop, _mouse_loop_reset } from "./mouse.js";
 import { clear_bitmap, clear_to_color, rectfill } from "./primitives.js";
 import { _touch_loop } from "./touch.js";
-import { makecol } from "./color.js";
-import { BITMAP, CONFIG, SAMPLE, MIDI } from "./types.js";
-import { screen } from "./bitmap.js";
+import { BITMAP, CONFIG, MIDI, SAMPLE } from "./types.js";
 import { rest } from "./timer.js";
-import { textprintf_centre_ex } from "./font.js";
 
-/// All downloadable objects
+// All downloadable objects
 export const _downloadables: (BITMAP | CONFIG | MIDI | SAMPLE)[] = [];
 
-/// Performs some loop tasks, such as cleaning up pressed[] and released[]
-export function _uberloop() {
+// Performs some loop tasks, such as cleaning up pressed[] and released[]
+export function _uberloop(): void {
   _mouse_loop();
   _keyboard_loop();
   _mouse_loop_reset();
   _touch_loop();
 }
 
-/// time when ready() was called
+// Time when ready() was called
 let _loader_init_time = 0;
 
-/// Holds the download complete handler function
+// Holds the download complete handler function
 const _bar_proc = loading_bar;
 
-/// checks if everything has downloaded in intervals
-export async function _progress_check() {
+// Checks if everything has downloaded in intervals
+export async function _progress_check(): Promise<void> {
   let loaded = false;
   while (!loaded) {
     const num_assets = _downloadables.length;
@@ -54,9 +54,10 @@ export async function _progress_check() {
 
     if (num_loaded >= num_assets) {
       log(
-        "Loading complete! Took " +
-          ((Date.now() - _loader_init_time) / 1000).toFixed(1) +
-          " seconds!"
+        `Loading complete! Took ${(
+          (Date.now() - _loader_init_time) /
+          1000
+        ).toFixed(1)} seconds!`
       );
       clear_bitmap(screen);
       loaded = true;
@@ -67,10 +68,12 @@ export async function _progress_check() {
   }
 }
 
-/// Default loading bar rendering
-/// This function is used by ready() to display a simple loading bar on screen. You need to manually specify a dummy function if you don't want loading screen.
-/// @param progress loading progress in 0.0 - 1.0 range
-export function loading_bar(progress: number) {
+/**
+ * Default loading bar rendering
+ * This function is used by ready() to display a simple loading bar on screen. You need to manually specify a dummy function if you don't want loading screen.
+ * @param progress - loading progress in 0.0 - 1.0 range
+ */
+export function loading_bar(progress: number): void {
   rectfill(screen, 5, SCREEN_H - 55, SCREEN_W - 10, 50, makecol(0, 0, 0));
   rectfill(
     screen,
@@ -98,17 +101,17 @@ export function loading_bar(progress: number) {
   );
 }
 
-/// Setup browser specific allegro functions
+// Setup browser specific allegro functions
 export function init_allegro_ts(
   canvas_id: string,
   main?: () => Promise<number>
-) {
+): void {
   // Get canvas from document
   const cv = document.getElementById(canvas_id) as
     | HTMLCanvasElement
     | undefined;
   if (!cv) {
-    _error("Can't find canvas with id " + canvas_id);
+    _error(`Can't find canvas with id ${canvas_id}`);
     return;
   }
 
@@ -131,7 +134,7 @@ export function init_allegro_ts(
 }
 
 // Start it up
-async function boot(main: () => Promise<number>) {
+async function boot(main: () => Promise<number>): Promise<void> {
   const code = await main();
   set_gfx_mode(GFX_AUTODETECT_WINDOWED, 320, 200, 0, 0);
   clear_to_color(screen, makecol(100, 100, 100));
@@ -147,11 +150,13 @@ async function boot(main: () => Promise<number>) {
   );
 }
 
-/// Installs a handler to check if everything has downloaded.
-/// You should always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this hander will only get executed after everything has loaded making sure you can access bitmap properties and data and play samples right away.  Note that load_font() does not affect ready(), so you should always load your fonts first.
-/// @param procedure function to be called when everything has loaded.
-/// @param bar loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
-export async function allegro_ready() {
+/**
+ * Installs a handler to check if everything has downloaded.
+ * You should always wrap your loop() function around it, unless there is nothing external you need. load_bitmap() and load_sample() all require some time to process and the execution cannot be stalled for that, so all code you wrap in this hander will only get executed after everything has loaded making sure you can access bitmap properties and data and play samples right away.  Note that load_font() does not affect ready(), so you should always load your fonts first.
+ * @param procedure - function to be called when everything has loaded.
+ * @param bar - loading bar callback function, if omitted, equals to loading_bar() and renders a simple loading bar. it must accept one parameter, that is loading progress in 0.0-1.0 range.
+ */
+export async function allegro_ready(): Promise<void> {
   _loader_init_time = Date.now();
   log("Loader initialised!");
   return _progress_check();

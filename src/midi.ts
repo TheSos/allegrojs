@@ -14,8 +14,6 @@ let _current_midi: MIDI | null = null;
  */
 const _midis: MIDI[] = [];
 
-// const player = new LibTimidity();
-
 /**
  * Midi driver
  *
@@ -38,7 +36,7 @@ export const midi_driver = {
  *
  * @allegro 1.28.1
  */
-export function load_midi(filename: string) {
+export function load_midi(filename: string): MIDI {
   const midi: MIDI = {
     file: filename,
     ready: true,
@@ -55,7 +53,7 @@ export function load_midi(filename: string) {
  *
  * @allegro 1.28.2
  */
-export function destroy_midi(midi: MIDI) {
+export function destroy_midi(midi: MIDI): void {
   void midi;
 }
 
@@ -66,7 +64,7 @@ export function destroy_midi(midi: MIDI) {
  *
  * @allegro 1.28.3
  */
-export function lock_midi(midi: MIDI) {
+export function lock_midi(midi: MIDI): void {
   void midi;
 }
 
@@ -77,15 +75,13 @@ export function lock_midi(midi: MIDI) {
  *
  * @allegro 1.28.4
  */
-export function play_midi(midi: MIDI | null, loop: boolean) {
+export function play_midi(midi: MIDI | null, loop: boolean): void {
   void loop;
   if (_current_midi) {
-    // player.pause();
+    // Nothing
   }
 
   if (midi) {
-    // player.load(midi.file);
-    // player.play();
     _current_midi = midi;
   }
 }
@@ -101,7 +97,7 @@ export function play_looped_midi(
   midi: MIDI,
   loop_start: number,
   loop_end: number
-) {
+): number {
   void midi;
   midi_loop_start = loop_start;
   midi_loop_end = loop_end;
@@ -115,7 +111,7 @@ export function play_looped_midi(
  *
  * @allegro 1.28.6
  */
-export function stop_midi() {
+export function stop_midi(): void {
   play_midi(null, false);
 }
 
@@ -126,9 +122,9 @@ export function stop_midi() {
  *
  * @allegro 1.28.7
  */
-export function midi_pause() {
+export function midi_pause(): void {
   if (_current_midi) {
-    // player.pause();
+    // Player.pause();
   }
 }
 
@@ -139,9 +135,9 @@ export function midi_pause() {
  *
  * @allegro 1.28.8
  */
-export function midi_resume() {
+export function midi_resume(): void {
   if (_current_midi) {
-    // player.play();
+    // Player.play();
   }
 }
 
@@ -152,9 +148,9 @@ export function midi_resume() {
  *
  * @allegro 1.28.9
  */
-export function midi_seek(target: number) {
+export function midi_seek(target: number): void {
   if (_current_midi) {
-    // player.seek(target / 1000);
+    // Player.seek(target / 1000);
     void target;
   }
 }
@@ -166,9 +162,9 @@ export function midi_seek(target: number) {
  *
  * @allegro 1.28.10
  */
-export function get_midi_length(midi: MIDI) {
+export function get_midi_length(midi: MIDI): number {
   void midi;
-  // player.duration;
+  // Player.duration;
   return 0;
 }
 
@@ -179,7 +175,7 @@ export function get_midi_length(midi: MIDI) {
  *
  * @allegro 1.28.11
  */
-export function midi_out(data: string[], length: number) {
+export function midi_out(data: string[], length: number): void {
   void data;
   void length;
 }
@@ -191,8 +187,8 @@ export function midi_out(data: string[], length: number) {
  *
  * @allegro 1.28.12
  */
-export function load_midi_patches() {
-  // hi
+export function load_midi_patches(): void {
+  // Noop
 }
 
 /**
@@ -230,7 +226,11 @@ export let midi_loop_end = 0;
  *
  * @allegro 1.28.16
  */
-export function midi_msg_callback(msg: number, byte1: number, byte2: number) {
+export function midi_msg_callback(
+  msg: number,
+  byte1: number,
+  byte2: number
+): void {
   void msg;
   void byte1;
   void byte2;
@@ -243,7 +243,7 @@ export function midi_msg_callback(msg: number, byte1: number, byte2: number) {
  *
  * @allegro 1.28.17
  */
-export function load_ibk(filename: string, drums: number) {
+export function load_ibk(filename: string, drums: number): void {
   void filename;
   void drums;
 }

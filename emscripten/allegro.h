@@ -1,7 +1,3 @@
-/**
-        I'm the C header, #include me!
-**/
-
 #ifndef _ALLEGRO_JS_H
 #define _ALLEGRO_JS_H
 #pragma once
@@ -10,53 +6,125 @@
 extern "C" {
 #endif
 
+/* Macros */
+#define AL_RAND() ((rand() >> 16) & 0x7fff)
+
+/* Types */
+#ifndef TRUE
+#define TRUE -1
+#define FALSE 0
+#endif
+
+typedef struct RGB {
+  unsigned char r, g, b;
+  unsigned char filler;
+} RGB;
+
+#define PAL_SIZE 256
+
+typedef RGB PALETTE[PAL_SIZE];
+
+typedef struct {
+  int handle;
+  int w, h;
+} BITMAP;
+
+typedef int SAMPLE;
+
+typedef int FONT;
+
 typedef void (*procedure)(void);
 
-/* CONFIGURATION ROUTINES */
+/* Allegro TS Specific */
 extern void init_allegro_ts(const char* canvas_id);
-extern void install_allegro(void);
-extern void allegro_init(void);
+extern void allegro_ready(void);
+extern void enable_debug(const char* id);
+
+// 1.1.1
+extern void install_allegro(int system_id, int* errno_ptr, int (*atexit_ptr)());
+
+// 1.1.2
+extern int allegro_init(void);
+
+// 1.1.3
+extern void allegro_exit(void);
+
+// 1.1.4
 #define END_OF_MAIN()
 
-/* MOUSE ROUTINES */
+// 1.1.5
+extern const char* allegro_id();
+#define allegro_id allegro_id()
+
+// 1.1.6
+extern const char* allegro_error();
+#define allegro_error allegro_error()
+
+// 1.1.7
+extern int ALLEGRO_VERSION();
+#define ALLEGRO_VERSION ALLEGRO_VERSION()
+
+// 1.1.8
+extern int ALLEGRO_SUB_VERSION();
+#define ALLEGRO_SUB_VERSION ALLEGRO_SUB_VERSION()
+
+// 1.1.9
+extern int ALLEGRO_WIP_VERSION();
+#define ALLEGRO_WIP_VERSION ALLEGRO_WIP_VERSION()
+
+// 1.1.10
+extern const char* ALLEGRO_VERSION_STR();
+#define ALLEGRO_VERSION_STR ALLEGRO_VERSION_STR()
+
+// 1.1.11
+extern const char* ALLEGRO_DATE_STR();
+#define ALLEGRO_DATE_STR ALLEGRO_DATE_STR()
+
+// 1.1.12
+extern int ALLEGRO_DATE();
+#define ALLEGRO_DATE ALLEGRO_DATE();
+
+// 1.1.13
+extern int AL_ID(int a, int b, int c, int d);
+
+// 1.1.14
+extern int MAKE_VERSION(int a, int b, int c);
+
+// 1.1.18
+extern void allegro_message(const char* str, ...);
+
+// 1.1.19
+extern void set_window_title(const char* name);
+
+// 1.5.1
+extern int install_mouse();
+
+// 1.5.2
+extern int remove_mouse(void);
+
+// 1.5.9
 extern int mouse_b(void);
 extern int mouse_x(void);
 extern int mouse_y(void);
 extern int mouse_z(void);
-extern int mouse_mx(void);
-extern int mouse_my(void);
-extern int mouse_mz(void);
+extern int mouse_w(void);
 
-extern int install_mouse(int menu);
-extern int remove_mouse(void);
-extern int show_mouse(void);
-extern int hide_mouse(void);
+// 1.5.11
+extern int show_mouse(BITMAP* bmp);
 
-/* TOUCH ROUTINES */
-typedef struct {
-  int x, y, mx, my, px, py, sx, sy, id, age, dead;
-} TOUCH;
-extern TOUCH* touch(int* len);
-extern void install_touch(void);
-extern void remove_touch(void);
+// 1.5.12
+extern int scare_mouse(void);
 
-/* TIMER ROUTINES */
-#define SECS_TO_TIMER(secs) (secs * 1000)
-#define MSEC_TO_TIMER(msec) (msec)
-#define BPS_TO_TIMER(bps) (1000. / (float)bps)
-#define BPM_TO_TIMER(bpm) (60 * 1000. / (float)bpm)
-typedef void (*bar)(float progress);
-extern void install_timer(void);
-extern long altime(void);
-extern void install_int(procedure p, long msec);
-extern void install_int_ex(procedure p, long speed);
-extern void loop(procedure p, long speed);
-extern void loading_bar(float progress);
-extern void allegro_ready();
-extern void remove_int(procedure p);
-extern void remove_all_ints(void);
+// 1.7.1
+extern int install_keyboard(void);
 
-/* KEYBOARD ROUTINES */
+// 1.7.2
+extern int remove_keyboard(void);
+
+// 1.7.3
+extern int readkey(void);
+
+// 1.7.6
 const char KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45,
            KEY_F = 0x46, KEY_G = 0x47, KEY_H = 0x48, KEY_I = 0x49, KEY_J = 0x4A,
            KEY_K = 0x4B, KEY_L = 0x4C, KEY_M = 0x4D, KEY_N = 0x4E, KEY_O = 0x4F,
@@ -88,26 +156,17 @@ const char KEY_A = 0x41, KEY_B = 0x42, KEY_C = 0x43, KEY_D = 0x44, KEY_E = 0x45,
 extern int* key(void);
 #define key key()
 
-extern int install_keyboard();
-extern int remove_keyboard(void);
+// 1.7.8
+extern int keypressed(void);
 
-/* BITMAP ROUTINES */
-typedef struct {
-  int handle;
-  int w, h;
-} BITMAP;
-extern BITMAP* create_bitmap(int width, int height);
-extern BITMAP* load_bitmap(const char* filename);
-extern BITMAP* load_bmp(const char* filename);
+// 1.7.20
+extern void clear_keybuf(void);
 
-/* GRAPHICS MODES */
-extern BITMAP* screen(void);
-extern int SCREEN_W(void);
-extern int SCREEN_H(void);
+// 1.9.1
+extern int set_color_depth(int depth);
+
+// 1.9.7
 extern int set_gfx_mode(int card, int w, int h, int v_w, int v_h);
-#define screen screen()
-#define SCREEN_W SCREEN_W()
-#define SCREEN_H SCREEN_H()
 
 #define SWITCH_NONE 0
 #define SWITCH_PAUSE 1
@@ -121,92 +180,265 @@ extern int set_gfx_mode(int card, int w, int h, int v_w, int v_h);
 #define GFX_AUTODETECT_WINDOWED 2
 #define GFX_SAFE 3
 
-/* DRAWING PRIMITIVES */
-#define PI = 3.14159265
-#define PI2 = 6.2831853
-#define PI_2 = 1.570796325
-#define PI_3 = 1.04719755
-#define PI_4 = 0.7853981625
-#define RAD(d) (-d * PI / 180.0)
-#define DEG(r) (-r * 180.0 / PI)
+// 1.6.1
+extern void install_timer(void);
+
+#define SECS_TO_TIMER(secs) (secs * 1000)
+#define MSEC_TO_TIMER(msec) (msec)
+#define BPS_TO_TIMER(bps) (1000. / (float)bps)
+#define BPM_TO_TIMER(bpm) (60 * 1000. / (float)bpm)
+
+// 1.6.2
+extern void remove_timer(void);
+
+// 1.6.3
+extern void install_int(procedure p, long msec);
+
+// 1.6.4
+extern void install_int_ex(procedure p, long speed);
+
+// 1.6.8
+extern void remove_int(procedure p);
+
+// 1.6.12
+extern int retrace_count();
+#define retrace_count retrace_count()
+
+// 1.6.13
+extern void rest(unsigned int time);
+
+// 1.9.13
+extern int gfx_capabilities();
+#define gfx_capabilities gfx_capabilities()
+
+#define GFX_CAN_SCROLL 0x00000001
+#define GFX_CAN_TRIPLE_BUFFER 0x00000002
+#define GFX_HW_CURSOR 0x00000004
+#define GFX_HW_HLINE 0x00000008
+#define GFX_HW_HLINE_XOR 0x00000010
+#define GFX_HW_HLINE_SOLID_PATTERN 0x00000020
+#define GFX_HW_HLINE_COPY_PATTERN 0x00000040
+#define GFX_HW_FILL 0x00000080
+#define GFX_HW_FILL_XOR 0x00000100
+#define GFX_HW_FILL_SOLID_PATTERN 0x00000200
+#define GFX_HW_FILL_COPY_PATTERN 0x00000400
+#define GFX_HW_LINE 0x00000800
+#define GFX_HW_LINE_XOR 0x00001000
+#define GFX_HW_TRIANGLE 0x00002000
+#define GFX_HW_TRIANGLE_XOR 0x00004000
+#define GFX_HW_GLYPH 0x00008000
+#define GFX_HW_VRAM_BLIT 0x00010000
+#define GFX_HW_VRAM_BLIT_MASKED 0x00020000
+#define GFX_HW_MEM_BLIT 0x00040000
+#define GFX_HW_MEM_BLIT_MASKED 0x00080000
+#define GFX_HW_SYS_TO_VRAM_BLIT 0x00100000
+#define GFX_HW_SYS_TO_VRAM_BLIT_MASKED 0x00200000
+#define GFX_SYSTEM_CURSOR 0x00400000
+#define GFX_HW_VRAM_STRETCH_BLIT 0x00800000
+#define GFX_HW_VRAM_STRETCH_BLIT_MASKED 0x01000000
+#define GFX_HW_SYS_STRETCH_BLIT 0x02000000
+#define GFX_HW_SYS_STRETCH_BLIT_MASKED 0x04000000
+
+// 1.9.18
+extern int show_video_bitmap(BITMAP* bitmap);
+
+// 1.10.1
+extern BITMAP* screen(void);
+#define screen screen()
+
+// 1.10.2
+extern int SCREEN_W(void);
+#define SCREEN_W SCREEN_W()
+
+extern int SCREEN_H(void);
+#define SCREEN_H SCREEN_H()
+
+// 1.10.4
+extern BITMAP* create_bitmap(int width, int height);
+
+// 1.10.5
+extern BITMAP* create_bitmap_ex(int color_depth, int width, int height);
+
+// 1.10.6
+extern BITMAP* create_sub_bitmap(BITMAP* parent,
+                                 int x,
+                                 int y,
+                                 int width,
+                                 int height);
+
+// 1.10.7
+extern BITMAP* create_video_bitmap(int width, int height);
+
+// 1.10.8
+extern BITMAP* create_system_bitmap(int width, int height);
+
+// 1.10.9
+extern void destroy_bitmap(BITMAP* bitmap);
+
+// 1.10.21
+extern void acquire_bitmap(BITMAP* bmp);
+
+// 1.10.22
+extern void release_bitmap(BITMAP* bmp);
+
+// 1.11.1
+extern BITMAP* load_bitmap(const char* filename, PALETTE pal);
+
+// 1.11.2
+extern BITMAP* load_bmp(const char* filename, PALETTE pal);
+
+// 1.12.3
+extern void set_palette(PALETTE pal);
+
+// 1.13.3
 extern int makecol(int r, int g, int b);
-extern char getr(int colour);
-extern char getg(int colour);
-extern char getb(int colour);
-extern char geta(int colour);
-extern int getpixel(BITMAP* bitmap, int x, int y);
-extern void putpixel(BITMAP* bitmap, int x, int y, int colour);
+
+// 1.13.4
+extern int makecol_depth(int color_depth, int r, int g, int b);
+
+// 1.13.9
+extern char getr(int c);
+extern char getg(int c);
+extern char getb(int c);
+extern char geta(int c);
+
+// 1.13.10
+extern char getr_depth(int color_depth, int c);
+extern char getg_depth(int color_depth, int c);
+extern char getb_depth(int color_depth, int c);
+extern char geta_depth(int color_depth, int c);
+
+// 1.14.1
 extern void clear_bitmap(BITMAP* bitmap);
-extern void clear_to_color(BITMAP* bitmap, int colour);
-extern void
-line(BITMAP* bitmap, int x1, int y1, int x2, int y2, int colour, int width);
-extern void vline(BITMAP* bitmap, int x, int y1, int y2, int colour, int width);
-extern void hline(BITMAP* bitmap, int x1, int y, int x2, int colour, int width);
-extern void triangle(BITMAP* bitmap,
+
+// 1.14.2
+extern void clear_to_color(BITMAP* bitmap, int color);
+
+// 1.14.3
+extern void putpixel(BITMAP* bmp, int x, int y, int color);
+
+// 1.14.4
+extern void _putpixel(BITMAP* bmp, int x, int y, int color);
+extern void _putpixel15(BITMAP* bmp, int x, int y, int color);
+extern void _putpixel16(BITMAP* bmp, int x, int y, int color);
+extern void _putpixel24(BITMAP* bmp, int x, int y, int color);
+extern void _putpixel32(BITMAP* bmp, int x, int y, int color);
+
+// 1.14.5
+extern int getpixel(BITMAP* bmp, int x, int y);
+
+// 1.14.6
+extern int _getpixel(BITMAP* bmp, int x, int y);
+extern int _getpixel15(BITMAP* bmp, int x, int y);
+extern int _getpixel16(BITMAP* bmp, int x, int y);
+extern int _getpixel24(BITMAP* bmp, int x, int y);
+extern int _getpixel32(BITMAP* bmp, int x, int y);
+
+// 1.14.7
+extern void vline(BITMAP* bmp, int x, int y1, int y2, int color);
+
+// 1.14.8
+extern void hline(BITMAP* bmp, int x1, int y, int x2, int color);
+
+// 1.14.10
+extern void line(BITMAP* bmp, int x1, int y1, int x2, int y2, int color);
+
+// 1.14.11
+extern void fastline(BITMAP* bmp, int x1, int y1, int x2, int y2, int color);
+
+// 1.14.12
+extern void triangle(BITMAP* bmp,
                      int x1,
                      int y1,
                      int x2,
                      int y2,
                      int x3,
                      int y3,
-                     int colour,
-                     int width);
-extern void trianglefill(BITMAP* bitmap,
-                         int x1,
-                         int y1,
-                         int x2,
-                         int y2,
-                         int x3,
-                         int y3,
-                         int colour);
-extern void polygon(BITMAP* bitmap,
-                    int vertices,
-                    const int* points,
-                    int colour,
-                    int width);
-extern void polygonfill(BITMAP* bitmap,
-                        int vertices,
-                        const int* points,
-                        int colour);
-extern void
-rect(BITMAP* bitmap, int x, int y, int w, int h, int colour, int width);
-extern void rectfill(BITMAP* bitmap, int x, int y, int w, int h, int colour);
-extern void circle(BITMAP* bitmap,
-                   int x,
-                   int y,
-                   int radius,
-                   int colour,
-                   int width);
-extern void circlefill(BITMAP* bitmap, int x, int y, int radius, int colour);
-extern void arc(BITMAP* bitmap,
-                int x,
-                int y,
-                float ang1,
-                float ang2,
-                int radius,
-                int colour,
-                int width);
-extern void arcfill(BITMAP* bitmap,
-                    int x,
-                    int y,
-                    float ang1,
-                    float ang2,
-                    int radius,
-                    int colour);
+                     int color);
 
-/* BLITTING AND SPRITES */
+// 1.14.13
+extern void polygon(BITMAP* bmp, int vertices, const int* points, int color);
+
+// 1.14.14
+extern void rect(BITMAP* bmp, int x1, int y1, int x2, int y2, int color);
+
+// 1.14.15
+extern void rectfill(BITMAP* bmp, int x1, int y1, int x2, int y2, int color);
+
+// 1.14.17
+extern void circle(BITMAP* bmp, int x, int y, int radius, int color);
+
+// 1.14.18
+extern void circlefill(BITMAP* bmp, int x, int y, int radius, int color);
+
+// 1.14.20
+extern void ellipse(BITMAP* bmp, int x, int y, int rx, int ry, int color);
+
+// 1.14.21
+extern void ellipse(BITMAP* bmp, int x, int y, int rx, int ry, int color);
+
+// 1.14.23
+extern void
+arc(BITMAP* bmp, int x, int y, float ang1, float ang2, int r, int color);
+
+// 1.14.25
+extern void spline(BITMAP* bmp, const int points[8], int color);
+
+// 1.14.26
+extern void floodfill(BITMAP* bmp, int x, int y, int color);
+
+// 1.15.1
+extern void blit(BITMAP* source,
+                 BITMAP* dest,
+                 int source_x,
+                 int source_y,
+                 int dest_x,
+                 int dest_y,
+                 int width,
+                 int height);
+
+// 1.15.2
+extern void stretch_blit(BITMAP* source,
+                         BITMAP* dest,
+                         int source_x,
+                         int source_y,
+                         int source_width,
+                         int source_height,
+                         int dest_x,
+                         int dest_y,
+                         int dest_width,
+                         int dest_height);
+
+// 1.15.5
 extern void draw_sprite(BITMAP* bmp, BITMAP* sprite, int x, int y);
-extern void scaled_sprite(BITMAP* bmp,
-                          BITMAP* sprite,
-                          int x,
-                          int y,
-                          float sx,
-                          float sy);
+
+// 1.15.6
+extern void stretch_sprite(BITMAP* bmp,
+                           BITMAP* sprite,
+                           int x,
+                           int y,
+                           int w,
+                           int h);
+
+// 1.15.7
+extern void draw_sprite_h_flip(BITMAP* bmp, BITMAP* sprite, int x, int y);
+
+// 1.15.12
 extern void rotate_sprite(BITMAP* bmp,
                           BITMAP* sprite,
                           int x,
                           int y,
                           float angle);
+
+// 1.15.14
+extern void rotate_scaled_sprite(BITMAP* bmp,
+                                 BITMAP* sprite,
+                                 int x,
+                                 int y,
+                                 float angle,
+                                 float scale);
+
+// 1.15.16
 extern void pivot_sprite(BITMAP* bmp,
                          BITMAP* sprite,
                          int x,
@@ -214,13 +446,8 @@ extern void pivot_sprite(BITMAP* bmp,
                          int cx,
                          int cy,
                          float angle);
-extern void rotate_scaled_sprite(BITMAP* bmp,
-                                 BITMAP* sprite,
-                                 int x,
-                                 int y,
-                                 float angle,
-                                 float sx,
-                                 float sy);
+
+// 1.15.18
 extern void pivot_scaled_sprite(BITMAP* bmp,
                                 BITMAP* sprite,
                                 int x,
@@ -228,77 +455,56 @@ extern void pivot_scaled_sprite(BITMAP* bmp,
                                 int cx,
                                 int cy,
                                 float angle,
-                                float sx,
-                                float sy);
-extern void blit(BITMAP* source,
-                 BITMAP* dest,
-                 int sx,
-                 int sy,
-                 int dx,
-                 int dy,
-                 int w,
-                 int h);
-extern void simple_blit(BITMAP* source, BITMAP* dest, int x, int y);
-extern void stretch_blit(BITMAP* source,
-                         BITMAP* dest,
-                         int sx,
-                         int sy,
-                         int sw,
-                         int sh,
-                         int dx,
-                         int dy,
-                         int dw,
-                         int dh);
+                                float scale);
 
-/* TEXT OUTPUT */
-typedef int FONT;
+// 1.18.2
+extern FONT* load_font(char* filename, PALETTE pal, void* param);
+
 extern FONT* font(void);
-extern FONT* load_base64_font(char* data);
-extern FONT* load_font(char* filename);
-extern FONT* create_font(char* family);
-extern void textout_ex(BITMAP* bitmap,
+#define font font()
+
+// 1.18.3
+extern void destroy_font(FONT* f);
+
+// 1.19.5
+extern void textout_ex(BITMAP* bmp,
                        FONT* f,
                        const char* s,
                        int x,
                        int y,
-                       int colour,
+                       int color,
                        int bg);
-extern void textout_centre_ex(BITMAP* bitmap,
+
+// 1.19.6
+extern void textout_centre_ex(BITMAP* bmp,
                               FONT* f,
                               const char* s,
                               int x,
                               int y,
-                              int colour,
+                              int color,
                               int bg);
-extern void textout_right_ex(BITMAP* bitmap,
+
+// 1.19.7
+extern void textout_right_ex(BITMAP* bmp,
                              FONT* f,
                              const char* s,
                              int x,
                              int y,
-                             int colour,
+                             int color,
                              int bg);
-extern void textprintf_ex(BITMAP* bitmap,
+
+// 1.19.9
+extern void textprintf_ex(BITMAP* bmp,
                           FONT* f,
                           int x,
                           int y,
-                          int colour,
+                          int color,
                           int bg,
                           const char* s,
                           ...);
 
-#define font font()
-
-/* SOUND ROUTINES */
-typedef int SAMPLE;
+// 1.25.5
 extern void install_sound(int digi, int midi, const char* cfg_path);
-extern void set_volume(float volume);
-extern float get_volume(void);
-extern SAMPLE* load_sample(char* filename);
-extern void destroy_sample(char* filename);
-extern void play_sample(SAMPLE* sample, float vol, float freq, int loop);
-extern void adjust_sample(SAMPLE* sample, float vol, float freq, int loop);
-extern void stop_sample(SAMPLE* sample);
-extern void pause_sample(SAMPLE* sample);
 
 #define DIGI_AUTODETECT -1
 #define DIGI_NONE 0
@@ -307,12 +513,34 @@ extern void pause_sample(SAMPLE* sample);
 #define MIDI_NONE 0
 #define MIDI_DIGMID 1
 
-/* DEBUG FUNCTIONS */
-extern int ALLEGRO_CONSOLE;
-extern void enable_debug(const char* id);
-extern void logmsg(const char* string);
-extern void wipe_log(void);
-extern void rest(float time);
+// 1.25.7
+extern void set_volume(float volume);
+
+// 1.25.9
+extern float get_volume(void);
+
+// 1.27.1
+extern SAMPLE* load_sample(char* filename);
+
+// 1.27.8
+extern void destroy_sample(char* filename);
+
+// 1.27.11
+extern void play_sample(SAMPLE* spl,
+                        float vol,
+                        float pan,
+                        float freq,
+                        int loop);
+
+// 1.27.12
+extern void adjust_sample(SAMPLE* spl,
+                          float vol,
+                          float pan,
+                          float freq,
+                          int loop);
+
+// 1.27.13
+extern void stop_sample(SAMPLE* sample);
 
 #ifdef __cplusplus
 }

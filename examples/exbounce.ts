@@ -77,13 +77,13 @@ function draw() {
   if (key[KEY_Q]) {
     rotate_sprite(screen, ball, cx, cy, retrace_count % 360);
   } else if (key[KEY_W]) {
-    rotate_scaled_sprite(screen, ball, cx, cy, retrace_count % 360, 10, 10);
+    rotate_scaled_sprite(screen, ball, cx, cy, retrace_count % 360, 10);
   } else if (key[KEY_E]) {
     rotate_sprite_v_flip(screen, ball, cx, cy, retrace_count % 360);
   } else if (key[KEY_R]) {
     draw_sprite_v_flip(screen, ball, cx, cy);
   } else if (key[KEY_T]) {
-    rotate_scaled_sprite(screen, ball, cx, cy, 0, 10, 8);
+    rotate_scaled_sprite(screen, ball, cx, cy, 0, 10);
   } else {
     draw_sprite(screen, ball, cx, cy);
   }

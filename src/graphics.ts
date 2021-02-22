@@ -1,5 +1,5 @@
-import { makecol, _uberloop } from "./allegro.js";
-import { log, _error } from "./debug.js";
+import { _uberloop, makecol } from "./allegro.js";
+import { log } from "./debug.js";
 import { clear_to_color } from "./primitives.js";
 import { draw_sprite } from "./sprites.js";
 import { BITMAP, FONT } from "./types.js";
@@ -48,7 +48,7 @@ export let SCREEN_H = 0;
  *
  * @allegro 1.9.1
  */
-export function set_color_depth(depth: number) {
+export function set_color_depth(depth: number): number {
   void depth;
   return 0;
 }
@@ -61,7 +61,7 @@ export function set_color_depth(depth: number) {
  *
  * @allegro 1.9.2
  */
-export function get_color_depth() {
+export function get_color_depth(): number {
   return 32;
 }
 
@@ -75,7 +75,7 @@ export function get_color_depth() {
  *
  * @allegro 1.9.3
  */
-export function request_refresh_rate(rate: number) {
+export function request_refresh_rate(rate: number): void {
   void rate;
 }
 
@@ -87,7 +87,7 @@ export function request_refresh_rate(rate: number) {
  *
  * @allegro 1.9.4
  */
-export function get_refresh_rate() {
+export function get_refresh_rate(): number {
   return 60;
 }
 
@@ -98,7 +98,7 @@ export function get_refresh_rate() {
  *
  * @allegro 1.9.5
  */
-export function get_gfx_mode_list(card: number) {
+export function get_gfx_mode_list(card: number): number[][] {
   void card;
   return [[0, 0, 0]];
 }
@@ -110,7 +110,7 @@ export function get_gfx_mode_list(card: number) {
  *
  * @allegro 1.9.6
  */
-export function destroy_gfx_mode_list(mode_list: number[]) {
+export function destroy_gfx_mode_list(mode_list: number[]): void {
   void mode_list;
 }
 
@@ -135,7 +135,7 @@ export function set_gfx_mode(
   h: number,
   v_w = 0,
   v_h = 0
-) {
+): number {
   // NOOP
   void v_w;
   void v_h;
@@ -164,11 +164,11 @@ export function set_gfx_mode(
 
   font = { element: null, file: "", name: "Monospace", size: 12, type: "fnt" };
   _gfx_installed = true;
-  log("Graphics mode set to " + w + " x " + h);
+  log(`Graphics mode set to ${w} x ${h}`);
 
   // Special cases for cards
   if (card === GFX_AUTODETECT_FULLSCREEN) {
-    const requestFullscreen = () => {
+    const requestFullscreen = (): void => {
       void screen.canvas.requestFullscreen();
       screen.canvas.removeEventListener("click", requestFullscreen);
     };
@@ -201,7 +201,7 @@ export const GFX_SAFE = 3;
  *
  * @allegro 1.9.8
  */
-export function set_display_switch_mode(mode: number) {
+export function set_display_switch_mode(mode: number): number {
   // Reset switch callbacks
   _switch_in_callbacks.length = 0;
   _switch_out_callbacks.length = 0;
@@ -248,7 +248,10 @@ let _switch_mode = SWITCH_PAUSE;
  *
  * @allegro 1.9.9
  */
-export function set_display_switch_callback(dir: number, cb: () => void) {
+export function set_display_switch_callback(
+  dir: number,
+  cb: () => void
+): number {
   // Limit at 8
   if (_switch_in_callbacks.length + _switch_out_callbacks.length >= 8) {
     return -1;
@@ -283,7 +286,7 @@ export const SWITCH_OUT = 1;
  *
  * @allegro 1.9.10
  */
-export function remove_display_switch_callback(cb: () => void) {
+export function remove_display_switch_callback(cb: () => void): void {
   const in_index = _switch_in_callbacks.findIndex((proc) => proc === cb);
   const out_index = _switch_out_callbacks.findIndex((proc) => proc === cb);
 
@@ -306,7 +309,7 @@ export function remove_display_switch_callback(cb: () => void) {
  *
  * @allegro 1.9.11
  */
-export function get_display_switch_mode() {
+export function get_display_switch_mode(): number {
   return _switch_mode;
 }
 
@@ -320,7 +323,7 @@ export function get_display_switch_mode() {
  *
  * @allegro 1.9.12
  */
-export function is_windowed_mode() {
+export function is_windowed_mode(): boolean {
   return !document.fullscreenElement;
 }
 
@@ -332,8 +335,6 @@ export function is_windowed_mode() {
  *
  * @allegro 1.9.13
  */
-export const gfx_capabilities = 0;
-
 export const GFX_CAN_SCROLL = 0x00000001;
 export const GFX_CAN_TRIPLE_BUFFER = 0x00000002;
 export const GFX_HW_CURSOR = 0x00000004;
@@ -362,6 +363,18 @@ export const GFX_HW_VRAM_STRETCH_BLIT_MASKED = 0x01000000;
 export const GFX_HW_SYS_STRETCH_BLIT = 0x02000000;
 export const GFX_HW_SYS_STRETCH_BLIT_MASKED = 0x04000000;
 
+export const gfx_capabilities =
+  GFX_HW_CURSOR |
+  GFX_HW_HLINE |
+  GFX_HW_FILL |
+  GFX_HW_LINE |
+  GFX_HW_TRIANGLE |
+  GFX_HW_VRAM_BLIT |
+  GFX_HW_VRAM_BLIT |
+  GFX_HW_MEM_BLIT |
+  GFX_SYSTEM_CURSOR |
+  GFX_HW_SYS_STRETCH_BLIT;
+
 /**
  * Enable tripe buffer
  *
@@ -382,7 +395,7 @@ export function enable_triple_buffer(): number {
  *
  * @allegro 1.9.15
  */
-export function scroll_screen(x: number, y: number) {
+export function scroll_screen(x: number, y: number): void {
   void x;
   void y;
 }
@@ -395,7 +408,7 @@ export function scroll_screen(x: number, y: number) {
  *
  * @allegro 1.9.16
  */
-export function request_scroll(x: number, y: number) {
+export function request_scroll(x: number, y: number): void {
   void x;
   void y;
 }
@@ -408,7 +421,7 @@ export function request_scroll(x: number, y: number) {
  *
  * @allegro 1.9.17
  */
-export function poll_scroll() {
+export function poll_scroll(): void {
   // NOOP
 }
 
@@ -423,7 +436,7 @@ export function poll_scroll() {
  *
  * @allegro 1.9.18
  */
-export function show_video_bitmap(bmp: BITMAP | undefined) {
+export function show_video_bitmap(bmp: BITMAP | undefined): void {
   if (!bmp || bmp.w !== screen.w || bmp.h !== screen.h) {
     return;
   }
@@ -455,12 +468,11 @@ export function request_video_bitmap(
  *
  * @allegro 1.9.20
  */
-export function vsync() {
+export function vsync(): void {
   // NOOP
 }
 
 export let _gfx_installed = false;
 
-/// default font
 // eslint-disable-next-line @typescript-eslint/init-declarations
 export let font!: FONT;

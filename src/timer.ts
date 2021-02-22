@@ -45,7 +45,7 @@ export function install_timer(): number {
  *
  * @alpha
  */
-export function remove_timer() {
+export function remove_timer(): void {
   // NOOP
 }
 
@@ -60,8 +60,8 @@ export function remove_timer() {
  *
  * @allegro 1.6.3
  */
-export function install_int(proc: () => void, speed: number) {
-  return install_int_ex(proc, MSEC_TO_TIMER(speed));
+export function install_int(proc: () => void, speed: number): void {
+  install_int_ex(proc, MSEC_TO_TIMER(speed));
 }
 
 /**
@@ -76,7 +76,7 @@ export function install_int(proc: () => void, speed: number) {
  *
  * @allegro 1.6.3
  */
-export function SECS_TO_TIMER(secs: number) {
+export function SECS_TO_TIMER(secs: number): number {
   return secs * 1000;
 }
 
@@ -92,7 +92,7 @@ export function SECS_TO_TIMER(secs: number) {
  *
  * @allegro 1.6.3
  */
-export function MSEC_TO_TIMER(msec: number) {
+export function MSEC_TO_TIMER(msec: number): number {
   return msec;
 }
 
@@ -108,7 +108,7 @@ export function MSEC_TO_TIMER(msec: number) {
  *
  * @allegro 1.6.3
  */
-export function BPS_TO_TIMER(bps: number) {
+export function BPS_TO_TIMER(bps: number): number {
   return 1000 / bps;
 }
 
@@ -124,7 +124,7 @@ export function BPS_TO_TIMER(bps: number) {
  *
  * @allegro 1.6.3
  */
-export function BPM_TO_TIMER(bpm: number) {
+export function BPM_TO_TIMER(bpm: number): number {
   return (60 * 1000) / bpm;
 }
 
@@ -142,10 +142,10 @@ export function BPM_TO_TIMER(bpm: number) {
  *
  * @allegro 1.6.4
  */
-export function install_int_ex(proc: () => void, speed: number) {
+export function install_int_ex(proc: () => void, speed: number): void {
   const timer_id = window.setInterval(proc, speed);
   _installed_timers.push({ timer: proc, id: timer_id });
-  log("Added insterrupt #" + timer_id + " at " + speed + "msec isntervals!");
+  log(`Added insterrupt #${timer_id} at ${speed}msec isntervals!`);
 }
 
 /**
@@ -158,7 +158,7 @@ export function install_int_ex(proc: () => void, speed: number) {
  *
  * @allegro 1.6.5
  */
-export function LOCK_VARIABLE(variable_name: number | string) {
+export function LOCK_VARIABLE(variable_name: number | string): void {
   void variable_name;
 }
 
@@ -172,7 +172,9 @@ export function LOCK_VARIABLE(variable_name: number | string) {
  *
  * @allegro 1.6.6
  */
-export function LOCK_FUNCTION(function_name: (...args: any) => void) {
+export function LOCK_FUNCTION(
+  function_name: (...args: unknown[]) => void
+): void {
   void function_name;
 }
 
@@ -186,7 +188,9 @@ export function LOCK_FUNCTION(function_name: (...args: any) => void) {
  *
  * @allegro 1.6.7
  */
-export function END_OF_FUNCTION(function_name: (...args: any) => void) {
+export function END_OF_FUNCTION(
+  function_name: (...args: unknown[]) => void
+): void {
   void function_name;
 }
 
@@ -200,10 +204,10 @@ export function END_OF_FUNCTION(function_name: (...args: any) => void) {
  *
  * @allegro 1.6.8
  */
-export function remove_int(proc: () => void) {
+export function remove_int(proc: () => void): void {
   _installed_timers.forEach((timer, index) => {
     if (timer.timer === proc) {
-      log("Removing interrupt " + timer.id + "!");
+      log(`Removing interrupt ${timer.id}!`);
       window.clearInterval(timer.id);
       _installed_timers.splice(index, 1);
     }
@@ -228,8 +232,8 @@ export function install_param_int(
   procedure: () => void,
   param: string,
   speed: number
-) {
-  return install_param_int_ex(procedure, param, speed);
+): void {
+  install_param_int_ex(procedure, param, speed);
 }
 
 /**
@@ -250,7 +254,7 @@ export function install_param_int_ex(
   procedure: () => void,
   param: string,
   speed: number
-) {
+): void {
   void procedure;
   void param;
   void speed;
@@ -267,7 +271,7 @@ export function install_param_int_ex(
  *
  * @allegro 1.6.11
  */
-export function remove_param_int(proc: () => void, param: string) {
+export function remove_param_int(proc: () => void, param: string): void {
   void proc;
   void param;
 }
@@ -332,7 +336,7 @@ export async function rest_callback(
  *
  * @internal
  */
-export function _timer_lookup(proc: () => void) {
+export function _timer_lookup(proc: () => void): TIMER | -1 {
   return _installed_timers.find((t) => t.timer === proc) ?? -1;
 }
 

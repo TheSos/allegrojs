@@ -1,4 +1,4 @@
-/// Internal color depth set to 32
+// Internal color depth set to 32
 const _color_depth = 32;
 
 /**
@@ -7,14 +7,14 @@ const _color_depth = 32;
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
-export function makecol8(r: number, g: number, b: number) {
+export function makecol8(r: number, g: number, b: number): number {
   return makecol32(r, g, b);
 }
 
@@ -24,14 +24,14 @@ export function makecol8(r: number, g: number, b: number) {
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
-export function makecol15(r: number, g: number, b: number) {
+export function makecol15(r: number, g: number, b: number): number {
   return makecol32(r, g, b);
 }
 
@@ -41,14 +41,14 @@ export function makecol15(r: number, g: number, b: number) {
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
-export function makecol16(r: number, g: number, b: number) {
+export function makecol16(r: number, g: number, b: number): number {
   return makecol32(r, g, b);
 }
 
@@ -58,14 +58,14 @@ export function makecol16(r: number, g: number, b: number) {
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
-export function makecol24(r: number, g: number, b: number) {
+export function makecol24(r: number, g: number, b: number): number {
   return makecol32(r, g, b);
 }
 
@@ -75,28 +75,28 @@ export function makecol24(r: number, g: number, b: number) {
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.1
  */
-export function makecol32(r: number, g: number, b: number) {
+export function makecol32(r: number, g: number, b: number): number {
   return (r << 0) | (g << 8) | (b << 16);
 }
 
 /**
  * Make packed color with alpha from rgba
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @param a alpha component in 0-255 range
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @param a - alpha component in 0-255 range
  *
  * @allegro 1.13.2
  */
-export function makeacol32(r: number, g: number, b: number, a: number) {
+export function makeacol32(r: number, g: number, b: number, a: number): number {
   return (r << 0) | (g << 8) | (b << 16) | (a << 24);
 }
 
@@ -106,10 +106,10 @@ export function makeacol32(r: number, g: number, b: number, a: number) {
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.3
  */
@@ -184,11 +184,11 @@ export function makeacol_depth(
  * @remarks
  * Overdrive is not permitted, so values over 255 (0xff) will get clipped.
  *
- * @param r red component in 0-255 range
- * @param g green component in 0-255 range
- * @param b blue  component in 0-255 range
- * @param a alpha component in 0-255 range
- * @return colour in 0xAARRGGBB format
+ * @param r - red component in 0-255 range
+ * @param g - green component in 0-255 range
+ * @param b - blue component in 0-255 range
+ * @param a - alpha component in 0-255 range
+ * @returns colour in 0xAARRGGBB format
  *
  * @allegro 1.13.5
  */
@@ -212,7 +212,7 @@ export function makecol15_dither(
   b: number,
   x: number,
   y: number
-) {
+): number {
   void x;
   void y;
   return makecol32(r, g, b);
@@ -223,7 +223,7 @@ export function makecol15_dither(
  *
  * @allegro 1.13.7
  */
-export function getr8(c: number) {
+export function getr8(c: number): number {
   return getr32(c);
 }
 
@@ -232,7 +232,7 @@ export function getr8(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getr15(c: number) {
+export function getr15(c: number): number {
   return getr32(c);
 }
 
@@ -241,7 +241,7 @@ export function getr15(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getr16(c: number) {
+export function getr16(c: number): number {
   return getr32(c);
 }
 
@@ -250,7 +250,7 @@ export function getr16(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getr24(c: number) {
+export function getr24(c: number): number {
   return getr32(c);
 }
 
@@ -259,7 +259,7 @@ export function getr24(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getr32(c: number) {
+export function getr32(c: number): number {
   return (c >> 0) & 0xff;
 }
 
@@ -268,7 +268,7 @@ export function getr32(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getg8(c: number) {
+export function getg8(c: number): number {
   return getg32(c);
 }
 
@@ -277,7 +277,7 @@ export function getg8(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getg15(c: number) {
+export function getg15(c: number): number {
   return getg32(c);
 }
 
@@ -286,7 +286,7 @@ export function getg15(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getg16(c: number) {
+export function getg16(c: number): number {
   return getg32(c);
 }
 
@@ -295,7 +295,7 @@ export function getg16(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getg24(c: number) {
+export function getg24(c: number): number {
   return getg32(c);
 }
 
@@ -304,7 +304,7 @@ export function getg24(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getg32(c: number) {
+export function getg32(c: number): number {
   return (c >> 8) & 0xff;
 }
 
@@ -313,7 +313,7 @@ export function getg32(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getb8(c: number) {
+export function getb8(c: number): number {
   return getb32(c);
 }
 
@@ -322,7 +322,7 @@ export function getb8(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getb15(c: number) {
+export function getb15(c: number): number {
   return getb32(c);
 }
 
@@ -331,7 +331,7 @@ export function getb15(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getb16(c: number) {
+export function getb16(c: number): number {
   return getb32(c);
 }
 
@@ -340,7 +340,7 @@ export function getb16(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getb24(c: number) {
+export function getb24(c: number): number {
   return getb32(c);
 }
 
@@ -349,7 +349,7 @@ export function getb24(c: number) {
  *
  * @allegro 1.13.7
  */
-export function getb32(c: number) {
+export function getb32(c: number): number {
   return (c >> 16) & 0xff;
 }
 
@@ -360,7 +360,7 @@ export function getb32(c: number) {
  *
  * @allegro 1.13.8
  */
-export function geta32(c: number) {
+export function geta32(c: number): number {
   return (c >> 24) & 0xff;
 }
 
@@ -369,12 +369,12 @@ export function geta32(c: number) {
  *
  * @remarks
  *
- * @param colour colour in 0xAARRGGBB format
- * @return red component in 0-255 range
+ * @param colour - colour in 0xAARRGGBB format
+ * @returns red - component in 0-255 range
  *
  * @allegro 1.13.9
  */
-export function getr(c: number) {
+export function getr(c: number): number {
   return getr_depth(_color_depth, c);
 }
 
@@ -383,12 +383,12 @@ export function getr(c: number) {
  *
  * @remarks
  *
- * @param colour colour in 0xAARRGGBB format
- * @return green component in 0-255 range
+ * @param colour - colour in 0xAARRGGBB format
+ * @returns green - component in 0-255 range
  *
  * @allegro 1.13.9
  */
-export function getg(c: number) {
+export function getg(c: number): number {
   return getg_depth(_color_depth, c);
 }
 
@@ -397,12 +397,12 @@ export function getg(c: number) {
  *
  * @remarks
  *
- * @param colour colour in 0xAARRGGBB format
- * @return blue component in 0-255 range
+ * @param colour - colour in 0xAARRGGBB format
+ * @returns blue - component in 0-255 range
  *
  * @allegro 1.13.9
  */
-export function getb(c: number) {
+export function getb(c: number): number {
   return getb_depth(_color_depth, c);
 }
 
@@ -411,12 +411,12 @@ export function getb(c: number) {
  *
  * @remarks
  *
- * @param colour colour in 0xAARRGGBB format
- * @return alpha component in 0-255 range
+ * @param colour - colour in 0xAARRGGBB format
+ * @returns alpha - component in 0-255 range
  *
  * @allegro 1.13.9
  */
-export function geta(c: number) {
+export function geta(c: number): number {
   return geta_depth(_color_depth, c);
 }
 
@@ -425,7 +425,7 @@ export function geta(c: number) {
  *
  * @allegro 1.13.10
  */
-export function getr_depth(color_depth: number, c: number) {
+export function getr_depth(color_depth: number, c: number): number {
   switch (color_depth) {
     case 8:
       return getr8(c);
@@ -447,7 +447,7 @@ export function getr_depth(color_depth: number, c: number) {
  *
  * @allegro 1.13.10
  */
-export function getg_depth(color_depth: number, c: number) {
+export function getg_depth(color_depth: number, c: number): number {
   switch (color_depth) {
     case 8:
       return getg8(c);
@@ -469,7 +469,7 @@ export function getg_depth(color_depth: number, c: number) {
  *
  * @allegro 1.13.10
  */
-export function getb_depth(color_depth: number, c: number) {
+export function getb_depth(color_depth: number, c: number): number {
   switch (color_depth) {
     case 8:
       return getb8(c);
@@ -486,7 +486,7 @@ export function getb_depth(color_depth: number, c: number) {
   }
 }
 
-export function geta_depth(color_depth: number, c: number) {
+export function geta_depth(color_depth: number, c: number): number {
   if (color_depth === 32) return geta32(c);
   return 0;
 }

@@ -77,7 +77,7 @@ export function remove_sound(): void {
  *
  * @allegro 1.25.7
  */
-export function set_volume(digi_volume: number, midi_volume: number) {
+export function set_volume(digi_volume: number, midi_volume: number): void {
   // Bound check
   if (digi_volume > 255) {
     _volume = 255;
@@ -107,7 +107,7 @@ export function set_volume(digi_volume: number, midi_volume: number) {
  *
  * @returns Object containing digi_volume and midi_volume
  */
-export function get_volume() {
+export function get_volume(): { digi_volume: number; midi_volume: number } {
   return { digi_volume: _volume, midi_volume: _midi_volume };
 }
 
@@ -122,7 +122,7 @@ export function get_volume() {
  *
  * @allegro 1.27.1
  */
-export function load_sample(filename: string) {
+export function load_sample(filename: string): SAMPLE {
   const audio = document.createElement("audio");
   audio.src = filename;
   const sample: SAMPLE = {
@@ -134,11 +134,11 @@ export function load_sample(filename: string) {
   };
   _downloadables.push(sample);
   _samples.push(sample);
-  log("Loading sample " + filename + "...");
-  audio.onloadeddata = () => {
+  log(`Loading sample ${filename}...`);
+  audio.onloadeddata = (): void => {
     if (!sample.ready) {
       sample.ready = true;
-      log("Sample " + filename + " loaded!");
+      log(`Sample ${filename} loaded!`);
     }
   };
   return sample;
@@ -154,11 +154,10 @@ export function load_sample(filename: string) {
  *
  * @allegro 1.27.8
  */
-export function destroy_sample(spl: SAMPLE) {
+export function destroy_sample(spl: SAMPLE): void {
   const index = _samples.findIndex((s) => s === spl);
-  console.log(index, _samples);
   if (index !== -1) {
-    log("Sample destroyed at index " + index);
+    log(`Sample destroyed at index ${index}`);
     spl.element.pause();
     spl.element.remove();
     _samples.splice(index, 1);
@@ -187,7 +186,7 @@ export function play_sample(
   pan = 127,
   freq = 1000,
   loop = false
-) {
+): void {
   adjust_sample(sample, vol, pan, freq, loop);
   sample.element.currentTime = 0;
   void sample.element.play();
@@ -213,7 +212,7 @@ export function adjust_sample(
   pan: number,
   freq: number,
   loop: boolean
-) {
+): void {
   void pan;
   sample.volume = vol;
   sample.element.volume = sample.volume / 255;
@@ -231,7 +230,7 @@ export function adjust_sample(
  *
  * @allegro 1.27.13
  */
-export function stop_sample(sample: SAMPLE) {
+export function stop_sample(sample: SAMPLE): void {
   sample.element.pause();
   sample.element.currentTime = 0;
 }

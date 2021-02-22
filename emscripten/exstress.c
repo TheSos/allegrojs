@@ -24,7 +24,7 @@ int main(void) {
   install_keyboard();
   enable_debug("debug");
   set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
-  bmp = load_bmp("data/planet.png");
+  bmp = load_bmp("data/planet.png", NULL);
 
   allegro_ready();
 

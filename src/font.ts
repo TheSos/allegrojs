@@ -1,4 +1,4 @@
-import { rectfill, _fillstyle } from "./primitives.js";
+import { _fillstyle, rectfill } from "./primitives.js";
 import { BITMAP, FONT, RGB } from "./types.js";
 import { vsprintf } from "./sprintf.js";
 import { create_bitmap } from "./bitmap.js";
@@ -23,7 +23,7 @@ let _num_fonts = 0;
 export function register_font_file_type(
   ext: string,
   load: (filename: string, pal: RGB, param: string) => void
-) {
+): void {
   void ext;
   void load;
 }
@@ -45,12 +45,11 @@ export function register_font_file_type(
 export function load_font(filename: string, size = 12): FONT {
   const s = document.createElement("style");
   _num_fonts += 1;
-  const fontname = "font" + _num_fonts;
+  const fontname = `font${_num_fonts}`;
   s.id = fontname;
   s.type = "text/css";
   document.head.appendChild(s);
-  s.textContent =
-    "@font-face { font-family: " + fontname + "; src:url('" + filename + "');}";
+  s.textContent = `@font-face { font-family: ${fontname}; src:url('${filename}');}`;
   return { element: s, file: filename, name: fontname, size, type: "fnt" };
 }
 
@@ -64,7 +63,7 @@ export function load_font(filename: string, size = 12): FONT {
  *
  * @allegro 1.18.3
  */
-export function destroy_font(f: FONT) {
+export function destroy_font(f: FONT): void {
   void f;
 }
 
@@ -78,7 +77,7 @@ export function destroy_font(f: FONT) {
  *
  * @allegro 1.18.4
  */
-export function make_trans_font(f: FONT) {
+export function make_trans_font(f: FONT): void {
   void f;
 }
 
@@ -93,7 +92,7 @@ export function make_trans_font(f: FONT) {
  *
  * @allegro 1.18.5
  */
-export function is_color_font(f: FONT) {
+export function is_color_font(f: FONT): boolean {
   void f;
   return true;
 }
@@ -109,7 +108,7 @@ export function is_color_font(f: FONT) {
  *
  * @allegro 1.18.6
  */
-export function is_mono_font(f: FONT) {
+export function is_mono_font(f: FONT): boolean {
   void f;
   return false;
 }
@@ -125,7 +124,7 @@ export function is_mono_font(f: FONT) {
  *
  * @allegro 1.18.7
  */
-export function is_compatible_font(f: FONT) {
+export function is_compatible_font(f: FONT): boolean {
   void f;
   return true;
 }
@@ -141,7 +140,7 @@ export function is_compatible_font(f: FONT) {
  *
  * @allegro 1.18.8
  */
-export function get_font_ranges(f: FONT) {
+export function get_font_ranges(f: FONT): number {
   void f;
   return 1;
 }
@@ -158,7 +157,7 @@ export function get_font_ranges(f: FONT) {
  *
  * @allegro 1.18.9
  */
-export function get_font_range_begin(f: FONT, range: number) {
+export function get_font_range_begin(f: FONT, range: number): number {
   void f;
   void range;
   return 1;
@@ -176,7 +175,7 @@ export function get_font_range_begin(f: FONT, range: number) {
  *
  * @allegro 1.18.10
  */
-export function get_font_range_end(f: FONT, range: number) {
+export function get_font_range_end(f: FONT, range: number): number {
   void f;
   void range;
   return 1;
@@ -194,7 +193,7 @@ export function get_font_range_end(f: FONT, range: number) {
  *
  * @allegro 1.18.11
  */
-export function extract_font_range(f: FONT, begin: number, end: number) {
+export function extract_font_range(f: FONT, begin: number, end: number): FONT {
   void begin;
   void end;
   return f;
@@ -229,7 +228,7 @@ export function transpose_font(f: FONT, drange: number): FONT {
  *
  * @allegro 1.18.13
  */
-export function merge_fonts(f1: FONT, f2: FONT) {
+export function merge_fonts(f1: FONT, f2: FONT): FONT {
   void f2;
   return f1;
 }
@@ -256,11 +255,11 @@ export const allegro_404_char = "^";
  *
  * @allegro 1.19.3
  */
-export function text_length(f: FONT, str: string) {
+export function text_length(f: FONT, str: string): number {
   if (!_text_len_canvas) {
     _text_len_canvas = create_bitmap(0, 0);
   }
-  _text_len_canvas.context.font = f.size + "px " + f.name;
+  _text_len_canvas.context.font = `${f.size}px ${f.name}`;
   const metrics = _text_len_canvas.context.measureText(str);
   return metrics.width;
 }
@@ -276,7 +275,7 @@ export function text_length(f: FONT, str: string) {
  *
  * @allegro 1.19.4
  */
-export function text_height(f: FONT) {
+export function text_height(f: FONT): number {
   return f.size;
 }
 
@@ -332,7 +331,7 @@ export function textout_centre_ex(
   y: number,
   colour: number,
   bg: number
-) {
+): void {
   _textout(bitmap, f, s, x, y, colour, bg, "center");
 }
 
@@ -360,7 +359,7 @@ export function textout_right_ex(
   y: number,
   colour: number,
   bg: number
-) {
+): void {
   _textout(bitmap, f, s, x, y, colour, bg, "right");
 }
 
@@ -388,7 +387,7 @@ export function textout_justify_ex(
   y: number,
   colour: number,
   bg: number
-) {
+): void {
   _textout(bitmap, f, s, x, y, colour, bg, "center");
 }
 
@@ -418,7 +417,7 @@ export function textprintf_ex(
   bg: number,
   s: string,
   ...args: (number | string)[]
-) {
+): void {
   _textout(bitmap, f, vsprintf(s, args), x, y, colour, bg, "left");
 }
 
@@ -448,7 +447,7 @@ export function textprintf_centre_ex(
   bg: number,
   s: string,
   ...args: (number | string)[]
-) {
+): void {
   _textout(bitmap, f, vsprintf(s, args), x, y, colour, bg, "center");
 }
 
@@ -478,7 +477,7 @@ export function textprintf_right_ex(
   bg: number,
   s: string,
   ...args: (number | string)[]
-) {
+): void {
   _textout(bitmap, f, vsprintf(s, args), x, y, colour, bg, "right");
 }
 
@@ -508,7 +507,7 @@ export function textprintf_justify_ex(
   bg: number,
   s: string,
   ...args: (number | string)[]
-) {
+): void {
   _textout(bitmap, f, vsprintf(s, args), x, y, colour, bg, "center");
 }
 
@@ -538,12 +537,12 @@ function _textout(
   colour: number,
   bg: number,
   text_align: "center" | "left" | "right"
-) {
+): void {
   if (!bitmap) {
     return;
   }
 
-  bitmap.context.font = f.size + "px " + f.name;
+  bitmap.context.font = `${f.size}px ${f.name}`;
   bitmap.context.textAlign = text_align;
   _fillstyle(bitmap, colour);
 

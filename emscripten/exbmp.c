@@ -15,7 +15,7 @@ int main(void) {
   set_gfx_mode(0, 640, 480, 0, 0);
 
   // Loads an image into the bitmap object
-  logo = load_bmp("data/allegro.png");
+  logo = load_bmp("data/allegro.png", NULL);
 
   // Wait for allegro to be ready
   allegro_ready();

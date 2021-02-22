@@ -1,5 +1,5 @@
-import { RAD } from "./math.js";
 import { BITMAP } from "./types.js";
+import { RAD } from "./math.js";
 
 /**
  * Blit
@@ -9,38 +9,38 @@ import { BITMAP } from "./types.js";
  *
  * @param source - source bitmap
  * @param dest - destination bitmap
- * @param sx - source origin x
- * @param sy - source origin y
- * @param dx - destination origin x
- * @param dy - destination origin y
- * @param w - width of sprite
- * @param h - height of sprite
+ * @param source_x - source origin x
+ * @param source_y - source origin y
+ * @param dest_x - destination origin x
+ * @param dest_y - destination origin y
+ * @param width - width of sprite
+ * @param height - height of sprite
  *
  * @allegro 1.15.1
  */
 export function blit(
   source: BITMAP | undefined,
   dest: BITMAP | undefined,
-  sx: number,
-  sy: number,
-  dx: number,
-  dy: number,
-  w: number,
-  h: number
-) {
+  source_x: number,
+  source_y: number,
+  dest_x: number,
+  dest_y: number,
+  width: number,
+  height: number
+): void {
   if (!source || !dest) {
     return;
   }
   dest.context.drawImage(
     source.canvas,
-    sx,
-    sy,
+    source_x,
+    source_y,
     source.w,
     source.h,
-    dx,
-    dy,
-    w,
-    h
+    dest_x,
+    dest_y,
+    width,
+    height
   );
 }
 
@@ -52,33 +52,43 @@ export function blit(
  *
  * @param source - source bitmap
  * @param dest - destination bitmap
- * @param sx - source origin x
- * @param sy - source origin y
- * @param sw - source width
- * @param sh - source height
- * @param dx - destination origin x
- * @param dy - destination origin y
- * @param dw - destination width
- * @param dh - destination height
+ * @param source_x - source origin x
+ * @param source_y - source origin y
+ * @param source_width - source width
+ * @param source_height - source height
+ * @param dest_x - destination origin x
+ * @param dest_y - destination origin y
+ * @param dest_width - destination width
+ * @param dest_height - destination height
  *
  * @allegro 1.15.2
  */
 export function stretch_blit(
   source: BITMAP | undefined,
   dest: BITMAP | undefined,
-  sx: number,
-  sy: number,
-  sw: number,
-  sh: number,
-  dx: number,
-  dy: number,
-  dw: number,
-  dh: number
-) {
+  source_x: number,
+  source_y: number,
+  source_width: number,
+  source_height: number,
+  dest_x: number,
+  dest_y: number,
+  dest_width: number,
+  dest_height: number
+): void {
   if (!source || !dest) {
     return;
   }
-  dest.context.drawImage(source.canvas, sx, sy, sw, sh, dx, dy, dw, dh);
+  dest.context.drawImage(
+    source.canvas,
+    source_x,
+    source_y,
+    source_width,
+    source_height,
+    dest_x,
+    dest_y,
+    dest_width,
+    dest_height
+  );
 }
 
 /**
@@ -100,7 +110,7 @@ export function masked_blit(
   dest_y: number,
   width: number,
   height: number
-) {
+): void {
   void sprite;
   void dest;
   void source_x;
@@ -132,7 +142,7 @@ export function masked_stretch_blit(
   dest_y: number,
   dest_w: number,
   dest_h: number
-) {
+): void {
   void sprite;
   void dest;
   void source_x;
@@ -163,7 +173,7 @@ export function draw_sprite(
   sprite: BITMAP | undefined,
   x: number,
   y: number
-) {
+): void {
   if (!sprite || !bmp) {
     return;
   }
@@ -192,15 +202,17 @@ export function stretch_sprite(
   y: number,
   w: number,
   h: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
-  const u = (w * sprite.w) / 2;
-  const v = (h * sprite.h) / 2;
+  const scale_frac_x = w / sprite.w;
+  const scale_frac_y = h / sprite.h;
+  const u = (scale_frac_x * sprite.w) / 2;
+  const v = (scale_frac_y * sprite.h) / 2;
   bmp.context.save();
   bmp.context.translate(x - u, y - v);
-  bmp.context.scale(w, h);
+  bmp.context.scale(scale_frac_x, scale_frac_y);
   bmp.context.drawImage(sprite.canvas, 0, 0);
   bmp.context.restore();
 }
@@ -223,7 +235,7 @@ export function draw_sprite_v_flip(
   sprite: BITMAP | undefined,
   x: number,
   y: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -253,7 +265,7 @@ export function draw_sprite_h_flip(
   sprite: BITMAP | undefined,
   x: number,
   y: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -283,7 +295,7 @@ export function draw_sprite_vh_flip(
   sprite: BITMAP | undefined,
   x: number,
   y: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -315,7 +327,7 @@ export function draw_trans_sprite(
   sprite: BITMAP | undefined,
   x: number,
   y: number
-) {
+): void {
   draw_sprite(bmp, sprite, x, y);
 }
 
@@ -341,7 +353,7 @@ export function draw_lit_sprite(
   x: number,
   y: number,
   color: number
-) {
+): void {
   void color;
   draw_sprite(bmp, sprite, x, y);
 }
@@ -374,7 +386,7 @@ export function draw_gouraud_sprite(
   c2: number,
   c3: number,
   c4: number
-) {
+): void {
   void c1;
   void c2;
   void c3;
@@ -399,7 +411,7 @@ export function draw_character_ex(
   y: number,
   color: number,
   bg: number
-) {
+): void {
   void color;
   void bg;
   draw_sprite(bmp, sprite, x, y);
@@ -426,7 +438,7 @@ export function rotate_sprite(
   x: number,
   y: number,
   angle: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -460,7 +472,7 @@ export function rotate_sprite_v_flip(
   x: number,
   y: number,
   angle: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -499,9 +511,8 @@ export function rotate_scaled_sprite(
   x: number,
   y: number,
   angle: number,
-  sx: number,
-  sy: number
-) {
+  scale: number
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -510,7 +521,7 @@ export function rotate_scaled_sprite(
   bmp.context.save();
   bmp.context.translate(x + u, y + v);
   bmp.context.rotate(RAD(angle));
-  bmp.context.scale(sx, sy);
+  bmp.context.scale(scale, scale);
   bmp.context.translate(-x - u, -y - v);
   bmp.context.drawImage(sprite.canvas, x, y);
   bmp.context.restore();
@@ -538,7 +549,7 @@ export function rotate_scaled_sprite_v_flip(
   y: number,
   angle: number,
   scale: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -580,7 +591,7 @@ export function pivot_sprite(
   cx: number,
   cy: number,
   angle: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -617,7 +628,7 @@ export function pivot_sprite_v_flip(
   cx: number,
   cy: number,
   angle: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }
@@ -645,8 +656,7 @@ export function pivot_sprite_v_flip(
  * @param cx - Pivot point x
  * @param cy - Pivot point y
  * @param angle - angle of rotation in degrees
- * @param sx - scale x
- * @param xy - scale y
+ * @param scale - scale
  *
  * @allegro 1.15.18
  */
@@ -658,19 +668,18 @@ export function pivot_scaled_sprite(
   cx: number,
   cy: number,
   angle: number,
-  sx: number,
-  sy: number
-) {
+  scale: number
+): void {
   if (!bmp || !sprite) {
     return;
   }
-  const u = sx * cx;
-  const v = sy * cy;
+  const u = scale * cx;
+  const v = scale * cy;
   bmp.context.save();
   bmp.context.translate(x, y);
   bmp.context.rotate(RAD(angle));
   bmp.context.translate(-u, -v);
-  bmp.context.scale(sx, sy);
+  bmp.context.scale(scale, scale);
   bmp.context.drawImage(sprite.canvas, 0, 0);
   bmp.context.restore();
 }
@@ -701,7 +710,7 @@ export function pivot_scaled_sprite_v_flip(
   cy: number,
   angle: number,
   scale: number
-) {
+): void {
   if (!bmp || !sprite) {
     return;
   }

@@ -26,7 +26,7 @@ export const keyboard_driver = {
  *
  * @allegro 1.7.1
  */
-export function install_keyboard(enable_keys?: number[]) {
+export function install_keyboard(enable_keys?: number[]): number {
   if (_keyboard_installed) {
     _allog("Keyboard already installed");
     return -1;
@@ -54,7 +54,7 @@ export function install_keyboard(enable_keys?: number[]) {
  *
  * @allegro 1.7.2
  */
-export function remove_keyboard() {
+export function remove_keyboard(): number {
   if (!_keyboard_installed) {
     _allog("Keyboard not installed");
     return -1;
@@ -82,7 +82,7 @@ export function remove_keyboard() {
 export function install_keyboard_hooks(
   keypressed: () => void,
   readkey: () => void
-) {
+): void {
   void keypressed;
   void readkey;
 }
@@ -205,7 +205,7 @@ export function ureadkey(scancode: number): number {
  *
  * @alpha
  */
-export function scancode_to_ascii(scancode: number) {
+export function scancode_to_ascii(scancode: number): number {
   return scancode;
 }
 
@@ -221,7 +221,7 @@ export function scancode_to_ascii(scancode: number) {
  *
  * @alpha
  */
-export function scancode_to_name(scancode: number) {
+export function scancode_to_name(scancode: number): number {
   return scancode;
 }
 
@@ -235,7 +235,7 @@ export function scancode_to_name(scancode: number) {
  *
  * @allegro 1.7.13
  */
-export function simulate_keypress(key: number) {
+export function simulate_keypress(key: number): void {
   _keydown_handler(key);
 }
 
@@ -252,7 +252,7 @@ export function simulate_keypress(key: number) {
  *
  * @alpha
  */
-export function simulate_ukeypress(key: number, scancode: number) {
+export function simulate_ukeypress(key: number, scancode: number): void {
   void scancode;
   _keydown_handler(key);
 }
@@ -269,7 +269,7 @@ export function simulate_ukeypress(key: number, scancode: number) {
  *
  * @alpha
  */
-export function keyboard_callback(key: number) {
+export function keyboard_callback(key: number): void {
   void key;
 }
 
@@ -286,7 +286,7 @@ export function keyboard_callback(key: number) {
  *
  * @alpha
  */
-export function keyboard_ucallback(key: number, scancode: number) {
+export function keyboard_ucallback(key: number, scancode: number): void {
   void key;
   void scancode;
 }
@@ -303,7 +303,7 @@ export function keyboard_ucallback(key: number, scancode: number) {
  *
  * @alpha
  */
-export function keyboard_lowlevel_callback(key: number) {
+export function keyboard_lowlevel_callback(key: number): void {
   void key;
 }
 
@@ -319,7 +319,7 @@ export function keyboard_lowlevel_callback(key: number) {
  *
  * @alpha
  */
-export function set_leds(leds: number) {
+export function set_leds(leds: number): void {
   void leds;
 }
 
@@ -336,7 +336,7 @@ export function set_leds(leds: number) {
  *
  * @alpha
  */
-export function set_keyboard_rate(delay: number, repeat: number) {
+export function set_keyboard_rate(delay: number, repeat: number): void {
   void delay;
   void repeat;
 }
@@ -349,7 +349,7 @@ export function set_keyboard_rate(delay: number, repeat: number) {
  *
  * @allegro 1.7.20
  */
-export function clear_keybuf() {
+export function clear_keybuf(): void {
   key_buffer.length = 0;
 }
 
@@ -452,6 +452,7 @@ export const KEY_0 = 0x30,
   KEY_LSHIFT = 0x10,
   KEY_LWIN = 0x5b,
   KEY_M = 0x4d,
+  KEY_MAX = 0xdf,
   KEY_MENU = 0x5d,
   KEY_MINUS = 0xbd,
   KEY_MINUS_PAD = 0x6d,
@@ -487,24 +488,23 @@ export const KEY_0 = 0x30,
   KEY_W = 0x57,
   KEY_X = 0x58,
   KEY_Y = 0x59,
-  KEY_Z = 0x5a,
-  KEY_MAX = 0x5b;
+  KEY_Z = 0x5a;
 
-export const KB_SHIFT_FLAG = 0x0001,
-  KB_CTRL_FLAG = 0x0002,
-  KB_ALT_FLAG = 0x0004,
-  KB_LWIN_FLAG = 0x0008,
-  KB_RWIN_FLAG = 0x0010,
-  KB_MENU_FLAG = 0x0020,
-  KB_COMMAND_FLAG = 0x0040,
-  KB_SCROLOCK_FLAG = 0x0100,
-  KB_NUMLOCK_FLAG = 0x0200,
-  KB_CAPSLOCK_FLAG = 0x0400,
-  KB_INALTSEQ_FLAG = 0x0800,
-  KB_ACCENT1_FLAG = 0x1000,
+export const KB_ACCENT1_FLAG = 0x1000,
   KB_ACCENT2_FLAG = 0x2000,
   KB_ACCENT3_FLAG = 0x4000,
-  KB_ACCENT4_FLAG = 0x8000;
+  KB_ACCENT4_FLAG = 0x8000,
+  KB_ALT_FLAG = 0x0004,
+  KB_CAPSLOCK_FLAG = 0x0400,
+  KB_COMMAND_FLAG = 0x0040,
+  KB_CTRL_FLAG = 0x0002,
+  KB_INALTSEQ_FLAG = 0x0800,
+  KB_LWIN_FLAG = 0x0008,
+  KB_MENU_FLAG = 0x0020,
+  KB_NUMLOCK_FLAG = 0x0200,
+  KB_RWIN_FLAG = 0x0010,
+  KB_SCROLOCK_FLAG = 0x0100,
+  KB_SHIFT_FLAG = 0x0001;
 
 /**
  * Is keyboard installed
@@ -558,7 +558,7 @@ let _enabled_keys: number[] = [];
  *
  * @internal
  */
-export function _keyboard_loop() {
+export function _keyboard_loop(): void {
   if (_keyboard_installed) {
     key_buffer.length = 0;
   }
@@ -572,7 +572,7 @@ export function _keyboard_loop() {
  *
  * @internal
  */
-function _keydown(e: KeyboardEvent) {
+function _keydown(e: KeyboardEvent): void {
   _keydown_handler(e.keyCode);
   if (!_enabled_keys.includes(e.keyCode)) e.preventDefault();
 }
@@ -585,7 +585,7 @@ function _keydown(e: KeyboardEvent) {
  *
  * @internal
  */
-function _keydown_handler(keyCode: number) {
+function _keydown_handler(keyCode: number): void {
   key[keyCode] = true;
   key_buffer.push(keyCode << 8);
   switch (keyCode) {
@@ -618,6 +618,8 @@ function _keydown_handler(keyCode: number) {
     case KEY_CAPSLOCK:
       key_shifts |= KB_CAPSLOCK_FLAG;
       break;
+    default:
+      break;
   }
 }
 
@@ -629,7 +631,7 @@ function _keydown_handler(keyCode: number) {
  *
  * @internal
  */
-function _keyup(e: KeyboardEvent) {
+function _keyup(e: KeyboardEvent): void {
   _keyup_handler(e.keyCode);
   if (!_enabled_keys.includes(e.keyCode)) e.preventDefault();
 }
@@ -642,7 +644,7 @@ function _keyup(e: KeyboardEvent) {
  *
  * @internal
  */
-function _keyup_handler(keyCode: number) {
+function _keyup_handler(keyCode: number): void {
   key[keyCode] = false;
   switch (keyCode) {
     case KEY_LSHIFT:
@@ -673,6 +675,8 @@ function _keyup_handler(keyCode: number) {
       break;
     case KEY_CAPSLOCK:
       key_shifts ^= KB_CAPSLOCK_FLAG;
+      break;
+    default:
       break;
   }
 }

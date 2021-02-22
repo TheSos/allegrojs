@@ -1,7 +1,3 @@
-////////////////////////////////////////////
-/// @name CONFIGURATION ROUTINES
-//@{
-
 import { _uberloop } from "./core.js";
 import { log } from "./debug.js";
 import { vsprintf } from "./sprintf.js";
@@ -13,7 +9,7 @@ import { vsprintf } from "./sprintf.js";
  */
 let _loop_interval = -1;
 
-export function _set_loop_interval(interval: number) {
+export function _set_loop_interval(interval: number): void {
   if (_loop_interval !== -1) {
     window.clearInterval(_loop_interval);
   }
@@ -37,7 +33,7 @@ export function _set_loop_interval(interval: number) {
  * @allegro 1.1.1
  */
 export function install_allegro(
-  system_id: "SYSTEM_AUTODETECT" | "SYSTEM_NONE",
+  system_id: number,
   errno_ptr: number,
   atexit_ptr: () => void
 ): number {
@@ -52,6 +48,9 @@ export function install_allegro(
   return 0;
 }
 
+export const SYSTEM_AUTODETECT = 0;
+export const SYSTEM_NONE = AL_ID("N", "O", "N", "E");
+
 /**
  * Wrapper for install_allegro.
  *
@@ -63,7 +62,7 @@ export function install_allegro(
  * @allegro 1.1.2
  */
 export function allegro_init(): number {
-  return install_allegro("SYSTEM_AUTODETECT", 0, atexit);
+  return install_allegro(SYSTEM_AUTODETECT, 0, atexit);
 }
 
 export function atexit(): void {
@@ -78,7 +77,7 @@ export function atexit(): void {
  *
  * @allegro 1.1.3
  */
-export function allegro_exit() {
+export function allegro_exit(): void {
   log("Allegro exited.");
 }
 
@@ -91,8 +90,8 @@ export function allegro_exit() {
  *
  * @allegro 1.1.4
  */
-export function END_OF_MAIN() {
-  /// Noop
+export function END_OF_MAIN(): void {
+  // Noop
 }
 
 /**
@@ -186,8 +185,13 @@ export const ALLEGRO_DATE = 0;
  *
  * @allegro 1.1.13
  */
-export function AL_ID(a: string, b: string, c: string, d: string) {
-  return a + b + c + d;
+export function AL_ID(a: string, b: string, c: string, d: string): number {
+  return (
+    (a.charCodeAt(0) << 24) +
+    (b.charCodeAt(0) << 16) +
+    (c.charCodeAt(0) << 8) +
+    d.charCodeAt(0)
+  );
 }
 
 /**
@@ -199,8 +203,8 @@ export function AL_ID(a: string, b: string, c: string, d: string) {
  *
  * @allegro 1.1.14
  */
-export function MAKE_VERSION(a: number, b: number, c: number) {
-  return a + b + c;
+export function MAKE_VERSION(a: string, b: string, c: string): number {
+  return (a.charCodeAt(0) << 16) + (b.charCodeAt(0) << 8) + c.charCodeAt(0);
 }
 
 /**
@@ -247,7 +251,7 @@ export const os_multitasking = true;
 export function allegro_message(
   text_format: string,
   ...args: (number | string)[]
-) {
+): void {
   // eslint-disable-next-line no-alert
   alert(vsprintf(text_format, args));
 }
@@ -262,7 +266,7 @@ export function allegro_message(
  *
  * @allegro 1.1.19
  */
-export function set_window_title(name: string) {
+export function set_window_title(name: string): void {
   document.title = name;
 }
 
@@ -276,7 +280,7 @@ export function set_window_title(name: string) {
  *
  * @allegro 1.1.20
  */
-export function set_close_button_callback(proc: () => void) {
+export function set_close_button_callback(proc: () => void): void {
   window.onbeforeunload = proc;
 }
 
@@ -299,7 +303,10 @@ export function desktop_color_depth(): number {
  *
  * @allegro 1.1.22
  */
-export function get_desktop_resolution(width: number, height: number) {
+export function get_desktop_resolution(
+  width: number,
+  height: number
+): { width: number; height: number } {
   return { width, height };
 }
 
@@ -311,7 +318,7 @@ export function get_desktop_resolution(width: number, height: number) {
  *
  * @allegro 1.1.23
  */
-export function check_cpu() {
+export function check_cpu(): void {
   cpu_vendor = "Browser CPU";
   cpu_family = "Browser CPU Family";
   cpu_model = "Browser CPU Model";

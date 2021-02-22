@@ -1,4 +1,4 @@
-/// Special types
+// Special types
 export type CONFIG_DATA = Record<string, Record<string, string>>;
 
 /**
@@ -7,12 +7,12 @@ export type CONFIG_DATA = Record<string, Record<string, string>>;
  * @remarks
  * Stores config file
  */
-export type CONFIG = {
+export interface CONFIG {
   file: string;
   data: CONFIG_DATA;
   ready: boolean;
   type: "config";
-};
+}
 
 /**
  * Timer
@@ -20,10 +20,10 @@ export type CONFIG = {
  * @remarks
  * Structure of a timer
  */
-export type TIMER = {
+export interface TIMER {
   timer: () => void;
   id: number;
-};
+}
 
 /**
  * Touch object
@@ -32,7 +32,7 @@ export type TIMER = {
  * The structure of touch object found in touch[] array and inside touch_pressed touch_released.
  * You can retain the touch obect picked up from touch_pressed in your code, but remember to let go of the dead ones.
  */
-export type ALLEGRO_TOUCH_EVENT = {
+export interface ALLEGRO_TOUCH_EVENT {
   sx: number;
   sy: number;
   mx: number;
@@ -44,7 +44,7 @@ export type ALLEGRO_TOUCH_EVENT = {
   id: number;
   dead: boolean;
   age: number;
-};
+}
 
 /**
  * Fixed
@@ -67,7 +67,7 @@ export type fixed = number;
  *
  * @allegro 1.2.2
  */
-export type BITMAP = {
+export interface BITMAP {
   w: number;
   h: number;
   canvas: HTMLCanvasElement;
@@ -79,17 +79,17 @@ export type BITMAP = {
   is_screen: boolean;
   mem_type: "memory" | "system" | "video";
   parent: BITMAP | null;
-};
+}
 
 /**
  * Subtype for clipping rectangles
  */
-type CLIPPING_RECTANGLE = {
+export interface CLIPPING_RECTANGLE {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
-};
+}
 
 /**
  * Rle Bitmap
@@ -98,11 +98,11 @@ type CLIPPING_RECTANGLE = {
  *
  * @allegro 1.2.3
  */
-export type RLE_SPRITE = {
+export interface RLE_SPRITE {
   w: number;
   h: number;
   color_depth: number;
-};
+}
 
 /**
  * Rle Bitmap
@@ -111,12 +111,12 @@ export type RLE_SPRITE = {
  *
  * @allegro 1.2.4
  */
-export type COMPILED_SPRITE = {
+export interface COMPILED_SPRITE {
   w: number;
   h: number;
   color_depth: number;
   planar: number;
-};
+}
 
 /**
  * Joy info
@@ -125,13 +125,13 @@ export type COMPILED_SPRITE = {
  *
  * @allegro 1.2.5
  */
-export type JOYSTICK_INFO = {
+export interface JOYSTICK_INFO {
   flags: number;
   num_sticks: number;
   num_buttons: number;
   stick: JOYSTICK_STICK_INFO[];
   button: JOYSTICK_STICK_INFO[];
-};
+}
 
 /**
  * Joystick Button Info
@@ -140,10 +140,10 @@ export type JOYSTICK_INFO = {
  *
  * @allegro 1.2.6
  */
-export type JOYSTICK_BUTTON_INFO = {
+export interface JOYSTICK_BUTTON_INFO {
   b: number;
   name: string;
-};
+}
 
 /**
  * Joystick stick info
@@ -152,12 +152,12 @@ export type JOYSTICK_BUTTON_INFO = {
  *
  * @allegro 1.2.7
  */
-export type JOYSTICK_STICK_INFO = {
+export interface JOYSTICK_STICK_INFO {
   flags: number;
   num_axis: number;
   axis: JOYSTICK_AXIS_INFO[];
   name: string;
-};
+}
 
 /**
  * Joystick axis info
@@ -166,12 +166,12 @@ export type JOYSTICK_STICK_INFO = {
  *
  * @allegro 1.2.8
  */
-export type JOYSTICK_AXIS_INFO = {
+export interface JOYSTICK_AXIS_INFO {
   pos: number;
   d1: number;
   d2: number;
   name: string;
-};
+}
 
 /**
  * Graphics mode list
@@ -180,10 +180,10 @@ export type JOYSTICK_AXIS_INFO = {
  *
  * @allegro 1.2.9
  */
-export type GFX_MODE_LIST = {
+export interface GFX_MODE_LIST {
   num_modes: number;
   mode: GFX_MODE;
-};
+}
 
 /**
  * Graphics mode
@@ -192,11 +192,11 @@ export type GFX_MODE_LIST = {
  *
  * @allegro 1.2.10
  */
-export type GFX_MODE = {
+export interface GFX_MODE {
   width: number;
   height: number;
   bpp: number;
-};
+}
 
 /**
  * Palette max size
@@ -223,11 +223,11 @@ export type PALETTE = RGB[];
  *
  * @allegro 1.2.13
  */
-export type RGB = {
+export interface RGB {
   r: number;
   g: number;
   b: number;
-};
+}
 
 /**
  * V3D
@@ -236,14 +236,14 @@ export type RGB = {
  *
  * @allegro 1.2.14
  */
-export type V3D = {
+export interface V3D {
   x: number;
   y: number;
   z: number;
   u: number;
   v: number;
   c: number;
-};
+}
 
 /**
  * V3D f
@@ -252,14 +252,14 @@ export type V3D = {
  *
  * @allegro 1.2.15
  */
-export type V3D_f = {
+export interface V3D_f {
   x: number;
   y: number;
   z: number;
   u: number;
   v: number;
   c: number;
-};
+}
 
 /**
  * Color map
@@ -268,9 +268,9 @@ export type V3D_f = {
  *
  * @allegro 1.2.16
  */
-export type COLOR_MAP = {
+export interface COLOR_MAP {
   data: number[][];
-};
+}
 
 /**
  * RGB map
@@ -279,9 +279,9 @@ export type COLOR_MAP = {
  *
  * @allegro 1.2.17
  */
-export type RGB_MAP = {
+export interface RGB_MAP {
   data: number[][][];
-};
+}
 
 /**
  * Allegro ffblk
@@ -290,11 +290,11 @@ export type RGB_MAP = {
  *
  * @allegro 1.2.18
  */
-export type al_ffblk = {
+export interface al_ffblk {
   attrib: number;
   time: number;
   name: string;
-};
+}
 
 /**
  * Datafile
@@ -303,12 +303,12 @@ export type al_ffblk = {
  *
  * @allegro 1.2.19
  */
-export type DATAFILE = {
+export interface DATAFILE {
   dat: string;
   type: number;
   size: number;
   prop: string;
-};
+}
 
 /**
  * Matrix
@@ -317,10 +317,10 @@ export type DATAFILE = {
  *
  * @allegro 1.2.20
  */
-export type MATRIX = {
+export interface MATRIX {
   v: number[][];
   t: number[];
-};
+}
 
 /**
  * Matrix f
@@ -329,10 +329,10 @@ export type MATRIX = {
  *
  * @allegro 1.2.21
  */
-export type MATRIX_f = {
+export interface MATRIX_f {
   v: number[][];
   t: number[];
-};
+}
 
 /**
  * Quit
@@ -341,12 +341,12 @@ export type MATRIX_f = {
  *
  * @allegro 1.2.22
  */
-export type QUAT = {
+export interface QUAT {
   w: number;
   x: number;
   y: number;
   z: number;
-};
+}
 
 /**
  * Dialog
@@ -355,7 +355,7 @@ export type QUAT = {
  *
  * @allegro 1.2.23
  */
-export type DIALOG = {
+export interface DIALOG {
   proc: () => void;
   x: number;
   y: number;
@@ -369,7 +369,7 @@ export type DIALOG = {
   dp: string;
   dp2: string;
   dp3: string;
-};
+}
 
 /**
  * Menu
@@ -378,13 +378,13 @@ export type DIALOG = {
  *
  * @allegro 1.2.24
  */
-export type MENU = {
+export interface MENU {
   text: string;
   proc: () => void;
   child: MENU;
   flags: number;
   dp: string;
-};
+}
 
 /**
  * Dialog player
@@ -393,7 +393,7 @@ export type MENU = {
  *
  * @allegro 1.2.25
  */
-export type DIALOG_PLAYER = {
+export interface DIALOG_PLAYER {
   obj: number;
   res: number;
   mouse_obj: number;
@@ -405,7 +405,7 @@ export type DIALOG_PLAYER = {
   mouse_oz: number;
   mouse_b: number;
   dialog: DIALOG;
-};
+}
 
 /**
  * Menu player
@@ -414,28 +414,28 @@ export type DIALOG_PLAYER = {
  *
  * @allegro 1.2.26
  */
-export type MENU_PLAYER = {
-  menu: MENU /* the menu itself */;
-  bar: number /* set if it is a top level menu bar */;
-  size: number /* number of items in the menu */;
-  sel: number /* selected item */;
-  x: number /* screen position of the menu */;
-  y: number /* screen position of the menu */;
-  w: number /* screen position of the menu */;
-  h: number /* screen position of the menu */;
-  numberproc: () => void /* callback function */;
-  saved: BITMAP /* saved what was underneath it */;
-  mouse_button_was_pressed: number /* set if mouse button pressed on last iteration */;
-  back_from_child: number /* set if a child was activated on last iteration */;
-  timestamp: number /* timestamp for gui_timer events */;
-  mouse_sel: number /* item the mouse is currently over */;
-  redraw: number /* set if redrawing is required */;
-  auto_open: number /* set if menu auto-opening is activated */;
-  ret: number /* return value */;
-  dialog: DIALOG /* d_menu_proc() parent dialog (if any) */;
-  parent: MENU_PLAYER /* the parent menu, or NULL for root */;
-  child: MENU_PLAYER /* the child menu, or NULL for none */;
-};
+export interface MENU_PLAYER {
+  menu: MENU /* The menu itself */;
+  bar: number /* Set if it is a top level menu bar */;
+  size: number /* Number of items in the menu */;
+  sel: number /* Selected item */;
+  x: number /* Screen position of the menu */;
+  y: number /* Screen position of the menu */;
+  w: number /* Screen position of the menu */;
+  h: number /* Screen position of the menu */;
+  numberproc: () => void /* Callback function */;
+  saved: BITMAP /* Saved what was underneath it */;
+  mouse_button_was_pressed: number /* Set if mouse button pressed on last iteration */;
+  back_from_child: number /* Set if a child was activated on last iteration */;
+  timestamp: number /* Timestamp for gui_timer events */;
+  mouse_sel: number /* Item the mouse is currently over */;
+  redraw: number /* Set if redrawing is required */;
+  auto_open: number /* Set if menu auto-opening is activated */;
+  ret: number /* Return value */;
+  dialog: DIALOG /* D_menu_proc() parent dialog (if any) */;
+  parent: MENU_PLAYER /* The parent menu, or NULL for root */;
+  child: MENU_PLAYER /* The child menu, or NULL for none */;
+}
 
 /**
  * Font
@@ -445,13 +445,13 @@ export type MENU_PLAYER = {
  *
  * @allegro 1.2.27
  */
-export type FONT = {
+export interface FONT {
   element: HTMLStyleElement | null;
   file: string;
   name: string;
   size: number;
   type: "fnt";
-};
+}
 
 /**
  * Z Buffer
@@ -470,13 +470,13 @@ export type ZBUFFER = BITMAP;
  *
  * @allegro 1.2.29
  */
-export type SAMPLE = {
+export interface SAMPLE {
   element: HTMLAudioElement;
   file: string;
   volume: number;
   ready: boolean;
   type: "snd";
-};
+}
 
 /**
  * Midi
@@ -485,11 +485,11 @@ export type SAMPLE = {
  *
  * @allegro 1.2.30
  */
-export type MIDI = {
+export interface MIDI {
   file: string;
   ready: boolean;
   type: "midi";
-};
+}
 
 /**
  * Audio stream
@@ -498,9 +498,9 @@ export type MIDI = {
  *
  * @allegro 1.2.31
  */
-export type AUDIOSTREAM = {
+export interface AUDIOSTREAM {
   voice: number;
-};
+}
 
 /**
  * Packfile
@@ -509,7 +509,7 @@ export type AUDIOSTREAM = {
  *
  * @allegro 1.2.32
  */
-export type PACKFILE = {
+export interface PACKFILE {
   vtable: PACKFILE_VTABLE;
   userdata: () => void;
   is_normal_packfile: boolean;
@@ -527,7 +527,7 @@ export type PACKFILE = {
     passpos: string;
     buff: string;
   };
-};
+}
 
 /**
  * Packfile vtable
@@ -536,9 +536,9 @@ export type PACKFILE = {
  *
  * @allegro 1.2.33
  */
-export type PACKFILE_VTABLE = {
+export interface PACKFILE_VTABLE {
   userdata: string;
-};
+}
 
 /**
  * LZSS Pack data
@@ -547,7 +547,7 @@ export type PACKFILE_VTABLE = {
  *
  * @allegro 1.2.34
  */
-export type LZSS_PACK_DATA = {
+export interface LZSS_PACK_DATA {
   state: number;
   i: number;
   c: number;
@@ -564,7 +564,7 @@ export type LZSS_PACK_DATA = {
   rson: number[];
   dad: number[];
   text_buf: string;
-};
+}
 
 /**
  * LZSS unpack data
@@ -573,7 +573,7 @@ export type LZSS_PACK_DATA = {
  *
  * @allegro 1.2.35
  */
-export type LZSS_UNPACK_DATA = {
+export interface LZSS_UNPACK_DATA {
   state: number;
   i: number;
   j: number;
@@ -582,4 +582,4 @@ export type LZSS_UNPACK_DATA = {
   c: number;
   flags: number;
   text_buf: string;
-};
+}

@@ -10,7 +10,7 @@ import { PALETTE, RGB } from "./types";
  *
  * @allegro 1.12.3
  */
-export function set_palette(pal: PALETTE | RGB) {
+export function set_palette(pal: PALETTE | RGB): void {
   void pal;
 }
 
@@ -23,14 +23,14 @@ export function set_palette(pal: PALETTE | RGB) {
  * @allegro 1.12.21
  */
 export const desktop_palette: PALETTE = [
-  { r: 63, g: 63, b: 63 } /*White*/,
-  { r: 63, g: 0, b: 0 } /*Red*/,
-  { r: 0, g: 63, b: 0 } /*Green*/,
-  { r: 63, g: 63, b: 0 } /*Yellow*/,
-  { r: 0, g: 0, b: 63 } /*Blue*/,
-  { r: 63, g: 0, b: 63 } /*Pink*/,
-  { r: 0, g: 63, b: 63 } /*Cyan*/,
-  { r: 16, g: 16, b: 16 } /*Gray*/,
+  { r: 63, g: 63, b: 63 } /* White */,
+  { r: 63, g: 0, b: 0 } /* Red */,
+  { r: 0, g: 63, b: 0 } /* Green */,
+  { r: 63, g: 63, b: 0 } /* Yellow */,
+  { r: 0, g: 0, b: 63 } /* Blue */,
+  { r: 63, g: 0, b: 63 } /* Pink */,
+  { r: 0, g: 63, b: 63 } /* Cyan */,
+  { r: 16, g: 16, b: 16 } /* Gray */,
   { r: 31, g: 31, b: 31 } /* Light gray*/,
   { r: 63, g: 31, b: 31 } /* Light red*/,
   { r: 31, g: 63, b: 31 } /* Light green*/,
