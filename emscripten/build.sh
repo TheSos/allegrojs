@@ -22,6 +22,7 @@ function build_file {
   emcc --pre-js ./build/allegro.library.js --js-library ./build/allegro.library.js --js-library library.js -I. -o ./build/$1.html $1.c -s ASYNCIFY -s 'ASYNCIFY_IMPORTS=["rest","allegro_ready","readkey"]' -s EXPORTED_FUNCTIONS='["_malloc","_main"]'
 }
 
+build_file "musicmaker"
 build_file "exbmp"
 build_file "exstress"
 build_file "exbounce"

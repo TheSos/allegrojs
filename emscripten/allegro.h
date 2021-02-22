@@ -2,6 +2,9 @@
 #define _ALLEGRO_JS_H
 #pragma once
 
+#include <stdarg.h>
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -91,7 +94,17 @@ extern int AL_ID(int a, int b, int c, int d);
 extern int MAKE_VERSION(int a, int b, int c);
 
 // 1.1.18
-extern void allegro_message(const char* str, ...);
+extern void _allegro_message(const char* str);
+
+// Native code needed
+void allegro_message(const char* str, ...) {
+  char buffer[256];
+  va_list args;
+  va_start(args, str);
+  vsnprintf(buffer, sizeof(buffer), str, args);
+  va_end(args);
+  _allegro_message(buffer);
+};
 
 // 1.1.19
 extern void set_window_title(const char* name);
@@ -104,10 +117,19 @@ extern int remove_mouse(void);
 
 // 1.5.9
 extern int mouse_b(void);
+#define mouse_b mouse_b()
+
 extern int mouse_x(void);
+#define mouse_x mouse_x()
+
 extern int mouse_y(void);
+#define mouse_y mouse_y()
+
 extern int mouse_z(void);
+#define mouse_z mouse_z()
+
 extern int mouse_w(void);
+#define mouse_w mouse_w()
 
 // 1.5.11
 extern int show_mouse(BITMAP* bmp);
@@ -494,14 +516,108 @@ extern void textout_right_ex(BITMAP* bmp,
                              int bg);
 
 // 1.19.9
-extern void textprintf_ex(BITMAP* bmp,
+extern void _textprintf_ex(BITMAP* bmp,
+                           FONT* f,
+                           int x,
+                           int y,
+                           int color,
+                           int bg,
+                           const char* s);
+
+// Native code needed
+void textprintf_ex(BITMAP* bmp,
+                   FONT* f,
+                   int x,
+                   int y,
+                   int color,
+                   int bg,
+                   const char* s,
+                   ...) {
+  char buffer[256];
+  va_list args;
+  va_start(args, s);
+  vsnprintf(buffer, sizeof(buffer), s, args);
+  va_end(args);
+  _textprintf_ex(bmp, f, x, y, color, bg, buffer);
+};
+
+// 1.19.10
+extern void _textprintf_centre_ex(BITMAP* bmp,
+                                  FONT* f,
+                                  int x,
+                                  int y,
+                                  int color,
+                                  int bg,
+                                  const char* s);
+
+// Native code needed
+void textprintf_centre_ex(BITMAP* bmp,
                           FONT* f,
                           int x,
                           int y,
                           int color,
                           int bg,
                           const char* s,
-                          ...);
+                          ...) {
+  char buffer[256];
+  va_list args;
+  va_start(args, s);
+  vsnprintf(buffer, sizeof(buffer), s, args);
+  va_end(args);
+  _textprintf_centre_ex(bmp, f, x, y, color, bg, buffer);
+};
+
+// 1.19.11
+extern void _textprintf_right_ex(BITMAP* bmp,
+                                 FONT* f,
+                                 int x,
+                                 int y,
+                                 int color,
+                                 int bg,
+                                 const char* s);
+
+// Native code needed
+void textprintf_right_ex(BITMAP* bmp,
+                         FONT* f,
+                         int x,
+                         int y,
+                         int color,
+                         int bg,
+                         const char* s,
+                         ...) {
+  char buffer[256];
+  va_list args;
+  va_start(args, s);
+  vsnprintf(buffer, sizeof(buffer), s, args);
+  va_end(args);
+  _textprintf_right_ex(bmp, f, x, y, color, bg, buffer);
+};
+
+// 1.19.12
+extern void _textprintf_justify_ex(BITMAP* bmp,
+                                   FONT* f,
+                                   int x,
+                                   int y,
+                                   int color,
+                                   int bg,
+                                   const char* s);
+
+// Native code needed
+void textprintf_justify_ex(BITMAP* bmp,
+                           FONT* f,
+                           int x,
+                           int y,
+                           int color,
+                           int bg,
+                           const char* s,
+                           ...) {
+  char buffer[256];
+  va_list args;
+  va_start(args, s);
+  vsnprintf(buffer, sizeof(buffer), s, args);
+  va_end(args);
+  _textprintf_justify_ex(bmp, f, x, y, color, bg, buffer);
+};
 
 // 1.25.5
 extern void install_sound(int digi, int midi, const char* cfg_path);

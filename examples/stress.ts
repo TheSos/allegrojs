@@ -72,7 +72,7 @@ async function main() {
     vx.push(frand() * 2 - 1);
     vy.push(frand() * 2 - 1);
     num++;
-    var msec = Date.now() - last_time - 1;
+    var msec = Date.now() - last_time;
     textprintf_ex(
       buffer,
       font,
@@ -80,11 +80,10 @@ async function main() {
       20,
       makecol(0, 0, 0),
       makecol(255, 255, 255),
-      "Sprites: %i took %f msec (%i fps)",
+      "Sprites: %i took %i msec (%.1f fps)",
       num,
       msec,
-      msec,
-      (1000 / msec).toFixed()
+      1000 / msec
     );
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     last_time = Date.now();

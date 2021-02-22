@@ -344,11 +344,11 @@ const AllegroJS = {
   os_multitasking: function () {
     return os_multitasking;
   },
-  allegro_message: function (str, args) {
-    allegro_message(UTF8ToString(str), args);
+  _allegro_message: function (str) {
+    allegro_message(UTF8ToString(str));
   },
   set_window_title: function (name) {
-    set_window_title(UTF8ToString(title));
+    set_window_title(UTF8ToString(name));
   },
   set_close_button_callback,
   desktop_color_depth,
@@ -483,7 +483,7 @@ const AllegroJS = {
       str
     );
   },
-  textprintf_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
+  _textprintf_ex: function (bitmap, f, x, y, color, bg, s) {
     const str = UTF8ToString(s);
     textprintf_ex(
       ALLEG.get_bitmap(bitmap),
@@ -492,11 +492,10 @@ const AllegroJS = {
       y,
       color,
       bg,
-      str,
-      ...args
+      str
     );
   },
-  textprintf_centre_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
+  _textprintf_centre_ex: function (bitmap, f, x, y, color, bg, s) {
     const str = UTF8ToString(s);
     textprintf_centre_ex(
       ALLEG.get_bitmap(bitmap),
@@ -505,11 +504,10 @@ const AllegroJS = {
       y,
       color,
       bg,
-      str,
-      ...args
+      str
     );
   },
-  textprintf_right_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
+  _textprintf_right_ex: function (bitmap, f, x, y, color, bg, s) {
     const str = UTF8ToString(s);
     textprintf_right_ex(
       ALLEG.get_bitmap(bitmap),
@@ -518,11 +516,10 @@ const AllegroJS = {
       y,
       color,
       bg,
-      str,
-      ...args
+      str
     );
   },
-  textprintf_justify_ex: function (bitmap, f, x, y, color, bg, s, ...args) {
+  _textprintf_justify_ex: function (bitmap, f, x, y, color, bg, s) {
     const str = UTF8ToString(s);
     textprintf_justify_ex(
       ALLEG.get_bitmap(bitmap),
@@ -531,8 +528,7 @@ const AllegroJS = {
       y,
       color,
       bg,
-      str,
-      ...args
+      str
     );
   },
 
