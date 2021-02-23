@@ -89,7 +89,7 @@ async function main() {
   }
 
   /* read in the MIDI file */
-  the_music = load_midi(argv[1] ?? "");
+  the_music = await load_midi(argv[1] ?? "");
 
   await allegro_ready();
 

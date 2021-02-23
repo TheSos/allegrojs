@@ -150,7 +150,7 @@ async function main() {
   clouds = load_bmp("data/clouds.png");
 
   // load the bounce sound
-  bounce = load_sample("data/bounce.mp3");
+  bounce = await load_sample("data/bounce.mp3");
 
   // make sure everything has loaded
   await allegro_ready();

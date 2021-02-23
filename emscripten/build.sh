@@ -19,7 +19,7 @@ sed -i "" "s/export//g" ./build/allegro.library.js
 # Run EMCC compiler
 function build_file {
   echo "Building $1"
-  emcc --pre-js ./build/allegro.library.js --js-library ./build/allegro.library.js --js-library library.js -I. -o ./build/$1.html $1.c -s ASYNCIFY -s 'ASYNCIFY_IMPORTS=["rest","allegro_ready","readkey"]' -s EXPORTED_FUNCTIONS='["_malloc","_main"]'
+  emcc --pre-js ./build/allegro.library.js --js-library ./build/allegro.library.js --js-library library.js -I. -o ./build/$1.html $1.c -s ASYNCIFY -s 'ASYNCIFY_IMPORTS=["rest","allegro_ready","readkey","load_sample"]' -s EXPORTED_FUNCTIONS='["_malloc","_main"]'
 }
 
 build_file "musicmaker"

@@ -1,3 +1,5 @@
+import { log } from "./debug.js";
+import { parseMidi } from "./midiParser.js";
 import { MIDI } from "./types.js";
 
 /**
@@ -6,13 +8,6 @@ import { MIDI } from "./types.js";
  * @internal
  */
 let _current_midi: MIDI | null = null;
-
-/**
- * List of midi files
- *
- * @internal
- */
-const _midis: MIDI[] = [];
 
 /**
  * Midi driver
@@ -36,13 +31,29 @@ export const midi_driver = {
  *
  * @allegro 1.28.1
  */
-export function load_midi(filename: string): MIDI {
+export async function load_midi(filename: string): Promise<MIDI | null> {
+  log(`Loading midi ${filename}...`);
+
+  // Fetch sound
+  const fileData = await fetch(filename)
+    .then(async (response) => response.arrayBuffer())
+    .then((buffer) => buffer);
+
+  const data = parseMidi(fileData);
+
+  if (!data) {
+    return null;
+  }
+
+  log(`MIDI ${filename} loaded!`);
+
   const midi: MIDI = {
     file: filename,
     ready: true,
     type: "midi",
+    data,
   };
-  _midis.push(midi);
+
   return midi;
 }
 

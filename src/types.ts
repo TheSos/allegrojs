@@ -1,3 +1,5 @@
+import { MidiData } from "./midiParser";
+
 // Special types
 export type CONFIG_DATA = Record<string, Record<string, string>>;
 
@@ -471,9 +473,11 @@ export type ZBUFFER = BITMAP;
  * @allegro 1.2.29
  */
 export interface SAMPLE {
-  element: HTMLAudioElement;
   file: string;
-  volume: number;
+  source: AudioBufferSourceNode;
+  gain: GainNode;
+  buffer: AudioBuffer | null;
+  pan: StereoPannerNode;
   ready: boolean;
   type: "snd";
 }
@@ -489,6 +493,7 @@ export interface MIDI {
   file: string;
   ready: boolean;
   type: "midi";
+  data: MidiData;
 }
 
 /**

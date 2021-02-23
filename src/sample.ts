@@ -1,4 +1,3 @@
-import { _downloadables } from "./core.js";
 import { log } from "./debug.js";
 import { SAMPLE } from "./types.js";
 
@@ -21,6 +20,10 @@ export const digi_driver = {
  * @internal
  */
 const _samples: SAMPLE[] = [];
+
+// Audio context
+let _context: AudioContext | null = null;
+let _context_gain: GainNode | null = null;
 
 // Constants
 export const DIGI_AUTODETECT = -1;
@@ -51,6 +54,11 @@ export function install_sound(
   void digi;
   void midi;
   void cfg_path;
+
+  _context = new window.AudioContext();
+  _context_gain = _context.createGain();
+  _context_gain.connect(_context.destination);
+
   return 0;
 }
 
@@ -93,9 +101,9 @@ export function set_volume(digi_volume: number, midi_volume: number): void {
   }
 
   // Loop over samples
-  _samples.forEach(
-    (sample) => (sample.element.volume = sample.volume * (_volume / 255))
-  );
+  if (_context_gain) {
+    _context_gain.gain.value = _volume / 255;
+  }
 }
 
 /**
@@ -115,32 +123,47 @@ export function get_volume(): { digi_volume: number; midi_volume: number } {
  * Loads a sample from file
  *
  * @remarks
- *  Loads a sample from file and returns it. Doesn't stall for loading, use ready() to make sure your samples are loaded! Note that big files, such as music jingles, will most probably get streamed instead of being fully loaded into memory, meta data should be accessible tho.
+ * Loads a sample from file and returns it. Doesn't stall for loading, use ready() to make sure your samples are loaded!
  *
  * @param filename - name of the audio file
  * @returns sample object
  *
  * @allegro 1.27.1
  */
-export function load_sample(filename: string): SAMPLE {
-  const audio = document.createElement("audio");
-  audio.src = filename;
+export async function load_sample(filename: string): Promise<SAMPLE> {
+  if (!_context || !_context_gain) {
+    throw new Error("Can not load audio without audio context");
+  }
+
+  log(`Loading sample ${filename}...`);
+
   const sample: SAMPLE = {
-    element: audio,
     file: filename,
-    volume: 1.0,
+    source: _context.createBufferSource(),
+    gain: _context.createGain(),
+    buffer: null,
+    pan: _context.createStereoPanner(),
     ready: false,
     type: "snd",
   };
-  _downloadables.push(sample);
-  _samples.push(sample);
-  log(`Loading sample ${filename}...`);
-  audio.onloadeddata = (): void => {
-    if (!sample.ready) {
-      sample.ready = true;
-      log(`Sample ${filename} loaded!`);
-    }
-  };
+
+  // Fetch sound
+  const buffer = await fetch(filename)
+    .then(async (response) => response.arrayBuffer())
+    .then(async (buffer) => _context?.decodeAudioData(buffer));
+
+  if (!buffer) {
+    throw new Error("Could not load sample");
+  }
+
+  // Set it up
+  sample.buffer = buffer;
+  sample.pan.connect(sample.gain);
+  sample.gain.connect(_context_gain);
+  sample.ready = true;
+
+  log(`Sample ${filename} loaded!`);
+
   return sample;
 }
 
@@ -158,8 +181,7 @@ export function destroy_sample(spl: SAMPLE): void {
   const index = _samples.findIndex((s) => s === spl);
   if (index !== -1) {
     log(`Sample destroyed at index ${index}`);
-    spl.element.pause();
-    spl.element.remove();
+    spl.source.disconnect();
     _samples.splice(index, 1);
   }
 }
@@ -187,9 +209,15 @@ export function play_sample(
   freq = 1000,
   loop = false
 ): void {
+  if (!_context) {
+    return;
+  }
+
+  sample.source = _context.createBufferSource();
+  sample.source.buffer = sample.buffer;
+  sample.source.connect(sample.pan);
   adjust_sample(sample, vol, pan, freq, loop);
-  sample.element.currentTime = 0;
-  void sample.element.play();
+  sample.source.start(0);
 }
 
 /**
@@ -213,11 +241,10 @@ export function adjust_sample(
   freq: number,
   loop: boolean
 ): void {
-  void pan;
-  sample.volume = vol;
-  sample.element.volume = sample.volume / 255;
-  sample.element.loop = loop;
-  sample.element.playbackRate = freq / 1000;
+  sample.pan.pan.value = pan / 127.0 - 1.0;
+  sample.gain.gain.value = vol / 255.0;
+  sample.source.loop = loop;
+  sample.source.playbackRate.value = freq / 1000.0;
 }
 
 /**
@@ -231,6 +258,5 @@ export function adjust_sample(
  * @allegro 1.27.13
  */
 export function stop_sample(sample: SAMPLE): void {
-  sample.element.pause();
-  sample.element.currentTime = 0;
+  sample.source.stop();
 }

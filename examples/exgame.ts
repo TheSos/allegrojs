@@ -116,7 +116,7 @@ async function main() {
   man = load_bmp("data/man.png");
   apple = load_bmp("data/apple.png");
   bg = load_bmp("data/grass.jpg");
-  munch = load_sample("data/munch.mp3");
+  munch = await load_sample("data/munch.mp3");
 
   await allegro_ready();
 

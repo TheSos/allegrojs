@@ -80,7 +80,7 @@ async function main() {
   }
 
   /* read in the WAV file */
-  the_sample = load_sample(argv[1]);
+  the_sample = await load_sample(argv[1]);
 
   if (!the_sample) {
     allegro_message("Error reading WAV file '%s'\n", argv[1]);
@@ -94,8 +94,6 @@ async function main() {
       return 1;
     }
   }
-
-  await allegro_ready();
 
   set_palette(desktop_palette);
   clear_to_color(screen, makecol(255, 255, 255));

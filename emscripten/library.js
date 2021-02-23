@@ -19,7 +19,6 @@ const AllegroJS = {
     screen: null,
     // C ARRAY POINTERS
     key: null,
-    touch: null,
 
     // PRIVATE FUNCTIONS
     // Writes `array`(array of integers) to memory at address `buffer`
@@ -40,20 +39,10 @@ const AllegroJS = {
     post_install_keyboard: function () {
       ALLEG.key = _malloc(4 * key.length);
     },
-    // Creates C arrays storing touch structures
-    post_install_touch: function () {
-      // limitation: maximum 32 touch object
-      ALLEG.touch = _malloc(4 * 11 * 32);
-    },
     // Deletes C arrays storing key statuses
     post_remove_keyboard: function () {
       _free(ALLEG.key);
       ALLEG.key = null;
-    },
-    // Deletes C arrays storing touch structures
-    post_remove_touch: function () {
-      _free(ALLEG.touch);
-      ALLEG.touch = null;
     },
     // Writes JS key arrays to C memory
     copy_key_statuses: function () {
@@ -595,6 +584,7 @@ const AllegroJS = {
   set_keyboard_rate,
   clear_keybuf,
   key: function () {
+    ALLEG.copy_key_statuses();
     return ALLEG.key;
   },
   install_keyboard: function () {
@@ -750,8 +740,12 @@ const AllegroJS = {
   set_volume: set_volume,
   get_volume: get_volume,
   load_sample: function (filename) {
-    const filename_s = UTF8ToString(filename);
-    return ALLEG.samples.push(load_sample(filename_s)) - 1;
+    return Asyncify.handleAsync(async () => {
+      const filename_s = UTF8ToString(filename);
+      const sample = await load_sample(filename_s);
+      const index = ALLEG.samples.push(sample) - 1;
+      return index;
+    });
   },
   destroy_sample: function (sample) {
     destroy_sample(ALLEG.samples[sample]);

@@ -39,16 +39,7 @@ export async function _progress_check(): Promise<void> {
   let loaded = false;
   while (!loaded) {
     const num_assets = _downloadables.length;
-    let num_loaded = 0;
-
-    _downloadables.forEach((down) => {
-      if (down.type === "snd") {
-        if (down.element.readyState >= down.element.HAVE_FUTURE_DATA) {
-          down.ready = true;
-        }
-      }
-      if (down.ready) num_loaded += 1;
-    });
+    const num_loaded = _downloadables.filter((down) => down.ready).length;
 
     _bar_proc(num_assets / num_loaded);
 
