@@ -26,4 +26,6 @@ yarn build
 
 ### Generate docs
 
-`yarn docs`
+```sh
+yarn docs
+```
