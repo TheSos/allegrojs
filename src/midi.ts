@@ -1,6 +1,6 @@
-import { log } from "./debug.js";
-import { parseMidi } from "./midiParser.js";
-import { MIDI } from "./types.js";
+import { log } from "./debug";
+import { parseMidi } from "./midiParser";
+import { MIDI } from "./types";
 
 /**
  * Current midi file used

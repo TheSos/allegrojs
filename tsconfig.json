@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es3",
-    "module": "es6",
+    "target": "es5",
+    "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
     "noUnusedLocals": true,
@@ -13,10 +13,9 @@
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
     "lib": ["ESNext", "DOM"],
-    "outDir": "build",
-    "incremental": true,
-    "removeComments": true,
+    "outDir": "lib",
+    "sourceMap": true,
     "declaration": true
   },
-  "include": ["src/"]
+  "include": ["src"]
 }

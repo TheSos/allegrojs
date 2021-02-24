@@ -1,5 +1,5 @@
-import { log } from "./debug.js";
-import { SAMPLE } from "./types.js";
+import { log } from "./debug";
+import { SAMPLE } from "./types";
 
 let _volume = 1.0;
 let _midi_volume = 1.0;

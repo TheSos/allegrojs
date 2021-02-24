@@ -1,6 +1,6 @@
-import { _allog, log } from "./debug.js";
-import { screen } from "./bitmap.js";
-import { ALLEGRO_TOUCH_EVENT } from "./types.js";
+import { _allog, log } from "./debug";
+import { screen } from "./bitmap";
+import { ALLEGRO_TOUCH_EVENT } from "./types";
 
 // Is touch installed
 export let _touch_installed = false;

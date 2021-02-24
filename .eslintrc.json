@@ -1,12 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
-  "extends": [
-    "eslint:all",
-    "plugin:@typescript-eslint/all",
-    "prettier",
-    "prettier/@typescript-eslint"
-  ],
+  "extends": ["eslint:all", "plugin:@typescript-eslint/all", "prettier"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",

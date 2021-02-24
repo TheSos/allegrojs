@@ -1,6 +1,3 @@
-examples/
-build/
-api/
 webpack.*
 emscripten/
-docs/
+lib/

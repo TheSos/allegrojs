@@ -1,7 +1,7 @@
-import { _allog, _error, log } from "./debug.js";
-import { screen } from "./bitmap.js";
-import { BITMAP } from "./types.js";
-import { draw_sprite } from "./sprites.js";
+import { _allog, _error, log } from "./debug";
+import { screen } from "./bitmap";
+import { BITMAP } from "./types";
+import { draw_sprite } from "./sprites";
 
 // Types
 export const MOUSE_CURSOR_NONE = 0;

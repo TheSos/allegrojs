@@ -1,5 +1,5 @@
-import { BITMAP } from "./types.js";
-import { RAD } from "./math.js";
+import { BITMAP } from "./types";
+import { RAD } from "./math";
 
 /**
  * Blit

@@ -1,6 +1,6 @@
-import { _downloadables } from "./core.js";
-import { log } from "./debug.js";
-import { CONFIG, CONFIG_DATA } from "./types.js";
+import { _downloadables } from "./core";
+import { log } from "./debug";
+import { CONFIG, CONFIG_DATA } from "./types";
 
 /**
  * Internal list of config files

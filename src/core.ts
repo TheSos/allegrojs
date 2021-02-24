@@ -1,21 +1,21 @@
-import { screen } from "./bitmap.js";
-import { makecol } from "./color.js";
-import { _error, log } from "./debug.js";
-import { textprintf_centre_ex } from "./font.js";
+import { screen } from "./bitmap";
+import { makecol } from "./color";
+import { _error, log } from "./debug";
+import { textprintf_centre_ex } from "./font";
 import {
   GFX_AUTODETECT_WINDOWED,
   SCREEN_H,
   SCREEN_W,
   font,
   set_gfx_mode,
-} from "./graphics.js";
-import { _keyboard_loop } from "./keyboard.js";
-import { scaleclamp } from "./math.js";
-import { _mouse_loop, _mouse_loop_reset } from "./mouse.js";
-import { clear_bitmap, clear_to_color, rectfill } from "./primitives.js";
-import { _touch_loop } from "./touch.js";
-import { BITMAP, CONFIG, MIDI, SAMPLE } from "./types.js";
-import { rest } from "./timer.js";
+} from "./graphics";
+import { _keyboard_loop } from "./keyboard";
+import { scaleclamp } from "./math";
+import { _mouse_loop, _mouse_loop_reset } from "./mouse";
+import { clear_bitmap, clear_to_color, rectfill } from "./primitives";
+import { _touch_loop } from "./touch";
+import { BITMAP, CONFIG, MIDI, SAMPLE } from "./types";
+import { rest } from "./timer";
 
 // All downloadable objects
 export const _downloadables: (BITMAP | CONFIG | MIDI | SAMPLE)[] = [];

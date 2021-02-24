@@ -1,6 +1,6 @@
-import { geta, getb, getg, getr } from "./color.js";
-import { PI2, RAD } from "./math.js";
-import { BITMAP } from "./types.js";
+import { geta, getb, getg, getr } from "./color";
+import { PI2, RAD } from "./math";
+import { BITMAP } from "./types";
 
 /**
  * Clear Bitmap

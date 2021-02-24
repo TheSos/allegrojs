@@ -1,6 +1,6 @@
-import { _uberloop } from "./core.js";
-import { log } from "./debug.js";
-import { vsprintf } from "./sprintf.js";
+import { _uberloop } from "./core";
+import { log } from "./debug";
+import { vsprintf } from "./sprintf";
 
 /**
  * Loop interval for pausing

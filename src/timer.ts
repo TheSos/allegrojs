@@ -1,5 +1,5 @@
-import { log } from "./debug.js";
-import { TIMER } from "./types.js";
+import { log } from "./debug";
+import { TIMER } from "./types";
 
 /**
  * Timer driverr

@@ -1,8 +1,8 @@
-import { makecol } from "./color.js";
-import { _downloadables } from "./core.js";
-import { log } from "./debug.js";
-import { blit } from "./sprites.js";
-import { BITMAP, CLIPPING_RECTANGLE, PACKFILE, RGB } from "./types.js";
+import { makecol } from "./color";
+import { _downloadables } from "./core";
+import { log } from "./debug";
+import { blit } from "./sprites";
+import { BITMAP, CLIPPING_RECTANGLE, PACKFILE, RGB } from "./types";
 
 /**
  * Global screen poiner

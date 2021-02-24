@@ -1,7 +1,7 @@
-import { _fillstyle, rectfill } from "./primitives.js";
-import { BITMAP, FONT, RGB } from "./types.js";
-import { vsprintf } from "./sprintf.js";
-import { create_bitmap } from "./bitmap.js";
+import { _fillstyle, rectfill } from "./primitives";
+import { BITMAP, FONT, RGB } from "./types";
+import { vsprintf } from "./sprintf";
+import { create_bitmap } from "./bitmap";
 
 let _text_len_canvas: BITMAP | null = null;
 

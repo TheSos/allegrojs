@@ -1,5 +1,5 @@
-import { _allog, log } from "./debug.js";
-import { rest } from "./timer.js";
+import { _allog, log } from "./debug";
+import { rest } from "./timer";
 
 /**
  * Keyboard driverr

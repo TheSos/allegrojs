@@ -1,10 +1,10 @@
-import { _uberloop, makecol } from "./allegro.js";
-import { log } from "./debug.js";
-import { clear_to_color } from "./primitives.js";
-import { draw_sprite } from "./sprites.js";
-import { BITMAP, FONT } from "./types.js";
-import { screen } from "./bitmap.js";
-import { _set_loop_interval } from "./config.js";
+import { _uberloop, makecol } from "./allegro";
+import { log } from "./debug";
+import { clear_to_color } from "./primitives";
+import { draw_sprite } from "./sprites";
+import { BITMAP, FONT } from "./types";
+import { screen } from "./bitmap";
+import { _set_loop_interval } from "./config";
 
 /**
  * Graphics Driver

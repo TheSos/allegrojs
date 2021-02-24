@@ -6,8 +6,8 @@
  *  Description  : MidiParser library reads .MID binary files, Base64 encoded MIDI Data,
  *  or UInt8 Arrays, and outputs as a readable and structured JS object.
  */
-import { log } from "./debug.js";
-import { FileParser } from "./FileParser.js";
+import { log } from "./debug";
+import { FileParser } from "./FileParser";
 
 /* eslint-disable complexity */
 
