@@ -27,7 +27,7 @@ jobs:
         run: yarn docs
 
       - name: Add no jekyll
-        run: touch public/.nojekyll
+        run: touch docs/.nojekyll
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
