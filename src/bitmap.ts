@@ -954,3 +954,13 @@ export function register_bitmap_file_type(
 export function set_color_conversion(mode: number): void {
   void mode;
 }
+
+/**
+ * Stub for compatibility with libloadpng
+ *
+ * @remarks
+ * Does nothing since we have png support
+ */
+export function loadpng_init(): number {
+  return 1;
+}

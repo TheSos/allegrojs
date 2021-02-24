@@ -11,7 +11,7 @@ interface GmPreset {
 const GM_INSTRUMENTS: GmPreset[] = [];
 
 export class GmPlayer {
-  private static readonly context = new AudioContext();
+  private readonly context: AudioContext;
 
   private readonly op1: OscillatorNode;
 
@@ -24,14 +24,16 @@ export class GmPlayer {
   private op2Ratio: number;
 
   public constructor() {
-    this.op1 = GmPlayer.context.createOscillator();
-    this.op2 = GmPlayer.context.createOscillator();
+    this.context = new AudioContext();
+
+    this.op1 = this.context.createOscillator();
+    this.op2 = this.context.createOscillator();
 
     this.op1Ratio = 1.0;
     this.op2Ratio = 1.0;
 
-    this.gain = GmPlayer.context.createGain();
-    this.gain.connect(GmPlayer.context.destination);
+    this.gain = this.context.createGain();
+    this.gain.connect(this.context.destination);
   }
 
   public programChange(instrument: number): void {

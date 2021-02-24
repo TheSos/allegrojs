@@ -206,15 +206,7 @@ export function stretch_sprite(
   if (!bmp || !sprite) {
     return;
   }
-  const scale_frac_x = w / sprite.w;
-  const scale_frac_y = h / sprite.h;
-  const u = (scale_frac_x * sprite.w) / 2;
-  const v = (scale_frac_y * sprite.h) / 2;
-  bmp.context.save();
-  bmp.context.translate(x - u, y - v);
-  bmp.context.scale(scale_frac_x, scale_frac_y);
-  bmp.context.drawImage(sprite.canvas, 0, 0);
-  bmp.context.restore();
+  bmp.context.drawImage(sprite.canvas, x, y, w, h);
 }
 
 /**

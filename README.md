@@ -18,13 +18,24 @@ Install packages
 `yarn`
 
 Build core
-`yarn build`
+
+```sh
+yarn build
+```
 
 Build examples
-`yarn build-examples`
+
+```sh
+yarn build-examples
+```
 
 Build Emscripten examples
-`cd emscripten && ./build.sh`
+
+```sh
+cd emscripten
+./build.sh
+<emcmake> cmake .
+```
 
 ### Generate docs
 
@@ -52,3 +63,7 @@ Build Emscripten examples
 - [Python Turtle](https://alegemaate.com/allegrots/examples/exturtle)
 - [Save Bitmap](https://alegemaate.com/allegrots/examples/exsavebmp)
 - [Stress Test](https://alegemaate.com/allegrots/examples/stress)
+
+```
+
+```
