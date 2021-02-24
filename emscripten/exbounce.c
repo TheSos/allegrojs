@@ -1,6 +1,11 @@
 #include <stdlib.h>
 
-#include "allegro.h"
+#ifdef __EMSCRIPTEN__
+#include "allegrots.h"
+#else
+#include <allegro.h>
+#include <loadpng.h>
+#endif
 
 // bitmap oobjects
 BITMAP* clouds;
@@ -71,9 +76,12 @@ void update() {
 // entry point of our example
 int main(void) {
 // Start
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
   init_allegro_ts("canvas");
 #endif
+
+  allegro_init();
+  set_color_depth(32);
 
   // put allegro in canvas with id="canvas_id"
   // make the dimesnions 640x480
@@ -83,17 +91,21 @@ int main(void) {
 
   install_keyboard();
 
+  loadpng_init();
+
   // load ball image
-  ball = load_bmp("data/planet.png", NULL);
+  ball = load_bitmap("data/planet.png", NULL);
 
   // load background image
-  clouds = load_bmp("data/clouds.png", NULL);
+  clouds = load_bitmap("data/clouds.png", NULL);
 
   // load the bounce sound
-  bounce = load_sample("data/bounce.mp3");
+  bounce = load_sample("data/piano.wav");
 
   // make sure everything has loaded
+#ifdef __EMSCRIPTEN__
   allegro_ready();
+#endif
 
   // repeat this game loop
   while (!key[KEY_ESC]) {
@@ -113,4 +125,4 @@ int main(void) {
   // the end
   return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

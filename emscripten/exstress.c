@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#include "allegro.h"
+#ifdef __EMSCRIPTEN__
+#include "allegrots.h"
+#else
+#include <allegro.h>
+#include <loadpng.h>
+#endif
 
 long long current_timestamp() {
   struct timeval te;
@@ -23,16 +28,21 @@ int main(void) {
   BITMAP* buffer = NULL;
 
   // Start
+#ifdef __EMSCRIPTEN__
   init_allegro_ts("canvas");
+#endif
 
   allegro_init();
   install_keyboard();
-  enable_debug("debug");
-  set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0);
-  bmp = load_bmp("data/planet.png", NULL);
+  loadpng_init();
+  set_color_depth(32);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+  bmp = load_bitmap("data/planet.png", NULL);
   buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
+#ifdef __EMSCRIPTEN__
   allegro_ready();
+#endif
 
   while (!key[KEY_ESC]) {
     clear_to_color(buffer, makecol(255, 255, 255));
@@ -58,8 +68,8 @@ int main(void) {
     if (num < MAX_NUM) {
       x[num] = rand() % SCREEN_W;
       y[num] = rand() % SCREEN_H;
-      vx[num] = drand48() * 2 - 1;
-      vy[num] = drand48() * 2 - 1;
+      vx[num] = ((float)rand() / (float)(RAND_MAX)) * 2 - 1;
+      vy[num] = ((float)rand() / (float)(RAND_MAX)) * 2 - 1;
       num++;
     }
     unsigned int msec = current_timestamp() - last_time;
@@ -73,4 +83,4 @@ int main(void) {
 
   return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

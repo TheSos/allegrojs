@@ -246,6 +246,7 @@ const AllegroJS = {
     return register_bitmap_file_type(ext_s, load, save);
   },
   set_color_conversion,
+  loadpng_init,
 
   // Color.ts
   makecol8,
@@ -701,7 +702,7 @@ const AllegroJS = {
     triangle(ALLEG.get_bitmap(bitmap), x1, y1, x2, y2, x3, y3, color);
   },
   polygon: function (bitmap, vertices, points, color) {
-    const points_arr = ALLEG.readArray32FromMemory(points, vertices);
+    const points_arr = ALLEG.readArray32FromMemory(points, vertices * 2);
     polygon(ALLEG.get_bitmap(bitmap), vertices, points_arr, color);
   },
   rect: function (bitmap, x1, y1, x2, y2, color) {
@@ -726,7 +727,8 @@ const AllegroJS = {
     arc(ALLEG.get_bitmap(bitmap), x, y, ang1, ang2, radius, color);
   },
   spline: function (bitmap, points, color) {
-    spline(ALLEG.get_bitmap(bitmap), points, color);
+    const points_arr = ALLEG.readArray32FromMemory(points, 8);
+    spline(ALLEG.get_bitmap(bitmap), points_arr, color);
   },
   floodfill: function (bmp, x, y, color) {
     floodfill(ALLEG.get_bitmap(bitmap), x, y, color);

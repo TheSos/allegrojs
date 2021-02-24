@@ -5,7 +5,12 @@
  *    double buffer and then using page flips.
  */
 
-#include "allegro.h"
+#ifdef __EMSCRIPTEN__
+#include "allegrots.h"
+#else
+#include <allegro.h>
+#include <loadpng.h>
+#endif
 
 int main(void) {
   BITMAP* buffer;
@@ -13,12 +18,15 @@ int main(void) {
   BITMAP* active_page;
   int c;
 
+#ifdef __EMSCRIPTEN__
   init_allegro_ts("canvas");
+#endif
 
   if (allegro_init() != 0)
     return 1;
   install_timer();
   install_keyboard();
+  set_color_depth(32);
 
   /* Some platforms do page flipping by making one large screen that you
    * can then scroll, while others give you several smaller, unique

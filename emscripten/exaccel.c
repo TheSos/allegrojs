@@ -13,7 +13,13 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "allegro.h"
+
+#ifdef __EMSCRIPTEN__
+#include "allegrots.h"
+#else
+#include <allegro.h>
+#include <loadpng.h>
+#endif
 
 #define MAX_IMAGES 256
 
@@ -47,6 +53,7 @@ void update_image(IMAGE* image) {
 
 int main() {
   const char* buf = "data/mysha.png";
+
   PALETTE pal;
   BITMAP* image;
   BITMAP* page[2];
@@ -57,12 +64,16 @@ int main() {
   int done = FALSE;
   int i;
 
+#ifdef __EMSCRIPTEN__
   init_allegro_ts("canvas");
+#endif
 
   if (allegro_init() != 0)
     return 1;
   install_keyboard();
   install_timer();
+  loadpng_init();
+  set_color_depth(32);
 
   /* see comments in exflip.c */
 #ifdef ALLEGRO_VRAM_SINGLE_SURFACE
@@ -83,7 +94,9 @@ int main() {
     return 1;
   }
 
+#ifdef __EMSCRIPTEN__
   allegro_ready();
+#endif
 
   set_palette(pal);
 

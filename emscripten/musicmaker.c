@@ -1,5 +1,10 @@
 #include <math.h>
-#include "allegro.h"
+
+#ifdef __EMSCRIPTEN__
+#include "allegrots.h"
+#else
+#include <allegro.h>
+#endif
 
 // Images
 BITMAP* buffer;
@@ -91,6 +96,10 @@ void game() {
         {82, 400}, {80, 1000},
     };
 
+    play_sequence(song_mary);
+  }
+
+  if (key[KEY_ENTER]) {
     int song_crazy[][2] = {
         {26, 0},   {78, 100}, {78, 100}, {80, 100}, {96, 100}, {68, 100},
         {97, 100}, {84, 100}, {48, 100}, {95, 100}, {85, 100}, {80, 100},
@@ -118,7 +127,9 @@ void play_sequence(int note_sequence[][2]) {
 
 // MAIN
 int main() {
+#ifdef __EMSCRIPTEN__
   init_allegro_ts("canvas");
+#endif
 
   // Makes sure allegro is running properly
   if (allegro_init() != 0) {
@@ -146,4 +157,4 @@ int main() {
 
   return 0;
 }
-END_OF_MAIN();
+END_OF_MAIN()

@@ -104,7 +104,7 @@ void allegro_message(const char* str, ...) {
   vsnprintf(buffer, sizeof(buffer), str, args);
   va_end(args);
   _allegro_message(buffer);
-};
+}
 
 // 1.1.19
 extern void set_window_title(const char* name);
@@ -201,6 +201,9 @@ extern int set_gfx_mode(int card, int w, int h, int v_w, int v_h);
 #define GFX_AUTODETECT_FULLSCREEN 1
 #define GFX_AUTODETECT_WINDOWED 2
 #define GFX_SAFE 3
+
+// 1.9.20
+extern void vsync();
 
 // 1.6.1
 extern void install_timer(void);
@@ -397,14 +400,14 @@ extern void circlefill(BITMAP* bmp, int x, int y, int radius, int color);
 extern void ellipse(BITMAP* bmp, int x, int y, int rx, int ry, int color);
 
 // 1.14.21
-extern void ellipse(BITMAP* bmp, int x, int y, int rx, int ry, int color);
+extern void ellipsefill(BITMAP* bmp, int x, int y, int rx, int ry, int color);
 
 // 1.14.23
 extern void
 arc(BITMAP* bmp, int x, int y, float ang1, float ang2, int r, int color);
 
 // 1.14.25
-extern void spline(BITMAP* bmp, const int points[8], int color);
+extern void spline(BITMAP* bmp, const int* points, int color);
 
 // 1.14.26
 extern void floodfill(BITMAP* bmp, int x, int y, int color);
@@ -539,7 +542,7 @@ void textprintf_ex(BITMAP* bmp,
   vsnprintf(buffer, sizeof(buffer), s, args);
   va_end(args);
   _textprintf_ex(bmp, f, x, y, color, bg, buffer);
-};
+}
 
 // 1.19.10
 extern void _textprintf_centre_ex(BITMAP* bmp,
@@ -565,7 +568,7 @@ void textprintf_centre_ex(BITMAP* bmp,
   vsnprintf(buffer, sizeof(buffer), s, args);
   va_end(args);
   _textprintf_centre_ex(bmp, f, x, y, color, bg, buffer);
-};
+}
 
 // 1.19.11
 extern void _textprintf_right_ex(BITMAP* bmp,
@@ -591,7 +594,7 @@ void textprintf_right_ex(BITMAP* bmp,
   vsnprintf(buffer, sizeof(buffer), s, args);
   va_end(args);
   _textprintf_right_ex(bmp, f, x, y, color, bg, buffer);
-};
+}
 
 // 1.19.12
 extern void _textprintf_justify_ex(BITMAP* bmp,
@@ -617,7 +620,7 @@ void textprintf_justify_ex(BITMAP* bmp,
   vsnprintf(buffer, sizeof(buffer), s, args);
   va_end(args);
   _textprintf_justify_ex(bmp, f, x, y, color, bg, buffer);
-};
+}
 
 // 1.25.5
 extern void install_sound(int digi, int midi, const char* cfg_path);
@@ -639,7 +642,7 @@ extern float get_volume(void);
 extern SAMPLE* load_sample(char* filename);
 
 // 1.27.8
-extern void destroy_sample(char* filename);
+extern void destroy_sample(SAMPLE* sample);
 
 // 1.27.11
 extern void play_sample(SAMPLE* spl,
@@ -657,6 +660,9 @@ extern void adjust_sample(SAMPLE* spl,
 
 // 1.27.13
 extern void stop_sample(SAMPLE* sample);
+
+// Load png compaitibility
+extern int loadpng_init();
 
 #ifdef __cplusplus
 }
