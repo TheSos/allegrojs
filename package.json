@@ -1,7 +1,7 @@
 {
   "name": "allegro-ts",
   "description": "Allegro 4 brought to the browser",
-  "version": "1.0.0-2",
+  "version": "1.0.0-3",
   "repository": "https://github.com/alegemaate/allegro-ts",
   "keywords": [
     "allegro",
