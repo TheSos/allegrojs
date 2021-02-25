@@ -1,5 +1,4 @@
 export * from "./bitmap";
-export * from "./clib";
 export * from "./color";
 export * from "./config";
 export * from "./configuration";

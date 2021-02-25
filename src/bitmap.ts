@@ -641,6 +641,28 @@ export function load_bitmap(filename: string, pal?: RGB): BITMAP {
       x2: bmp.w,
       y2: bmp.h,
     };
+
+    // Replace magic pink
+    const imageData = bmp.context.getImageData(
+      0,
+      0,
+      bmp.canvas.width,
+      bmp.canvas.height
+    );
+    for (let i = 0; i < imageData.data.length; i += 4) {
+      // MAGIC PINK DETECTED!
+      if (
+        imageData.data[i] === 255 &&
+        imageData.data[i + 1] === 0 &&
+        imageData.data[i + 2] === 255 &&
+        imageData.data[i + 3] === 255
+      ) {
+        // Alpha hack
+        imageData.data[i + 3] = 0;
+      }
+    }
+    ctx.putImageData(imageData, 0, 0);
+
     bmp.ready = true;
   };
 

@@ -1,3 +1,4 @@
+import { gfx_driver } from "./graphics";
 import { _uberloop } from "./core";
 import { log } from "./debug";
 import { vsprintf } from "./sprintf";
@@ -297,17 +298,15 @@ export function desktop_color_depth(): number {
 }
 
 /**
- *
+ * Return desktop resolution
  *
  * @remarks
+ * Generally an int pointer is passed, here we return an object
  *
  * @allegro 1.1.22
  */
-export function get_desktop_resolution(
-  width: number,
-  height: number
-): { width: number; height: number } {
-  return { width, height };
+export function get_desktop_resolution(): { width: number; height: number } {
+  return { width: gfx_driver.w, height: gfx_driver.h };
 }
 
 /**
