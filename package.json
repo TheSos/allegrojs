@@ -3,11 +3,20 @@
   "description": "Allegro 4 brought to the browser",
   "version": "1.0.0-2",
   "repository": "https://github.com/alegemaate/allegro-ts",
+  "keywords": [
+    "allegro",
+    "javascript",
+    "game",
+    "library"
+  ],
   "author": "Allan Legemaate <alegemaate@gmail.com>",
   "license": "MIT",
   "private": false,
   "main": "lib/allegro.js",
   "scripts": {
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn lint",
+    "preversion": "yarn lint",
     "build": "tsc",
     "lint": "eslint .",
     "docs": "typedoc src --out docs --name allegro.ts --readme README.md"

@@ -15,7 +15,8 @@
     "lib": ["ESNext", "DOM"],
     "outDir": "lib",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "removeComments": true
   },
   "include": ["src"]
 }
