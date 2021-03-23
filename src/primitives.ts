@@ -1,5 +1,5 @@
 import { geta, getb, getg, getr } from "./color";
-import { PI2, RAD } from "./math";
+import { PI2, fix_to_rad } from "./math";
 import { BITMAP } from "./types";
 
 /**
@@ -836,8 +836,8 @@ export function do_arc(
  * @param bitmap - bitmap to be drawn to
  * @param x - centre point x coordinates
  * @param y - centre point y coordinates
- * @param ang1 - angle 1 of arc
- * @param ang2 - angle 2 of arc
+ * @param ang1 - angle 1 of arc from 0-256
+ * @param ang2 - angle 2 of arc from 0-256
  * @param r - radius of arc
  * @param colour - colour of arc
  *
@@ -858,9 +858,9 @@ export function arc(
   _strokestyle(bitmap, colour);
   bitmap.context.beginPath();
   if (ang1 > ang2) {
-    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2), true);
+    bitmap.context.arc(x, y, r, fix_to_rad(ang1), fix_to_rad(ang2), true);
   } else {
-    bitmap.context.arc(x, y, r, RAD(ang1), RAD(ang2), true);
+    bitmap.context.arc(x, y, r, fix_to_rad(ang1), fix_to_rad(ang2), true);
   }
   bitmap.context.stroke();
 }
