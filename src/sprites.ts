@@ -1,5 +1,5 @@
 import { BITMAP } from "./types";
-import { RAD } from "./math";
+import { fix_to_rad } from "./math";
 
 /**
  * Blit
@@ -420,7 +420,7 @@ export function draw_character_ex(
  * @param sprite - sprite bitmap
  * @param x - x position
  * @param y - y position
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  *
  * @allegro 1.15.12
  */
@@ -438,7 +438,7 @@ export function rotate_sprite(
   const v = sprite.h / 2;
   bmp.context.save();
   bmp.context.translate(x + u, y + v);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-x - u, -y - v);
   bmp.context.drawImage(sprite.canvas, x, y);
   bmp.context.restore();
@@ -454,7 +454,7 @@ export function rotate_sprite(
  * @param sprite - sprite bitmap
  * @param x - x position
  * @param y - y position
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  *
  * @allegro 1.15.13
  */
@@ -472,7 +472,7 @@ export function rotate_sprite_v_flip(
   const v = sprite.h / 2;
   bmp.context.save();
   bmp.context.translate(x + u, y + v);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-x - u, -y - v);
   bmp.context.translate(x, y);
   bmp.context.scale(-1, 1);
@@ -491,7 +491,7 @@ export function rotate_sprite_v_flip(
  * @param sprite - sprite bitmap
  * @param x - x position
  * @param y - y position
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  * @param sx - horizontal scale, 1.0 is unscaled
  * @param sy - vertical scale, 1.0 is unscaled
  *
@@ -512,7 +512,7 @@ export function rotate_scaled_sprite(
   const v = sprite.h / 2;
   bmp.context.save();
   bmp.context.translate(x + u, y + v);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.scale(scale, scale);
   bmp.context.translate(-x - u, -y - v);
   bmp.context.drawImage(sprite.canvas, x, y);
@@ -529,7 +529,7 @@ export function rotate_scaled_sprite(
  * @param sprite - sprite bitmap
  * @param x - x position
  * @param y - y position
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  * @param scale - scale of sprite
  *
  * @allegro 1.15.15
@@ -549,7 +549,7 @@ export function rotate_scaled_sprite_v_flip(
   const v = sprite.h / 2;
   bmp.context.save();
   bmp.context.translate(x + u, y + v);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.scale(scale, scale);
   bmp.context.translate(-x - u, -y - v);
   bmp.context.translate(x, y);
@@ -571,7 +571,7 @@ export function rotate_scaled_sprite_v_flip(
  * @param y - y position
  * @param cx - Pivot point x
  * @param cy - Pivot point y
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  *
  * @allegro 1.15.16
  */
@@ -589,7 +589,7 @@ export function pivot_sprite(
   }
   bmp.context.save();
   bmp.context.translate(x, y);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-cx, -cy);
   bmp.context.drawImage(sprite.canvas, 0, 0);
   bmp.context.restore();
@@ -608,7 +608,7 @@ export function pivot_sprite(
  * @param y - y position
  * @param cx - Pivot point x
  * @param cy - Pivot point y
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  *
  * @allegro 1.15.17
  */
@@ -626,7 +626,7 @@ export function pivot_sprite_v_flip(
   }
   bmp.context.save();
   bmp.context.translate(x, y);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-cx, -cy);
   bmp.context.translate(x, y);
   bmp.context.scale(-1, 1);
@@ -647,7 +647,7 @@ export function pivot_sprite_v_flip(
  * @param y - y position
  * @param cx - Pivot point x
  * @param cy - Pivot point y
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  * @param scale - scale
  *
  * @allegro 1.15.18
@@ -669,7 +669,7 @@ export function pivot_scaled_sprite(
   const v = scale * cy;
   bmp.context.save();
   bmp.context.translate(x, y);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-u, -v);
   bmp.context.scale(scale, scale);
   bmp.context.drawImage(sprite.canvas, 0, 0);
@@ -688,7 +688,7 @@ export function pivot_scaled_sprite(
  * @param y - y position
  * @param cx - Pivot point x
  * @param cy - Pivot point y
- * @param angle - angle of rotation in degrees
+ * @param angle - angle of rotation from 0-256
  * @param scale - scale amount
  *
  * @allegro 1.15.19
@@ -710,7 +710,7 @@ export function pivot_scaled_sprite_v_flip(
   const v = scale * cy;
   bmp.context.save();
   bmp.context.translate(x, y);
-  bmp.context.rotate(RAD(angle));
+  bmp.context.rotate(fix_to_rad(angle));
   bmp.context.translate(-u, -v);
   bmp.context.scale(scale, scale);
   bmp.context.translate(x, y);
